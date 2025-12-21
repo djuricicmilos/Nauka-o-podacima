@@ -3,6 +3,7 @@
 ## Pregled projekta
 
 Ovaj projekat predstavlja seminarski rad čiji je cilj analiza podataka i izgradnja regresionih modela za predikciju iznosa premije osiguranja (*Premium Amount*). Rad obuhvata kompletan proces rada sa podacima, od osnovnog opisa skupa podataka i eksplorativne analize, preko pretprocesiranja i feature engineering-a, do kreiranja i poređenja linearnih i nelinearnih modela.
+Zbog veličine fajlova `train.csv` i `test.csv`, nismo u mogućnosti da izvršimo njihov upload. Trening i test skup mogu da se nađu na ovom [linku](https://www.kaggle.com/competitions/playground-series-s4e12/data). 
 
 ## Data description
 
