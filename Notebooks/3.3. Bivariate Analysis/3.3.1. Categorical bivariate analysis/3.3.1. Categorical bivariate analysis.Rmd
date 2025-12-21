@@ -196,35 +196,6 @@ CramerV(table(train$Occupation, train$Insurance.Duration))
 
 Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Occupation i Insurance.Duration, jacina te veze je veoma mala i raspodela po kategorijama je gotovo identicna, tako da se veza moze smatrati zanemarljivom.
 
-## Insurance.Duration prema Policy.Type varijabli
-
-Proveravamo procentualnu zastupljenost po kategorijama
-```{r}
-tbl <- table(train$Policy.Type, train$Insurance.Duration)
-
-prop_row <- prop.table(tbl, margin = 1) * 100
-round(prop_row, 1)
-```
-
-Graficka reprezentacija varijabli
-```{r}
-ggplot(train, aes(x = Policy.Type, fill = Insurance.Duration)) +
-  geom_bar(position = "fill") +
-  theme_minimal() +
-  labs(title = "Procentualna zastupljenost Insurance.Duration po Policy.Type", x = "Policy.Type", fill = "Insurance.Duration",y = "Procenat")
-```
-
-Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
-```{r}
-p_value <- chisq.test(table(train$Policy.Type, train$Insurance.Duration))$p.value
-
-if (p_value > 0.05) {
-  print("Ne postoji statistički značajna zavisnost između Policy.Type i Insurance.Duration.")
-} else {
-  print("Postoji statistički značajna zavisnost između Policy.Type i Insurance.Duration.")
-}
-```
-
 ## Insurance.Duration prema Property.Type varijabli
 
 Proveravamo procentualnu zastupljenost po kategorijama
