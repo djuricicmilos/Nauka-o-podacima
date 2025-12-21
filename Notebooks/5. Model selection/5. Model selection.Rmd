@@ -19,8 +19,8 @@ library(lightgbm)
 
 Ucitavanje pretprocesiranih podataka:
 ```{r}
-train <- read.csv("data/train.scaled.label.csv", stringsAsFactors = FALSE)
-test <- read.csv("data/test.scaled.label.csv", stringsAsFactors = FALSE)
+train <- read.csv("../data/train.scaled.label.csv", stringsAsFactors = FALSE)
+test <- read.csv("../data/test.scaled.label.csv", stringsAsFactors = FALSE)
 ```
 
 ## Cross-validacija

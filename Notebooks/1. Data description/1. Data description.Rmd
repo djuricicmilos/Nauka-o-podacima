@@ -14,8 +14,8 @@ library(skimr)
 
 Ucitavanje podataka:
 ```{r}
-train <- read.csv("data/train.csv", stringsAsFactors = FALSE)
-test <- read.csv("data/test.csv", stringsAsFactors = FALSE)
+train <- read.csv("../data/train.csv", stringsAsFactors = FALSE)
+test <- read.csv("../data/test.csv", stringsAsFactors = FALSE)
 ```
 
 Prikaz prvih nekoliko podataka iz train skupa:

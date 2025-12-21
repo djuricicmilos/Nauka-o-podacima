@@ -785,7 +785,7 @@ scale.cols <- c(
   "Health.Age"
 )
 
-preproc.label <- preProcess(
+preproc <- preProcess(
   train.label[, scale.cols],
   method = c("center", "scale")
 )
