@@ -19,8 +19,8 @@ library(lightgbm)
 
 Ucitavanje pretprocesiranih podataka:
 ```{r}
-train <- read.csv("../../data/train.scaled.label.csv", stringsAsFactors = FALSE)
-test <- read.csv("../../data/test.scaled.label.csv", stringsAsFactors = FALSE)
+train <- read.csv("data/train.scaled.label.csv", stringsAsFactors = FALSE)
+test <- read.csv("data/test.scaled.label.csv", stringsAsFactors = FALSE)
 ```
 
 ## Cross-validacija
@@ -161,7 +161,7 @@ cv.results <- xgb.cv(
 print(cv.results$evaluation_log)
 ```
 
-XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060281, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
+XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060292, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
 
 Sada cemo da prikazemo red sa najmanjim test RMSE:
 ```{r}
@@ -182,7 +182,7 @@ final.model <- xgboost(
   objective = "reg:squarederror",
   max_depth = 5,
   learning_rate = 0.1,
-  nrounds = best.rmse
+  nrounds = best.iter
 )
 
 importance.matrix <- xgb.importance(feature_names = colnames(train.x), model = final.model)
@@ -242,4 +242,3 @@ lgb.plot.importance(importance, top_n = 20)
 - Linearni regresioni modeli, ukljucujuci Ridge i Lasso regularizaciju, nisu uspeli da ostvare zadovoljavajuce performanse, jer nisu u stanju da uhvate nelinearne i kompleksne odnose izmedju prediktora i ciljne promenljive.
 - Nelinearni modeli bazirani na metodama stabala odlucivanja (XGBoost i LightGBM) znacajno poboljsavaju performanse u odnosu na linearne modele, sto potvrdjuje postojanje nelinearnih odnosa u podacima.
 - Na osnovu dobijenih rezultata, LightGBM se pokazao kao najadekvatniji model za predikciju ciljne promenljive, iako ostvarena poboljsanja u odnosu na XGBoost nisu drasticna.
-
