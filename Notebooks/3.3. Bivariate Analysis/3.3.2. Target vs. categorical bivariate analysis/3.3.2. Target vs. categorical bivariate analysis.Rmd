@@ -1,0 +1,978 @@
+---
+title: "Bivariate Analysis"
+output: html_notebook
+---
+
+## Ucitavanje potrebnih biblioteka
+
+```{r}
+install.packages("rstatix")
+
+library(tidyverse)
+library(car)
+library(FSA)
+library(rstatix)
+```
+
+## Kategorijske prema ciljnoj varijabli
+
+### Distribucija varijable Premium Amount u odnosu na Gender
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Gender) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Gender, y = Premium.Amount, fill = Gender)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  scale_fill_manual(values = c("Female" = "#e45775", "Male" = "#4ea0c4")) +
+  labs(title = "Violin plot distribucije Premium.Amount po Gender", x = "Gender", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Gender)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Gender == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Mann-Withney test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- wilcox.test(Premium.Amount ~ Gender, data = train)$p.value
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Gender atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Gender atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Marital.Status
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Marital.Status) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Marital.Status, y = Premium.Amount, fill = Marital.Status)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Marital.Status", x = "Marital.Status", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Marital.Status)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Marital.Status == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Marital.Status, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Marital.Status atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Marital.Status atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Education.Level
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Education.Level) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Education.Level, y = Premium.Amount, fill = Education.Level)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Education.Level", x = "Education.Level", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Education.Level)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Education.Level == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+
+p_value <- kruskal_test(Premium.Amount~Education.Level,data=train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Education.Level atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Education.Level atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Occupation
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Occupation) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Occupation, y = Premium.Amount, fill = Occupation)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Occupation", x = "Occupation", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Occupation)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Occupation == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount~Occupation,data=train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Occupation atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Occupation atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+
+```{r}
+kruskal_effsize(Premium.Amount~Occupation,data=train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Occupation varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Distribucija varijable Premium Amount u odnosu na Location
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Location) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Location, y = Premium.Amount, fill = Location)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Location", x = "Location", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Location)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Location == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Location, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Location atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Location atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Policy.Type
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Policy.Type) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Policy.Type, y = Premium.Amount, fill = Policy.Type)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Policy.Type", x = "Policy.Type", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Policy.Type)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Policy.Type == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Policy.Type, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Policy.Type atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Policy.Type atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Customer.Feedback
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Customer.Feedback) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Customer.Feedback, y = Premium.Amount, fill = Customer.Feedback)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Customer.Feedback", x = "Customer.Feedback", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Customer.Feedback)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Customer.Feedback == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Customer.Feedback, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Customer.Feedback atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Customer.Feedback atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Smoking.Status
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Smoking.Status) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Smoking.Status, y = Premium.Amount, fill = Smoking.Status)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Smoking.Status", x = "Smoking.Status", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Smoking.Status)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Smoking.Status == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Mann-Withney test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- wilcox.test(Premium.Amount ~ Smoking.Status, data = train)$p.value
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Smoking.Status atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Smoking.Status atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Exercise.Frequency
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Exercise.Frequency) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Exercise.Frequency, y = Premium.Amount, fill = Exercise.Frequency)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Exercise.Frequency", x = "Exercise.Frequency", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Exercise.Frequency)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Exercise.Frequency == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Exercise.Frequency, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Exercise.Frequency atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Exercise.Frequency atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Property.Type
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Property.Type) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Property.Type, y = Premium.Amount, fill = Property.Type)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Property.Type", x = "Property.Type", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Property.Type)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Property.Type == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Property.Type, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Property.Type atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Property.Type atributa.")
+}
+```
+
+### Distribucija varijable Premium Amount u odnosu na Number.of.Dependents
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Number.of.Dependents) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Number.of.Dependents, y = Premium.Amount, fill = Number.of.Dependents)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Number.of.Dependents", x = "Number.of.Dependents", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Number.of.Dependents)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Number.of.Dependents == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Number.of.Dependents, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Number.of.Dependents atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Number.of.Dependents atributa.")
+}
+```
+
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+
+```{r}
+kruskal_effsize(Premium.Amount ~ Number.of.Dependents, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Occupation varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Distribucija varijable Premium Amount u odnosu na Previous.Claims
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Previous.Claims) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Previous.Claims, y = Premium.Amount, fill = Previous.Claims)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount poPrevious.Claims", x = "Previous.Claims", y = "Premium.Amount") +
+  theme_minimal()
+
+str(train)
+```
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$PreviousClaimsGrouped)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$PreviousClaimsGrouped == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ PreviousClaimsGrouped, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama PreviousClaimsGrouped atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama PreviousClaimsGrouped atributa.")
+}
+```
+
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+
+```{r}
+kruskal_effsize(Premium.Amount ~ PreviousClaimsGrouped, data = train)$effsize
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+Grupisanje nivoa sa 7, 8 i 9 zahteva dalo je jasniju sliku trenda koji postoji izmedju Previous.Claims i Premium.Amount. Medijana Premium.Amount raste sa brojem prethodnih zahteva: veci broj prethodnih zahteva korelira sa visim iznosom premije. 
+Prilikom feature engineering-a potrebno je izvrsiti grupisanje nivoa sa malim brojem zahteva.
+
+### Distribucija varijable Premium Amount u odnosu na Insurance.Duration
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Insurance.Duration) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Insurance.Duration, y = Premium.Amount, fill = Insurance.Duration)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Insurance.Duration", x = "Insurance.Duration", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Insurance.Duration)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Premium.Amount[train$Insurance.Duration == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Insurance.Duration, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Insurance.Duration atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Insurance.Duration atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+
+```{r}
+kruskal_effsize(Premium.Amount ~ Insurance.Duration, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Insurance.Duration varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+## Zakljucak
+
+- Prema Shapiro-Wilk testu, Premium.Amount u vecini grupa po kategorijama ne prati normalnu raspodelu. Iz tog razloga, koristimo Kruskal-Wallis test i Mann-Whitney U test.
+- Atributi koji nemaju znacajnu vezu sa ciljnom varijablom: Gender, Marital.Status, Education.Level, Location, Policy.Type, Smoking.Status, Exercise.Frequency, Property.Type, Customer.Feedback.
+- Iako Kruskal-Wallis test ukazuje na znacajnu statisticku razliku distribucije Premium.Amount varijable u odnosu na kategorije Occupation, Insurance.Duration i Number.of.Dependents varijabli, daljom analizom je utvrdjeno da je ova razlika minimalna i prakticno neprimenljiva.
+- Na raspodelu Premium.Amount promenljive utice broj prethodno kreiranih zahteva, Previous.Claims. Premija se povecava sa povecanjem broja kreiranih zahteva.

@@ -1,0 +1,805 @@
+---
+title: "4.3. Feature engineering"
+output: html_notebook
+---
+
+```{r}
+install.packages('tidymodels')
+
+library(lubridate)
+library(recipes)
+library(caret)
+library(reshape2)
+library(tidymodels)
+```
+
+Spojicemo train i test skup:
+```{r}
+test$Premium.Amount <- NA
+data <- rbind(train, test)
+
+summary(data)
+```
+
+## Age.Group
+
+Od atributa Age kreiramo novi atribut Age.Group
+```{r}
+data$Age.Group <- cut(
+  data$Age,
+  breaks = c(-Inf, 25, 35, 50, 65, Inf),
+  labels = c("≤25", "26–35", "36–50", "51–65", "65+"),
+  right = TRUE,
+  ordered_result = TRUE
+)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Age.Group, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Bar plot za Age.Group", x = "Age.Group", y = "Procenat") +
+  theme_minimal()
+```
+
+#### Age.Group vs. Premium.Amount
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- data %>%
+  group_by(Age.Group) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  )
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Age.Group, y = Premium.Amount, fill = Age.Group)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Age.Group", x = "Age.Group", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(data$Age.Group)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(data$Premium.Amount[data$Age.Group == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Age.Group, data = data)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Age.Group atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Age.Group atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Premium.Amount ~ Age.Group, data = data)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Age.Group varijable, analizom Dunn post-hoc testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva. Premije osiguranja su uglavnom slične između grupa starosti ≤25, 26–35 i 36–50. Medjutim, grupa 26–35 ima značajno više premije u odnosu na stariju populaciju.
+
+## Income.Dependents
+
+Pomocu atributa Annual.Income i Number.of.Dependents kreiramo novu promenljivu Income.Dependents koja predstavlja ......
+```{r}
+data$Number.of.Dependents.Num <- as.character(data$Number.of.Dependents)
+data$Number.of.Dependents.Num <- as.numeric(data$Number.of.Dependents.Num)
+
+data$Income.Dependents <- ifelse(
+  is.na(data$Number.of.Dependents.Num),
+  NA,
+  data$Annual.Income / (data$Number.of.Dependents.Num + 1)
+)
+
+data <- data %>%
+  select(-Number.of.Dependents.Num)
+```
+
+```{r}
+summary(data$Income.Dependents)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Income.Dependents)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Income.Dependents", y = "Gustina")
+```
+
+```{r}
+data$Income.Dependents <- log(data$Income.Dependents)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Income.Dependents)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Income.Dependents", y = "Gustina")
+```
+
+#### Income.Dependents vs. Premium.Amount
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Income.Dependents, y = Premium.Amount)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "Odnos između Income.Dependents i Premium.Amount", x = "Income.Dependents", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+cor.test(data$Premium.Amount, data$Income.Dependents, method = "spearman")
+```
+
+Spearmanova korelacija izmedju Premium.Amount i Income.Dependents je statisticki znacajna (ρ = −0.054, p < 0.001), ali izuzetno slaba. S obzirom na veoma veliki uzorak, statisticka znacajnost ne implicira prakticnu vaznost, te se zakljucuje da Income.Dependents nema relevantan uticaj na Premium.Amount.
+
+## Income.Credit
+
+Pomocu atributa Annual.Income i Credit.Score kreiramo novu promenljivu Income.Credit koja predstavlja indikator finansijske stabilnosti
+```{r}
+data$Income.Credit <- data$Annual.Income * data$Credit.Score
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Income.Credit)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Income.Credit", y = "Gustina")
+```
+
+Logaritamska transformacija
+```{r}
+data$Income.Credit <- log(data$Income.Credit)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Income.Credit)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Income.Credit", y = "Gustina")
+```
+
+#### Income.Credit vs. Premium.Amount
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Income.Credit, y = Premium.Amount)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "Odnos između Income.Credit i Premium.Amount", x = "Income.Credit", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+cor.test(data$Premium.Amount, data$Income.Credit, method = "spearman")
+```
+
+Spearmanova korelacija izmedju Premium.Amount i Income.Credit je statisticki znacajna (ρ = −0.071, p < 0.001), ali vrlo slaba. S obzirom na izuzetno veliki uzorak, statisticka znacajnost ne implicira prakticnu relevantnost, te se zakljucuje da Income.Credit ima ogranicen samostalni uticaj na iznos premije.
+
+## Log transformacija Annual.Income i Income.Group
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Annual.Income)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Annual.Income", y = "Gustina")
+```
+
+Logaritamska transformacija
+```{r}
+data$Annual.Income <- log(data$Annual.Income)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Annual.Income)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Annual.Income", y = "Gustina")
+```
+
+Od atributa Annual.Income kreiramo novi atribut Income.Group
+```{r}
+sum(is.na(data$Annual.Income))
+q <- quantile(data$Annual.Income, probs = c(0, 0.25, 0.5, 0.75, 1))
+
+data$Income.Group <- cut(
+  data$Annual.Income,
+  breaks = q,
+  include.lowest = TRUE,
+  labels = c("Low", "Mid-Low", "Mid-High", "High"),
+  ordered_result = TRUE
+)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Income.Group)) +
+  geom_bar(fill = "thistle", color = "black") +
+  labs(title = "Bar plot za Income.Group", x = "Income.Group", y = "Broj") +
+  theme_minimal()
+table(data$Income.Group)
+```
+
+#### Income.Group vs. Premium.Amount
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- data %>%
+  group_by(Income.Group) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  )
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Income.Group, y = Premium.Amount, fill = Income.Group)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Income.Group", x = "Income.Group", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(data$Income.Group)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(data$Premium.Amount[data$Income.Group == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Income.Group, data = data)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Income.Group atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Income.Group atributa.")
+}
+```
+
+```{r}
+kruskal_effsize(Premium.Amount ~ Income.Group, data = data)$effsize
+```
+
+Post-hoc Dunn test (Bonferroni korekcija) pokazao je statistički značajne razlike u iznosu premije između svih Income.Group kategorija (p < 0.001). Medijani premije opadaju sa rastom prihoda, pri čemu grupa sa visokim prihodima ima najnižu medijalnu premiju. Međutim, velike interkvartilne širine i značajno preklapanje distribucija ukazuju da je praktični efekat Income.Group ograničen.
+
+## Health.Group
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Health.Score)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Health.Score", y = "Gustina")
+```
+
+Od atributa Health.Score kreiramo novi atribut Health.Group
+```{r}
+q <- quantile(data$Health.Score, probs = c(0, 1/3, 2/3, 1))
+
+data$Health.Group <- cut(
+  data$Health.Score,
+  breaks = q,
+  include.lowest = TRUE,
+  labels = c("Low", "Medium", "High"),
+  ordered_result = TRUE
+)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Health.Group, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Bar plot za Health.Group", x = "Health.Group", y = "Procenat") +
+  theme_minimal()
+```
+
+#### Health.Group vs. Premium.Amount
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- data %>%
+  group_by(Health.Group) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium_Amount = IQR(Premium.Amount, na.rm = TRUE)
+  )
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Health.Group, y = Premium.Amount, fill = Health.Group)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Health.Group", x = "Health.Group", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(data$Health.Group)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(data$Premium.Amount[data$Health.Group == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Health.Group, data = data)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Health.Group atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Health.Group atributa.")
+}
+```
+
+```{r}
+kruskal_effsize(Premium.Amount ~ Health.Group, data = data)$effsize
+```
+
+Dunn post-hoc test (Bonferroni korekcija) pokazao je statisticki znacajne razlike u iznosu premije izmedju zdravstvenih grupa (p < 0.001). Iako premije rastu sa pogorsanjem zdravstvene kategorije, razlike u medijanima su male u odnosu na interkvartilne raspone, sto ukazuje na ogranicenu prakticnu vaznost zdravstvene grupe kao samostalnog faktora.
+
+## Previous.Claims spojiti za 7+
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+"
+
+```{r}
+data$Previous.Claims <- as.character(data$Previous.Claims)
+data$Previous.Claims[data$Previous.Claims %in% c("7","8","9")] <- "7+"
+data$Previous.Claims <- factor(data$Previous.Claims, 
+                                      levels = c("0","1","2","3","4","5","6","7+", "UNKNOWN"))
+
+table(data$Previous.Claims, useNA="ifany")
+```
+
+## Policy.Year i Policy.Season
+
+Od char atributa Policy.Start.Date kreiramo atribute Policy.Year i Policy.Season
+```{r}
+data$Policy.Start.Date <- ymd_hms(data$Policy.Start.Date)
+
+data$Policy.Year  <- year(data$Policy.Start.Date)
+
+data$Policy.Season <- cut(
+  month(data$Policy.Start.Date),
+  breaks = c(0, 2, 5, 8, 11, 12),
+  labels = c("Winter", "Spring", "Summer", "Autumn", "Winter"),
+  include.lowest = TRUE,
+  right = TRUE
+)
+
+data <- data %>%
+  select(-Policy.Start.Date)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Policy.Year)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Policy.Year", y = "Gustina")
+```
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Policy.Season, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Bar plot za Policy.Season", x = "Policy.Season", y = "Procenat") +
+  theme_minimal()
+```
+
+#### Policy.Season vs. Premium.Amount
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- data %>%
+  group_by(Policy.Season) %>%
+  summarise(
+    Count = n(),
+    Mean_Premium_Amount = mean(Premium.Amount, na.rm = TRUE),
+    Median_Premium_Amount = median(Premium.Amount, na.rm = TRUE),
+    Std_Premium_Amount = sd(Premium.Amount, na.rm = TRUE),
+    IQR_Premium.Amount = IQR(Premium.Amount, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Premium_Amount))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Policy.Season, y = Premium.Amount, fill = Policy.Season)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Premium.Amount po Policy.Season", x = "Policy.Season", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(data$Policy.Season)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(data$Premium.Amount[data$Policy.Season == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Premium.Amount po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Premium.Amount po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Premium.Amount po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama
+
+```{r}
+p_value <- kruskal_test(Premium.Amount ~ Policy.Season, data = data)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Premium.Amount po kategorijama Policy.Season atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Premium.Amount po kategorijama Policy.Season atributa.")
+}
+```
+
+
+```{r}
+kruskal_effsize(Premium.Amount ~ Policy.Season, data = data)$effsize
+```
+
+Iako je Kruskal–Wallis test ukazao na to da postoji statistički značajna razlika u raspodeli varijable Premium.Amount u odnosu na nivoe varijable Policy.Season, analizom vrednosti efekta, kao i poređenjem medijana i IQR-a, utvrđujemo da je ova razlika minimalna i praktično zanemarljiva.
+
+#### Policy.Year vs. Premium.Amount
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Policy.Year, y = Premium.Amount)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "Odnos između Policy.Year i Premium.Amount", x = "Policy.Year", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+cor.test(data$Premium.Amount, data$Policy.Year, method = "spearman")
+```
+
+Spearmanova korelacija izmedju godine ugovaranja polise i iznosa premije je statisticki znacajna (ρ = −0.01, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da promena godine ugovaranja nema prakticno relevantan uticaj na visinu premije.
+
+
+## Health.Claims
+
+Na osnovu Health.Group i Previous.Claims atributa kreiramo novi, Health.Claims, koji govori koliko je klijent zdrav u odnosu na druge sa istim brojem prethodnih zahteva.
+```{r}
+data <- data %>%
+  group_by(Previous.Claims) %>%
+  mutate(
+    Health.Claims = Health.Score / mean(Health.Score)
+  ) %>%
+  ungroup()
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Health.Claims)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Health.Claims", y = "Gustina")
+```
+
+#### Health.Claims vs. Premium.Amount
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Health.Claims, y = Premium.Amount)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "Odnos između Health.Claims i Premium.Amount", x = "Health.Claims", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+cor.test(data$Premium.Amount, data$Health.Claims, method = "spearman")
+```
+
+Spearmanova korelacija izmedju Health.Claims i Premium.Amount je statisticki znacajna (ρ = 0.01517, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja prethodnih zahteva nema prakticno relevantan uticaj na visinu premije.
+
+## Health.Age
+
+Na osnovu Health.Score i Age atributa kreiramo novi, Health.Age, koji ukazuje na zdravlje klijenta u skladu sa godinama.
+```{r}
+data$Health.Age <- data$Health.Score * data$Age
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Health.Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Health.Age", y = "Gustina")
+```
+
+Logaritamska transformacija
+```{r}
+data$Health.Age <- log(data$Health.Age)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Health.Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Health.Age", y = "Gustina")
+```
+
+#### Health.Age vs. Premium.Amount
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(data, aes(x = Health.Age, y = Premium.Amount)) +
+  geom_point(alpha = 0.6, color = "blue") +
+  geom_smooth(method = "lm", se = TRUE, color = "red") +
+  labs(title = "Odnos između Health.Age i Premium.Amount", x = "Health.Age", y = "Premium.Amount") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+cor.test(data$Premium.Amount, data$Health.Age, method = "spearman")
+```
+
+Spearmanova korelacija izmedju Health.Age i Premium.Amount je statisticki znacajna (ρ = 0.01038015, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja godina nema prakticno relevantan uticaj na visinu premije.
+
+
+## Log transformacija Premium.Amount
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Premium.Amount)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Premium.Amount", y = "Gustina")
+```
+
+Logaritamska transformacija
+```{r}
+data$Premium.Amount <- log(data$Premium.Amount)
+```
+
+Graficki prikaz podataka
+```{r}
+ggplot(data, aes(x = Premium.Amount)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Histogram sa KDE", x = "Premium.Amount", y = "Gustina")
+```
+
+## Korelaciona analiza numerickih varijabli
+
+```{r}
+num.data <- data[sapply(data, is.numeric)]
+corr <- cor(num.data, use = "complete.obs")
+
+corr.melt <- melt(corr)
+
+ggplot(corr.melt, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(value, 2)), size = 3) +
+  scale_fill_distiller(palette = "PRGn", type = "div", limits = c(-1, 1)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_fixed() +
+  labs(title = "Heatmap korelacija numerickih atributa (sa brojevima)", x = "", y = "", fill = "Corr")
+```
+Heat mape potvrdjuju da, iako je vecina osnovnih osobina slabo medjusobno povezana, izvedene osobine poput Age_Health i Income_Credit pokazuju snažnu unutrašnju vezu. Ne postoji jaka multikolinearnost između nepovezanih osobina, što znaci da je skup podataka pogodan za primenu i linearnih i nelinearnih modela.
+
+# Enkodiranje
+
+```{r}
+list.feature.cat.label <- c("Number.of.Dependents", "Education.Level", "Insurance.Duration", "Exercise.Frequency", "Age.Group", "Income.Group", "Health.Group")
+
+list.feature.cat.onehot <- c("Gender", "Marital.Status", "Occupation", "Location", "Policy.Type", "Customer.Feedback", "Property.Type", "Policy.Season", "Smoking.Status", "Previous.Claims")
+
+rec <- recipe(Premium.Amount ~ ., data = data) %>%
+  step_integer(all_of(list.feature.cat.label), zero_based = FALSE) %>%
+  step_dummy(all_of(list.feature.cat.onehot))
+
+rec.prep <- prep(rec, training = data)
+data.label <- bake(rec.prep, new_data = data)
+
+str(data.label)
+```
+
+# Podela na train i test skup
+
+```{r}
+train.label <- data.label[!is.na(data.label$Premium.Amount), ]
+
+test.label  <- data.label[is.na(data.label$Premium.Amount), ]
+```
+
+
+# Skaliranje
+
+```{r}
+scale.cols <- c(
+  "Age",
+  "Annual.Income",
+  "Health.Score",
+  "Vehicle.Age",
+  "Credit.Score",
+  "Income.Dependents",
+  "Income.Credit",
+  "Policy.Year",
+  "Health.Claims",
+  "Health.Age"
+)
+
+preproc.label <- preProcess(
+  train.label[, scale.cols],
+  method = c("center", "scale")
+)
+
+train.scaled.label <- train.label
+train.scaled.label[, scale.cols] <- predict(preproc, train.scaled.label[, scale.cols])
+
+test.scaled.label <- test.label
+test.scaled.label[, scale.cols] <- predict(preproc, test.scaled.label[, scale.cols])
+```
+
+# Cuvanje train i test skupa
+
+```{r}
+write.csv(train.scaled.label, "train.scaled.label.csv", row.names = FALSE)
+write.csv(test.scaled.label, "test.scaled.label.csv", row.names = FALSE)
+```

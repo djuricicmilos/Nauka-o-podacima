@@ -1,0 +1,913 @@
+---
+title: "Bivariate Analysis"
+output: html_notebook
+---
+
+## Ucitavanje potrebnih biblioteka
+
+```{r}
+library(tidyverse)
+library(car)
+library(FSA)
+library(rstatix)
+```
+
+### Annual.Income prema Number.of.Dependents
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Number.of.Dependents) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Number.of.Dependents, y = Annual.Income, fill = Number.of.Dependents)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Number.of.Dependents", x = "Number.of.Dependents", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Number.of.Dependents)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Number.of.Dependents == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Number.of.Dependents, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Number.of.Dependents atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Number.of.Dependents atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Annual.Income ~ Number.of.Dependents, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Annual.Income varijable u odnosu na nivoe Number.of.Dependents varijable, analizom vrednosti efekta, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+
+### Annual.Income prema Education.Level
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Education.Level) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Education.Level, y = Annual.Income, fill = Education.Level)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Education.Level", x = "Education.Level", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Education.Level)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Education.Level == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Education.Level, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Education.Level atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Education.Level atributa.")
+}
+```
+
+### Annual.Income prema Occupation
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Occupation) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Occupation, y = Annual.Income, fill = Occupation)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Occupation", x = "Occupation", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Occupation)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Occupation == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Occupation, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Occupation atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Occupation atributa.")
+}
+```
+
+### Annual.Income prema Policy.Type
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Policy.Type) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Policy.Type, y = Annual.Income, fill = Policy.Type)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Policy.Type", x = "Policy.Type", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Policy.Type)
+categories <- categories[!is.na(categories)] 
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Policy.Type == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Policy.Type, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Policy.Type atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Policy.Type atributa.")
+}
+```
+
+### Annual.Income prema Insurance.Duration
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Insurance.Duration) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Insurance.Duration, y = Annual.Income, fill = Insurance.Duration)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Insurance.Duration", x = "Insurance.Duration", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Insurance.Duration)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Insurance.Duration == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Insurance.Duration, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Insurance.Duration atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Insurance.Duration atributa.")
+}
+```
+
+### Annual.Income prema Previous.Claims
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+Osnovni opis varijabli
+```{r}
+df_summary_feature <- train %>%
+  group_by(PreviousClaimsGrouped) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  )
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = PreviousClaimsGrouped, y = Annual.Income, fill = PreviousClaimsGrouped)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Previous.Claims", x = "Previous.Claims", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+```{r}
+set.seed(123)
+categories <- unique(train$PreviousClaimsGrouped)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$PreviousClaimsGrouped == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+```{r}
+p_value <- kruskal_test(Annual.Income ~ PreviousClaimsGrouped, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama PreviousClaimsGrouped atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama PreviousClaimsGrouped atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Annual.Income ~ PreviousClaimsGrouped, data = train)$effsize
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+Kruskal-Wallis test ukazuje na to da postoji statisticki znacajna razlika u raspodeli Annual.Income varijable u odnosu na nivoe PreviousClaimsGrouped varijable, sto se moze potvrditi i analizom medijana i IQR-a: veci broj zahteva ukazuje na vece godisnje prihode. Effect size vrednost je mala, ali u poredjenju sa ostalim vrednostima, ovu vezu mozemo da smatramo znacajnom.
+
+### Annual.Income prema Exercise.Frequency
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Exercise.Frequency) %>%
+  summarise(
+    Count = n(),
+    Mean_Annual.Income = mean(Annual.Income, na.rm = TRUE),
+    Median_Annual.Income = median(Annual.Income, na.rm = TRUE),
+    Std_Annual.Income = sd(Annual.Income, na.rm = TRUE),
+    IQR_Annual.Income = IQR(Annual.Income, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Annual.Income))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Exercise.Frequency, y = Annual.Income, fill = Exercise.Frequency)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Annual.Income po Exercise.Frequency", x = "Exercise.Frequency", y = "Annual.Income") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Exercise.Frequency)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Annual.Income[train$Exercise.Frequency == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Annual.Income po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Annual.Income po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Annual.Income po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Annual.Income ~ Exercise.Frequency, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Annual.Income po kategorijama Exercise.Frequency atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Annual.Income po kategorijama Exercise.Frequency atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Annual.Income ~ Exercise.Frequency, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Annual.Income varijable u odnosu na nivoe Exercise.Frequency varijable, analizom efekta testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Credit.Score prema Occupation
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Occupation) %>%
+  summarise(
+    Count = n(),
+    Mean_Credit.Score = mean(Credit.Score, na.rm = TRUE),
+    Median_Credit.Score = median(Credit.Score, na.rm = TRUE),
+    Std_Credit.Score = sd(Credit.Score, na.rm = TRUE),
+    IQR_Credit.Score = IQR(Credit.Score, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Credit.Score))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Occupation, y = Credit.Score, fill = Occupation)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Credit.Score po Occupation", x = "Occupation", y = "Credit.Score") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Occupation)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Credit.Score[train$Occupation == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Credit.Score po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Credit.Score po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Credit.Score po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Credit.Score ~ Occupation, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Credit.Score po kategorijama Occupation atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Credit.Score po kategorijama Occupation atributa.")
+}
+```
+
+### Credit.Score prema Marital.Status
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Marital.Status) %>%
+  summarise(
+    Count = n(),
+    Mean_Credit.Score = mean(Credit.Score, na.rm = TRUE),
+    Median_Credit.Score = median(Credit.Score, na.rm = TRUE),
+    Std_Credit.Score = sd(Credit.Score, na.rm = TRUE),
+    IQR_Credit.Score = IQR(Credit.Score, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Credit.Score))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Marital.Status, y = Credit.Score, fill = Marital.Status)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Credit.Score po Marital.Status", x = "Marital.Status", y = "Credit.Score") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Marital.Status)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Credit.Score[train$Marital.Status == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Credit.Score po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Credit.Score po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Credit.Score po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Credit.Score ~ Marital.Status, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Credit.Score po kategorijama Marital.Status atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Credit.Score po kategorijama Marital.Status atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Credit.Score ~ Marital.Status, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Credit.Score varijable u odnosu na nivoe Marital.Status varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Credit.Score prema Number.of.Dependents
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Number.of.Dependents) %>%
+  summarise(
+    Count = n(),
+    Mean_Credit.Score = mean(Credit.Score, na.rm = TRUE),
+    Median_Credit.Score = median(Credit.Score, na.rm = TRUE),
+    Std_Credit.Score = sd(Credit.Score, na.rm = TRUE),
+    IQR_Credit.Score = IQR(Credit.Score, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Credit.Score))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Number.of.Dependents, y = Credit.Score, fill = Number.of.Dependents)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Credit.Score po Number.of.Dependents", x = "Number.of.Dependents", y = "Credit.Score") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Number.of.Dependents)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Credit.Score[train$Number.of.Dependents == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Credit.Score po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Credit.Score po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Credit.Score po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Credit.Score ~ Number.of.Dependents, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Credit.Score po kategorijama Number.of.Dependents atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Credit.Score po kategorijama Number.of.Dependents atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Credit.Score ~ Number.of.Dependents, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Credit.Score varijable u odnosu na nivoe Number.of.Dependents varijable, analizom efekta testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Credit.Score prema Education.Level
+
+Osnovni opis varijabli
+
+```{r}
+df_summary_feature <- train %>%
+  group_by(Education.Level) %>%
+  summarise(
+    Count = n(),
+    Mean_Credit.Score = mean(Credit.Score, na.rm = TRUE),
+    Median_Credit.Score = median(Credit.Score, na.rm = TRUE),
+    Std_Credit.Score = sd(Credit.Score, na.rm = TRUE),
+    IQR_Credit.Score = IQR(Credit.Score, na.rm = TRUE)
+  ) %>%
+  arrange(desc(Mean_Credit.Score))
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+
+```{r}
+ggplot(train, aes(x = Education.Level, y = Credit.Score, fill = Education.Level)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Credit.Score po Education.Level", x = "Education.Level", y = "Credit.Score") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+
+```{r}
+set.seed(123)
+categories <- unique(train$Education.Level)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Credit.Score[train$Education.Level == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Credit.Score po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Credit.Score po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Credit.Score po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+
+```{r}
+p_value <- kruskal_test(Credit.Score ~ Education.Level, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Credit.Score po kategorijama Education.Level atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Credit.Score po kategorijama Education.Level atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Credit.Score ~ Education.Level, data = train)$effsize
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Credit.Score varijable u odnosu na nivoe Education.Level varijable, analizom efekta testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+
+### Credit.Score prema Previous.Claims
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+Osnovni opis varijabli
+```{r}
+df_summary_feature <- train %>%
+  group_by(PreviousClaimsGrouped) %>%
+  summarise(
+    Count = n(),
+    Mean_Credit.Score = mean(Credit.Score, na.rm = TRUE),
+    Median_Credit.Score = median(Credit.Score, na.rm = TRUE),
+    Std_Credit.Score = sd(Credit.Score, na.rm = TRUE),
+    IQR_Credit.Score = IQR(Credit.Score, na.rm = TRUE)
+  )
+
+print(df_summary_feature)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = PreviousClaimsGrouped, y = Credit.Score, fill = PreviousClaimsGrouped)) +
+  geom_violin(trim = FALSE, alpha = 0.8) +
+  geom_boxplot(width = 0.1, outlier.shape = NA, alpha = 0.3) +
+  labs(title = "Violin plot distribucije Credit.Score po Previous.Claims", x = "Previous.Claims", y = "Credit.Score") +
+  theme_minimal()
+```
+
+Statisticka analiza zavisnosti varijabli
+```{r}
+set.seed(123)
+categories <- unique(train$PreviousClaimsGrouped)
+categories <- categories[!is.na(categories)]
+
+shapiro_boot <- function(cat) {
+  values <- na.omit(train$Credit.Score[train$PreviousClaimsGrouped == cat])
+  
+  if (length(values) > 3) {
+    p_values <- replicate(500, shapiro.test(sample(values, min(3000, length(values))))$p.value)
+    p_mean <- mean(p_values)
+    
+    if (p_mean > 0.05) {
+      sprintf("Varijabla Credit.Score po %s kategoriji ima normalnu raspodelu.", as.character(cat))
+    } else {
+      sprintf("Varijabla Credit.Score po %s kategoriji nema normalnu raspodelu.", as.character(cat))
+    }
+  }
+  else {
+    sprintf("Varijabla Credit.Score po %s kategoriji ima manje od 3 observacije.", as.character(cat))
+  }
+}
+
+lapply(categories, shapiro_boot)
+```
+
+Kruskal-Wallis test radi statisticke provere distribucije po kategorijama:
+```{r}
+p_value <- kruskal_test(Credit.Score ~ PreviousClaimsGrouped, data = train)$p
+
+if (p_value > 0.05) {
+  print("Nema statisticke razlike izmedju distribucija Credit.Score po kategorijama PreviousClaimsGrouped atributa.")
+} else {
+  print("Postoji statisticka razlika izmedju distribucija Credit.Score po kategorijama PreviousClaimsGrouped atributa.")
+}
+```
+
+Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
+```{r}
+kruskal_effsize(Credit.Score ~ PreviousClaimsGrouped, data = train)$effsize
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Credit.Score varijable u odnosu na nivoe PreviousClaimsGrouped varijable, analizom efekta testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.

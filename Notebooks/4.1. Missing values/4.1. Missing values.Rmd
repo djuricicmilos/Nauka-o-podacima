@@ -1,0 +1,246 @@
+---
+title: "Missing values"
+output: html_notebook
+---
+
+Ucitavanje potrebnih biblioteka:
+
+```{r}
+install.packages('FSA')
+
+library(tidyverse)
+library(FSA)
+```
+
+## Kategorijski atributi
+
+Broj nedostajucih vrednosti u train skupu podataka:
+```{r}
+cat.train <- sapply(train, is.factor)
+colSums(is.na(train[, cat.train]))
+```
+
+Broj nedostajucih vrednosti u test skupu podataka:
+
+```{r}
+cat.test <- sapply(test, is.factor)
+colSums(is.na(test[, cat.test]))
+```
+
+Prikaz procentualnog odnosa nedostajucih podataka u train skupu: 
+
+```{r}
+na_percent <- colSums(is.na(train[, cat.train])) / nrow(train) * 100
+round(na_percent, 2)
+```
+
+Prikaz procentualnog odnosa nedostajucih podataka u test skupu: 
+
+```{r}
+na_percent <- colSums(is.na(test[, cat.test])) / nrow(test) * 100
+round(na_percent, 2)
+```
+
+Iako su train i test dva odvojena skupa podataka, imaju skoro identicne procente nedostajucih vrednosti po varijablama. Samim tim, tehnike imputacije ce biti iste za oba skupa.
+
+Tehnike imputacije:
+- Nedostajuce vrednosti u varijablama Marital.Status, Insurance.Duration i Customer.Feedback ce biti popunjene sa najvise prisutnom kategorijom u varijabli.
+- Nedostajuce vrednosti u varijablama Occupation i Previous.Claims ce biti popunjene sa novom kategorijom Unknown. Procenat nedostajucih vrednosti u ovim varijablama je veliki i imputacija mode tehnikom bi drasticno uticala na distibuciju podataka. Dodavanjem nove kategorije cemo obezbediti da se distribucija podataka ne promeni.
+
+## Imputacija MODE tehnikom
+
+```{r}
+cols <- c("Marital.Status", "Insurance.Duration", "Customer.Feedback", "Number.of.Dependents")
+
+for (col in cols) {
+  mode.train <- names(which.max(table(train[[col]])))
+  mode.test <- names(which.max(table(test[[col]])))
+  
+  train[[col]][is.na(train[[col]])] <- mode.train
+  test[[col]][is.na(test[[col]])] <- mode.test
+}
+```
+
+## Imputacija UNKNOWN kategorijom
+
+```{r}
+train$Previous.Claims <- factor(train$Previous.Claims, ordered = FALSE)
+test$Previous.Claims <- factor(test$Previous.Claims, ordered = FALSE)
+
+cols <- c("Occupation", "Previous.Claims")
+
+for (col in cols) {
+  levels(train[[col]]) <- c(levels(train[[col]]), "UNKNOWN")
+  levels(test[[col]])  <- c(levels(test[[col]]), "UNKNOWN")
+  
+  train[[col]][is.na(train[[col]])] <- "UNKNOWN"
+  test[[col]][is.na(test[[col]])] <- "UNKNOWN"
+}
+```
+
+## Provera nedostajucih vrednosti
+
+Prikaz procentualnog odnosa nedostajucih podataka u train skupu: 
+
+```{r}
+na_percent <- colSums(is.na(train[, cat.train])) / nrow(train) * 100
+na_percent
+```
+
+Prikaz procentualnog odnosa nedostajucih podataka u test skupu: 
+
+```{r}
+na_percent <- colSums(is.na(test[, cat.test])) / nrow(test) * 100
+na_percent
+```
+
+## Numericki atributi
+
+Broj nedostajucih vrednosti u train skupu podataka:
+```{r}
+num.train <- sapply(train, is.numeric)
+colSums(is.na(train[, num.train]))
+```
+Broj nedostajucih vrednosti u test skupu podataka:
+
+```{r}
+num.test <- sapply(test, is.numeric)
+colSums(is.na(test[, num.test]))
+```
+
+Prikaz procentualnog odnosa nedostajucih podataka u train skupu: 
+
+```{r}
+na_percent <- colSums(is.na(train[, num.train])) / nrow(train) * 100
+na_percent
+```
+
+Prikaz procentualnog odnosa nedostajucih podataka u test skupu: 
+
+```{r}
+na_percent <- colSums(is.na(test[, num.test])) / nrow(test) * 100
+na_percent
+```
+
+Na osnovu procentualnog prikaza broja nedostajucih vrednosti, zakljucujemo da ne postoji varijabla koja sadrzi vise od 20% nedostajucih vrednosti. Samim tim, mozemo da izvrsimo imputaciju nedostajucih vrednosti srednjom vrednoscu ili medijanom.
+Kako sve numericke varijable nemaju normalnu raspodelu, koristicemo median imputaciju:
+
+```{r}
+median.age.train <- median(train$Age, na.rm = TRUE)
+median.credit.score.train <- median(train$Credit.Score, na.rm = TRUE)
+median.vehicle.age.train <- median(train$Vehicle.Age, na.rm = TRUE)
+median.health.score.train <- median(train$Health.Score, na.rm = TRUE)
+
+median.age.test <- median(test$Age, na.rm = TRUE)
+median.credit.score.test <- median(test$Credit.Score, na.rm = TRUE)
+median.vehicle.age.test <- median(test$Vehicle.Age, na.rm = TRUE)
+median.health.score.test <- median(test$Health.Score, na.rm = TRUE)
+```
+
+## Imputacija Age varijable
+
+```{r}
+train$Age <- ifelse(
+  is.na(train$Age),
+  median.age.train,
+  train$Age
+)
+
+test$Age <- ifelse(
+  is.na(test$Age),
+  median.age.test,
+  test$Age
+)
+```
+
+## Imputacija Annual.Income varijable
+
+Racunanje godisnjih primanja po broju prethodno podnetih zahteva za nadoknadu novca. U prethodnoj sekciji je dokazana zavisnost ove dve varijable: 
+
+```{r}
+for (pc in unique(train$Previous.Claims)) {
+
+  idx <- train$Previous.Claims == pc & is.na(train$Annual.Income)
+
+  group.median <- median(
+    train$Annual.Income[train$Previous.Claims == pc],
+    na.rm = TRUE
+  )
+
+  train$Annual.Income[idx] <- group.median
+}
+
+for (pc in unique(test$Previous.Claims)) {
+
+  idx <- test$Previous.Claims == pc & is.na(test$Annual.Income)
+
+  group.median <- median(
+    test$Annual.Income[test$Previous.Claims == pc],
+    na.rm = TRUE
+  )
+
+  test$Annual.Income[idx] <- group.median
+}
+```
+
+## Imputacija Credit.Score varijable
+
+```{r}
+train$Credit.Score <- ifelse(
+  is.na(train$Credit.Score),
+  median.credit.score.train,
+  train$Credit.Score
+)
+
+test$Credit.Score <- ifelse(
+  is.na(test$Credit.Score),
+  median.credit.score.test,
+  test$Credit.Score
+)
+```
+
+## Imputacija Vehicle.Age varijable
+
+```{r}
+train$Vehicle.Age <- ifelse(
+  is.na(train$Vehicle.Age),
+  median.vehicle.age.train,
+  train$Vehicle.Age
+)
+
+test$Vehicle.Age <- ifelse(
+  is.na(test$Vehicle.Age),
+  median.vehicle.age.test,
+  test$Vehicle.Age
+)
+```
+
+## Imputacija Health.Score varijable
+
+```{r}
+train$Health.Score <- ifelse(
+  is.na(train$Health.Score),
+  median.health.score.train,
+  train$Health.Score
+)
+
+test$Health.Score <- ifelse(
+  is.na(test$Health.Score),
+  median.health.score.test,
+  test$Health.Score
+)
+```
+
+Provericemo da li je izvrsena imputacija u train skupu:
+
+```{r}
+na_percent <- colSums(is.na(train[, num.train])) / nrow(train) * 100
+na_percent
+```
+
+U test skupu:
+
+```{r}
+na_percent <- colSums(is.na(test[, num.test])) / nrow(test) * 100
+na_percent
+```

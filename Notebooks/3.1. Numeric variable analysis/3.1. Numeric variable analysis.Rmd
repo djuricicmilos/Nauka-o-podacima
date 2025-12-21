@@ -1,0 +1,809 @@
+---
+title: "3.1. Numeric variable analysis"
+output: html_notebook
+---
+
+Ucitavanje potrebnih biblioteka:
+```{r}
+install.packages('reshape2')
+install.packages('patchwork')
+
+library(tidyverse)
+library(lubridate)
+library(reshape2)
+library(patchwork)
+```
+
+## 1. Age
+
+Osnovni opis varijable Age u train skupu:
+```{r}
+summary(train$Age)
+```
+
+Osnovni opis varijable Age u test skupu:
+```{r}
+summary(test$Age)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Age pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Age distribucija", x = "Age", y = "Gustina")
+
+plot.test <- ggplot(test, aes(x = Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "lightblue", color = "black") +
+  geom_density(color = "blue") +
+  theme_minimal() +
+  labs(title = "Test: Age distribucija", x = "Age", y = "Gustina")
+
+plot.train | plot.test
+```
+
+Prikaz varijable Age pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Age)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Age", x = "Age")
+
+plot.test <- ggplot(test, aes(x = Age)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Age", x = "Age")
+
+plot.train | plot.test
+```
+
+Prikaz varijable Age pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Age)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Age")
+
+plot.test <- ggplot(test, aes(sample = Age)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Age")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Age za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Age, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Age ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Age nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Age za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Age, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Age ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Age nema normalnu raspodelu.")
+}
+```
+
+## 2. Annual.Income
+
+Osnovni opis varijable Annual.Income za train skup:
+```{r}
+summary(train$Annual.Income)
+```
+
+Osnovni opis varijable Annual.Income za test skup:
+```{r}
+summary(test$Annual.Income)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Annual.Income pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Annual.Income)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Annual.Income", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Annual.Income)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Annual.Income", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Annual.Income pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Annual.Income))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Annual.Income", x = "Annual.Income")
+  
+plot.test <- ggplot(test, aes(x = Annual.Income))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Annual.Income", x = "Annual.Income")
+  
+plot.train | plot.test 
+```
+
+Prikaz varijable Annual.Income pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Annual.Income)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Annual.Income")
+  
+plot.test <- ggplot(test, aes(sample = Annual.Income)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Annual.Income")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Annual.Income za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Annual.Income, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Annual.Income ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Annual.Income nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Annual.Income za test skup:
+```{r}
+set.seed(123)
+p.values.test <- replicate(500, shapiro.test(sample(test$Annual.Income, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Annual.Income ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Annual.Income nema normalnu raspodelu.")
+}
+```
+
+## 3. Number.of.Dependents
+
+Osnovni opis varijable Number.of.Dependents za train skup:
+```{r}
+summary(train$Number.of.Dependents)
+```
+
+Osnovni opis varijable Number.of.Dependents za test skup:
+```{r}
+summary(test$Number.of.Dependents)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Number.of.Dependents pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Number.of.Dependents)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Number.of.Dependents", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Number.of.Dependents)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Number.of.Dependents", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Number.of.Dependents pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Number.of.Dependents))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Number.of.Dependents", x = "Number.of.Dependents")
+  
+plot.test <- ggplot(test, aes(x = Number.of.Dependents))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Number.of.Dependents", x = "Number.of.Dependents")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Number.of.Dependents pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Number.of.Dependents)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Number.of.Dependents")
+  
+plot.test <- ggplot(test, aes(sample = Number.of.Dependents)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Number.of.Dependents")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Number.of.Dependents za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Number.of.Dependents, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Number.of.Dependents ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Number.of.Dependents nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Number.of.Dependents za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Number.of.Dependents, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Number.of.Dependents ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Number.of.Dependents nema normalnu raspodelu.")
+}
+```
+
+## 4. Health.Score
+
+Osnovni opis varijable Health.Score za train skup:
+```{r}
+summary(train$Health.Score)
+```
+
+Osnovni opis varijable Health.Score za test skup:
+```{r}
+summary(test$Health.Score)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Health.Score pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Health.Score)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Health.Score", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Health.Score)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Health.Score", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Health.Score pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Health.Score))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Health.Score", x = "Health.Score")
+  
+plot.test <- ggplot(test, aes(x = Health.Score))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Health.Score", x = "Health.Score")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Health.Score pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Health.Score)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Health.Score")
+
+plot.test <- ggplot(test, aes(sample = Health.Score)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Health.Score")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Health.Score za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Health.Score, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Health.Score ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Health.Score nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Health.Score za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Health.Score, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Health.Score ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Health.Score nema normalnu raspodelu.")
+}
+```
+
+## 5. Previous.Claims
+
+Osnovni opis varijable Previous.Claims za train skup:
+```{r}
+summary(train$Previous.Claims)
+```
+
+Osnovni opis varijable Previous.Claims za test skup:
+```{r}
+summary(test$Previous.Claims)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Previous.Claims pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Previous.Claims)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Previous.Claims", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Previous.Claims)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Previous.Claims", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Previous.Claims pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Previous.Claims))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Previous.Claims", x = "Previous.Claims")
+  
+plot.test <- ggplot(test, aes(x = Previous.Claims))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Previous.Claims", x = "Previous.Claims")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Previous.Claims pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Previous.Claims)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Previous.Claims")
+  
+plot.test <- ggplot(test, aes(sample = Previous.Claims)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Previous.Claims")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Previous.Claims za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Previous.Claims, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Previous.Claims ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Previous.Claims nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Previous.Claims za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Previous.Claims, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Previous.Claims ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Previous.Claims nema normalnu raspodelu.")
+}
+```
+
+## 6. Vehicle.Age
+
+Osnovni opis varijable Annual.Income za train skup:
+```{r}
+summary(train$Vehicle.Age)
+```
+
+Osnovni opis varijable Annual.Income za test skup:
+```{r}
+summary(test$Vehicle.Age)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Vehicle.Age pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Vehicle.Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Vehicle.Age", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Vehicle.Age)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Vehicle.Age", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Vehicle.Age pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Vehicle.Age))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Vehicle.Age", x = "Vehicle.Age")
+  
+plot.test <- ggplot(test, aes(x = Vehicle.Age))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Vehicle.Age", x = "Vehicle.Age")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Vehicle.Age pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Vehicle.Age)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Vehicle.Age")
+  
+plot.test <- ggplot(test, aes(sample = Vehicle.Age)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Vehicle.Age")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Vehicle.Age za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Vehicle.Age, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Vehicle.Age ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Vehicle.Age nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Vehicle.Age za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Vehicle.Age, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Vehicle.Age ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Vehicle.Age nema normalnu raspodelu.")
+}
+```
+
+## 7. Credit.Score
+
+Osnovni opis varijable Credit.Score za train skup:
+```{r}
+summary(train$Credit.Score)
+```
+
+Osnovni opis varijable Credit.Score za test skup:
+```{r}
+summary(test$Credit.Score)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Credit.Score pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Credit.Score)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Credit.Score", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Credit.Score)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Credit.Score", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Credit.Score pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Credit.Score))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Credit.Score", x = "Credit.Score")
+  
+plot.test <- ggplot(test, aes(x = Credit.Score))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Credit.Score", x = "Credit.Score")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Credit.Score pomocu Q-Q plota:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Credit.Score)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Credit.Score")
+  
+plot.test <- ggplot(test, aes(sample = Credit.Score)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Credit.Score")
+  
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Credit.Score za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Credit.Score, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Credit.Score ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Credit.Score nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Credit.Score za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Credit.Score, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Credit.Score ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Credit.Score nema normalnu raspodelu.")
+}
+```
+
+
+## 8. Insurance.Duration
+
+Osnovni opis varijable Insurance.Duration za train skup:
+```{r}
+summary(train$Insurance.Duration)
+```
+
+Osnovni opis varijable Insurance.Duration za test skup:
+```{r}
+summary(test$Insurance.Duration)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Insurance.Duration pomocu histograma:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Insurance.Duration)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Insurance.Duration", y = "Gustina")
+  
+plot.test <- ggplot(test, aes(x = Insurance.Duration)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Test: Histogram sa KDE", x = "Insurance.Duration", y = "Gustina")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Insurance.Duration pomocu boxplot-a:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Insurance.Duration))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Insurance.Duration", x = "Insurance.Duration")
+  
+plot.test <- ggplot(test, aes(x = Insurance.Duration))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Test: Boxplot za Insurance.Duration", x = "Insurance.Duration")
+  
+plot.train | plot.test
+```
+
+Prikaz varijable Insurance.Duration pomocu Q-Q plota: 
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(sample = Insurance.Duration)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Insurance.Duration")
+  
+plot.test <- ggplot(test, aes(sample = Insurance.Duration)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Test: Q-Q Plot za Insurance.Duration")
+
+plot.train | plot.test
+```
+
+Statisticko testiranje normalnosti varijable Insurance.Duration za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Insurance.Duration, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Insurance.Duration ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Insurance.Duration nema normalnu raspodelu.")
+}
+```
+
+Statisticko testiranje normalnosti varijable Insurance.Duration za test skup:
+```{r}
+p.values.test <- replicate(500, shapiro.test(sample(test$Insurance.Duration, 3000))$p.value)
+p.mean.test <- mean(p.values.test)
+
+if (p.mean.test > 0.05) {
+  print("Test: Varijabla Insurance.Duration ima normalnu raspodelu.")
+} else {
+  print("Test: Varijabla Insurance.Duration nema normalnu raspodelu.")
+}
+```
+
+## 9. Premium.Amount
+
+Osnovi opis varijable Premium.Amount za train skup:
+```{r}
+summary(train$Premium.Amount)
+```
+
+### Graficka reprezentacija podataka
+
+Prikaz varijable Premium.Amount pomocu histograma za train skup:
+```{r}
+ggplot(train, aes(x = Premium.Amount)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "thistle", color = "black") +
+  geom_density(color = "red") +
+  theme_minimal() +
+  labs(title = "Train: Histogram sa KDE", x = "Premium.Amount", y = "Gustina")
+```
+
+Prikaz varijable Premium.Amount pomocu boxplot-a za train skup:
+```{r}
+ggplot(train, aes(x = Premium.Amount))  +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Train: Boxplot za Premium.Amount", x = "Premium.Amount")
+```
+
+Prikaz varijable Premium.Amount pomocu Q-Q plota za train skup:
+```{r}
+ggplot(train, aes(sample = Premium.Amount)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(title = "Train: Q-Q Plot za Premium.Amount")
+```
+
+Statisticko testiranje normalnosti varijable Premium.Amount za train skup:
+```{r}
+set.seed(123)
+p.values.train <- replicate(500, shapiro.test(sample(train$Premium.Amount, 3000))$p.value)
+p.mean.train <- mean(p.values.train)
+
+if (p.mean.train > 0.05) {
+  print("Train: Varijabla Premium.Amount ima normalnu raspodelu.")
+} else {
+  print("Train: Varijabla Premium.Amount nema normalnu raspodelu.")
+}
+```
+
+## Zakljucak
+- Age i Credit.Score varijable prakticno imaju uniformnu raspodelu.
+- Annual.Income i Premium.Amount su pozitivno asimetricne, sadrze neke netipicne vrednosti.
+- Number.of.Dependents, Previous.Claims, Insurance.Duration varijable se ponasaju kao kategorijski atributi.
+- Kako su svi koeficijenti korelacije blizu nule, ne postoji multikolinearnost
+
+## Konvertovanje numerickih u kategorijske varijable
+```{r}
+num.cols <- c("Number.of.Dependents", "Previous.Claims", "Insurance.Duration")
+
+train[num.cols] <- lapply(train[num.cols], as.factor)
+
+dependents.levels <- c("0", "1", "2", "3", "4")
+
+train$Number.of.Dependents <- ordered(
+  train$Number.of.Dependents,
+  levels = dependents.levels
+)
+
+claims.levels <- c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+train$Previous.Claims <- ordered(
+  train$Previous.Claims,
+  levels = claims.levels
+)
+
+duration.levels <- c("1", "2", "3", "4", "5", "6", "7", "8", "9")
+
+train$Insurance.Duration <- ordered(
+  train$Insurance.Duration,
+  levels = duration.levels
+)
+
+str(train[num.cols])
+```
+
+```{r}
+test[num.cols] <- lapply(test[num.cols], as.factor)
+
+test$Number.of.Dependents <- ordered(
+  test$Number.of.Dependents,
+  levels = dependents.levels
+)
+
+test$Previous.Claims <- ordered(
+  test$Previous.Claims,
+  levels = claims.levels
+)
+
+test$Insurance.Duration <- ordered(
+  test$Insurance.Duration,
+  levels = duration.levels
+)
+
+str(test[num.cols])
+```

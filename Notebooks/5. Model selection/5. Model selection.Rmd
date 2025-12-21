@@ -1,0 +1,245 @@
+---
+title: "4.4. Feature selection"
+output: html_notebook
+---
+
+Ucitavanje potrebnih biblioteka:
+```{r}
+install.packages('tidymodels')
+install.packages('xgboost')
+install.packages('lightgbm')
+install.packages("caret")
+
+library(tidymodels)
+library(caret)
+library(glmnet)
+library(xgboost)
+library(lightgbm)
+```
+
+Ucitavanje pretprocesiranih podataka:
+```{r}
+train <- read.csv("../../data/train.scaled.label.csv", stringsAsFactors = FALSE)
+test <- read.csv("../../data/test.scaled.label.csv", stringsAsFactors = FALSE)
+```
+
+## Cross-validacija
+
+Iskoristicemo k-Fold cross-validaciju da bismo procenili realnu gresku modela i njegovu stabilnost na nevidjenim podacima. Kako nemamo obelezen test skup, koristicemo trening skup radi testiranja razlicitih modela.
+
+Konfiguracija za cross-validation:
+```{r}
+set.seed(123)
+
+k = 5
+ctrl <- trainControl(
+  method = "cv",
+  number = k
+)
+```
+
+# Linearni modeli
+
+## Base linear model
+
+Na osnovu prethodno analiziranih odnosa izmedju prediktora, uoceno je da pretpostavke proste linearne regresije nisu zadovoljene. Samim tim ne ocekujemo da ovaj model ostvari zadovoljavajuce performanse u predikciji ciljne promenljive. U nastavku cemo to proveriti primenom jednostavnog modela linearne regresije:
+
+```{r}
+base.model <- train(
+  Premium.Amount ~ .,
+  data = train,
+  method = "lm",
+  trControl = ctrl,
+  metric = "RMSE"
+)
+
+print(base.model$results)
+```
+
+Rezultati 5-fold cross-validacije pokazuju da linearni regresioni model ostvaruje slabe performanse. Dobijena RMSE vrednost iznosi 1.095, što je prakticno jednako standardnoj devijaciji ciljne promenljive (1.102). Ovo pokazuje da model linearne regresije ne uspeva da uhvati signal iz podataka i da njegova predikcija ne poboljsava znacajno prosti prosek ciljne promenljive. Rsquared iznosi 0.012, što znači da model objašnjava oko 1% varijanse podataka. Niska standardna devijacija metrika kroz foldove ukazuje da je ovakav rezultat stabilan i nezavisan od konkretne podele podataka.
+
+Kao sto smo i pretpostavili, model proste linearne regresije je prilicno los.
+
+## Regularizacija
+
+Sada bismo zeleli da vidimo da li bi regularizacija poboljsala stabilnost i gresku.
+
+### Ridge
+
+Ridge smanjuje varijansu koeficijenata kod kolinearnosti. Medjutim, kako ne postoje linearne veze izmedju prediktora, ne ocekujemo da ce se bilo sta promeniti. 
+
+```{r}
+ridge.model <- train(
+  Premium.Amount ~ .,
+  data = train,
+  method = "glmnet",
+  trControl = ctrl,
+  metric = "RMSE",
+  tuneGrid = expand.grid(
+    alpha = 0,
+    lambda = 10^seq(-4, 1, length = 30)
+  )
+)
+
+print(ridge.model$results)
+```
+
+Graficki prikaz RMSE greske prema regularizacionom parametru lambda:
+```{r}
+ggplot(ridge.model$results, aes(x = lambda, y = RMSE)) +
+  geom_line() + 
+  geom_point() +
+  scale_x_log10() +
+  labs(title="Ridge Regression: RMSE vs Lambda", x="Lambda (log scale)", y="RMSE") +
+  theme_minimal()
+```
+
+Ridge regresija je primenjena sa razlicitim vrednostima regularizacionog parametra lambda, ali rezultati pokazuju da RMSE (priblizno 1.096) i Rsquared (priblizno 0.011) ostaju prakticno nepromenjeni u odnosu na obicnu linearnu regresiju. Standardne devijacije metrika kroz foldove su vrlo male, sto ukazuje da je model stabilan, ali i dalje nije u mogucnosti da uhvati odnose u podacima.
+
+# Lasso
+
+Lasso, u odnosu na Ridge, radi i selekciju varijabli, cime moze dodatno eliminisati nebitne prediktore. Hajde da proverimo da li ce doci do poboljsanja:
+
+```{r}
+lasso.model <- train(
+  Premium.Amount ~ .,
+  data = train,
+  method = "glmnet",
+  trControl = ctrl,
+  metric = "RMSE",
+  tuneGrid = expand.grid(
+    alpha = 1,
+    lambda = 10^seq(-4, 1, length = 30)
+  )
+)
+
+print(lasso.model$results)
+```
+
+Graficki prikaz RMSE greske prema regularizacionom parametru lambda:
+```{r}
+ggplot(lasso.model$results, aes(x = lambda, y = RMSE)) +
+  geom_line() + 
+  geom_point() +
+  scale_x_log10() +
+  labs(title="Lasso Regression: RMSE vs Lambda", x="Lambda (log scale)", y="RMSE") +
+  theme_minimal()
+```
+
+Lasso regresija je primenjena sa razlicitim vrednostima regularizacionog parametra lambda, ali rezultati pokazuju da RMSE (~1.095–1.096) i Rsquared (~0.010–0.011) ostaju prakticno nepromenjeni u odnosu na obicnu linearnu regresiju. Standardne devijacije metrika kroz foldove su male, sto ukazuje da je model stabilan, ali i dalje nije u mogucnosti da objasni odnose u podacima.
+
+# Nelinearni modeli
+
+Linearni modeli, sa ili bez regularizacije, nisu adekvatni za predikciju ciljne promenljive. Sledeci logican korak jeste da pokusamo sa nelinearnim modelima koji mogu da uhvate kompleksne i nelinearne interakcije izmedju prediktora. Prvi nelinearni model koji cemo iskoristiti jeste XGBoost.
+
+## Izdvajanje ciljne promenljive iz train skupa
+
+```{r}
+train.x <- train %>% select(-c("Premium.Amount"))
+train.y <- train$Premium.Amount
+```
+
+## XGBoost
+
+```{r}
+xgboost.matrix <- xgb.DMatrix(data = train.x, label = train.y)
+
+cv.results <- xgb.cv(
+  params = list(
+    objective = "reg:squarederror",
+    max_depth = 5,
+    eta = 0.1
+  ),
+  data = xgboost.matrix,
+  nrounds = 1000,
+  nfold = 5,
+  metrics = "rmse",
+  verbose = 1,
+  early_stopping_rounds = 5
+)
+
+print(cv.results$evaluation_log)
+```
+
+XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060281, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
+
+Sada cemo da prikazemo red sa najmanjim test RMSE:
+```{r}
+best.row <- cv.results$evaluation_log[which.min(cv.results$evaluation_log$test_rmse_mean), ]
+
+best.iter <- best.row$iter
+print(best.iter)
+
+best.rmse <- best.row$test_rmse_mean
+print(best.rmse)
+```
+
+Prikazimo 20 najbitnijih feature-a:
+```{r}
+final.model <- xgboost(
+  x = train.x,
+  y = train.y,
+  objective = "reg:squarederror",
+  max_depth = 5,
+  learning_rate = 0.1,
+  nrounds = best.rmse
+)
+
+importance.matrix <- xgb.importance(feature_names = colnames(train.x), model = final.model)
+
+xgb.plot.importance(importance.matrix[1:20, ])
+```
+
+## LightGBM
+
+Sada cemo da probamo da obucimo LightGBM model, kako bismo proverili da li daje bolje rezultate od XGBoost:
+
+```{r}
+train.x.matrix <- as.matrix(train.x)
+train.lgbm <- lgb.Dataset(data = train.x.matrix, label = train.y)
+
+params <- list(
+  objective = "regression",
+  metric = "rmse",
+  learning_rate = 0.1,
+  num_leaves = 31,
+  feature_fraction = 0.8,
+  bagging_fraction = 0.8,
+  bagging_freq = 5
+)
+
+cv.result <- lgb.cv(
+  params = params,
+  data = train.lgbm,
+  nrounds = 1000,
+  nfold = 5,
+  early_stopping_rounds = 10,
+  verbose = 1
+)
+
+best.iter <- cv.result$best_iter
+best.rmse <- cv.result$record_evals$valid$rmse$eval[best.iter]
+print(paste("Best iteration:", best.iter, "with RMSE:",best.rmse))
+```
+
+LightGBM model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.05849, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora LightGBM-a za predikciju Premium.Amount.
+
+U odnosu na XGBoost, LightGBM daje bolje RMSE rezultate. 
+
+Prikazimo 20 najbitnijih feature-a:
+```{r}
+final.model <- lgb.train(
+  params = params,
+  data = train.lgbm,
+  nrounds = best.iter
+)
+
+importance <- lgb.importance(final.model, percentage = TRUE)
+lgb.plot.importance(importance, top_n = 20)
+```
+
+## Zakljucak
+- Linearni regresioni modeli, ukljucujuci Ridge i Lasso regularizaciju, nisu uspeli da ostvare zadovoljavajuce performanse, jer nisu u stanju da uhvate nelinearne i kompleksne odnose izmedju prediktora i ciljne promenljive.
+- Nelinearni modeli bazirani na metodama stabala odlucivanja (XGBoost i LightGBM) znacajno poboljsavaju performanse u odnosu na linearne modele, sto potvrdjuje postojanje nelinearnih odnosa u podacima.
+- Na osnovu dobijenih rezultata, LightGBM se pokazao kao najadekvatniji model za predikciju ciljne promenljive, iako ostvarena poboljsanja u odnosu na XGBoost nisu drasticna.
+

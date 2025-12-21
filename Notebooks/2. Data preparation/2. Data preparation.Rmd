@@ -1,0 +1,113 @@
+---
+title: "2. Data preparation"
+output: html_notebook
+---
+
+Ucitavanje potrebnih biblioteka:
+```{r}
+library(lubridate)
+```
+
+Provera da li postoje duplirani redovi u train skupu:
+```{r}
+sum(duplicated(train))
+```
+
+Provera da li postoje duplirani redovi u test skupu:
+```{r}
+sum(duplicated(test))
+```
+
+Pregled jedinstvenih vrednosti za char promenljive train skupa:
+```{r}
+sapply(train[sapply(train, is.character)], function(x) length(unique(x)))
+```
+
+Pregled jedinstvenih vrednosti za char promenljive test skupa:
+```{r}
+sapply(test[sapply(test, is.character)], function(x) length(unique(x)))
+```
+
+Sve char promenljive, osim Policy.Start.Date, mozemo da pretvorimo u faktor promenljive:
+```{r}
+char.cols.train <- sapply(train, is.character)
+char.cols.train[c("Policy.Start.Date")] <- FALSE
+train[char.cols.train] <- lapply(train[char.cols.train], as.factor)
+
+char.cols.test <- sapply(test, is.character)
+char.cols.test[c("Policy.Start.Date")] <- FALSE
+test[char.cols.test] <- lapply(test[char.cols.test], as.factor)
+```
+
+Kategorijske promenljive Education.Level, Exercise.Frequency i Customer.Feedback cemo prebaciti da budu ordinalne:
+```{r}
+education.levels <- c("High School", "Bachelor's", "Master's", "PhD")
+
+train$Education.Level <- ordered(
+  train$Education.Level,
+  levels = education.levels
+)
+
+test$Education.Level <- ordered(
+  test$Education.Level,
+  levels = education.levels
+)
+
+exercise.levels <- c("Rarely", "Monthly", "Weekly", "Daily")
+
+train$Exercise.Frequency <- ordered(
+  train$Exercise.Frequency,
+  levels = exercise.levels
+)
+
+test$Exercise.Frequency <- ordered(
+  test$Exercise.Frequency,
+  levels = exercise.levels
+)
+
+feedback.levels <- c("Poor", "Average", "Good")
+
+train$Customer.Feedback <- ordered(
+  train$Customer.Feedback,
+  levels = feedback.levels
+)
+
+test$Customer.Feedback <- ordered(
+  test$Customer.Feedback,
+  levels = feedback.levels
+)
+```
+
+Pregled nivoa faktor promenljivih u train skupu:
+```{r}
+lapply(train[sapply(train, is.factor)], levels)
+```
+
+Pregled nivoa faktor promenljivih u test skupu:
+```{r}
+lapply(test[sapply(test, is.factor)], levels)
+```
+
+Promena nivoa "" u NA u train skupu:
+```{r}
+levels(train$Marital.Status)[levels(train$Marital.Status) == ""] <- NA
+levels(train$Occupation)[levels(train$Occupation) == ""] <- NA
+levels(train$Customer.Feedback)[levels(train$Customer.Feedback) == ""] <- NA
+
+lapply(train[sapply(train, is.factor)], levels)
+```
+
+Promena nivoa "" u NA u test skupu:
+```{r}
+levels(test$Marital.Status)[levels(test$Marital.Status) == ""] <- NA
+levels(test$Occupation)[levels(test$Occupation) == ""] <- NA
+levels(test$Customer.Feedback)[levels(test$Customer.Feedback) == ""] <- NA
+
+lapply(test[sapply(test, is.factor)], levels)
+```
+
+Izbacujemo kolonu id iz train i test skupa:
+```{r}
+train <- train[, !(names(train) == "id")]
+test <- test[, !(names(test) == "id")]
+```

@@ -1,0 +1,478 @@
+---
+title: "Bivariate Analysis"
+output: html_notebook
+---
+
+## Ucitavanje potrebnih biblioteka
+
+```{r}
+install.packages("DescTools")
+
+library(tidyverse)
+library(car)
+library(FSA)
+library(DescTools)
+```
+
+## Number.of.Dependents prema Education.Level varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Education.Level, train$Number.of.Dependents)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Education.Level, fill = Number.of.Dependents)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Number.of.Dependents po Education Level", x = "Education Level", fill = "Number of Dependents", y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Education.Level, train$Number.of.Dependents))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Education.Level i Number.of.Dependents.")
+} else {
+  print("Postoji statistički značajna zavisnost između Education.Level i Number.of.Dependents.")
+}
+```
+
+## Number.of.Dependents prema Occupation varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Occupation, train$Number.of.Dependents)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Occupation, fill = Number.of.Dependents)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Number.of.Dependents po Occupation", x = "Occupation", fill = "Number of Dependents",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Education.Level, train$Number.of.Dependents))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Occupation i Number.of.Dependents.")
+} else {
+  print("Postoji statistički značajna zavisnost između Occupation i Number.of.Dependents.")
+}
+```
+
+## Number.of.Dependents prema Property.Type varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Property.Type, train$Number.of.Dependents)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Property.Type, fill = Number.of.Dependents)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Number.of.Dependents po Property.Type", x = "Property.Type", fill = "Number of Dependents",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Property.Type, train$Number.of.Dependents))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Property.Type i Number.of.Dependents.")
+} else {
+  print("Postoji statistički značajna zavisnost između Property.Type i Number.of.Dependents.")
+}
+```
+
+Proveravamo jacinu veze pomocu Cramer V 
+```{r}
+CramerV(table(train$Number.of.Dependents, train$Property.Type))
+```
+
+Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Number.of.Dependents i Property.Type, jacina te veze je veoma slaba i raspodela po kategorijama je gotovo identicna, tako da se veza moze smatrati zanemarljivom.
+
+## Number.of.Dependents prema Previous.Claims varijabli
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$PreviousClaimsGrouped, train$Number.of.Dependents)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = PreviousClaimsGrouped, fill = Number.of.Dependents)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Number.of.Dependents po Previous.Claims", x = "Previous.Claims", fill = "Number of Dependents",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$PreviousClaimsGrouped, train$Number.of.Dependents))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Previous.Claims i Number.of.Dependents.")
+} else {
+  print("Postoji statistički značajna zavisnost između Previous.Claims i Number.of.Dependents.")
+}
+```
+
+Proveravamo jacinu veze pomocu Cramer V 
+```{r}
+CramerV(table(train$Number.of.Dependents, train$PreviousClaimsGrouped))
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Number.of.Dependents i Previous.Claims, jacina te veze je veoma slaba i raspodela po kategorijama je gotovo identicna, tako da se veza moze smatrati zanemarljivom.
+
+## Insurance.Duration prema Occupation varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Occupation, train$Insurance.Duration)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Occupation, fill = Insurance.Duration)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Insurance.Duration po Occupation", x = "Occupation", fill = "Insurance.Duration",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Occupation, train$Insurance.Duration))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Occupation i Insurance.Duration.")
+} else {
+  print("Postoji statistički značajna zavisnost između Occupation i Insurance.Duration.")
+}
+```
+
+Proveravamo jacinu veze pomocu Cramer V 
+```{r}
+CramerV(table(train$Occupation, train$Insurance.Duration))
+```
+
+Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Occupation i Insurance.Duration, jacina te veze je veoma mala i raspodela po kategorijama je gotovo identicna, tako da se veza moze smatrati zanemarljivom.
+
+## Insurance.Duration prema Policy.Type varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Policy.Type, train$Insurance.Duration)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Policy.Type, fill = Insurance.Duration)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Insurance.Duration po Policy.Type", x = "Policy.Type", fill = "Insurance.Duration",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Policy.Type, train$Insurance.Duration))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Policy.Type i Insurance.Duration.")
+} else {
+  print("Postoji statistički značajna zavisnost između Policy.Type i Insurance.Duration.")
+}
+```
+
+## Insurance.Duration prema Property.Type varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Property.Type, train$Insurance.Duration)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Property.Type, fill = Insurance.Duration)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Insurance.Duration po Property.Type", x = "Property.Type", fill = "Insurance.Duration",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Property.Type, train$Insurance.Duration))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Property.Type i Insurance.Duration.")
+} else {
+  print("Postoji statistički značajna zavisnost između Property.Type i Insurance.Duration.")
+}
+```
+
+Proveravamo jacinu veze pomocu Cramer V 
+```{r}
+CramerV(table(train$Insurance.Duration, train$Property.Type))
+```
+
+Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Insurance.Duration i Property.Type, jacina te veze je veoma slaba i raspodela po kategorijama je gotovo identicna, tako da se veza moze smatrati zanemarljivom.
+
+## Previous.Claims prema Location varijabli
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Location, train$PreviousClaimsGrouped)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Location, fill = PreviousClaimsGrouped)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Previous.Claims po Location", x = "Location", fill = "Previous.Claims",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$PreviousClaimsGrouped, train$Location))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Previous.Claims i Location.")
+} else {
+  print("Postoji statistički značajna zavisnost između Previous.Claims i Location.")
+}
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+## Previous.Claims prema Customer.Feedback varijabli
+
+Posto su grupe koje imaju 7-9 zahteva veoma male, grupisacemo ih u jednu kategoriju "7+" radi testiranja.
+```{r}
+train$PreviousClaimsGrouped <- as.character(train$Previous.Claims)
+train$PreviousClaimsGrouped[train$PreviousClaimsGrouped %in% c("7","8","9")] <- "7+"
+train$PreviousClaimsGrouped <- factor(train$PreviousClaimsGrouped, 
+                                      levels = c("0","1","2","3","4","5","6","7+"))
+
+table(train$PreviousClaimsGrouped, useNA="ifany")
+```
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Customer.Feedback, train$PreviousClaimsGrouped)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Customer.Feedback, fill = Previous.Claims)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Previous.Claims po Customer.Feedback", x = "Customer.Feedback", fill = "Previous.Claims",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$PreviousClaimsGrouped, train$Customer.Feedback))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Previous.Claims i Customer.Feedback")
+} else {
+  print("Postoji statistički značajna zavisnost između Previous.Claims i Customer.Feedback")
+}
+```
+
+Proveravamo jacinu veze pomocu Cramer V 
+```{r}
+CramerV(table(train$PreviousClaimsGrouped, train$Customer.Feedback))
+```
+
+Odbacujemo kolonu PreviousClaimsGrouped
+```{r}
+train <- train %>%
+  select(-PreviousClaimsGrouped)
+```
+
+Iako Chi_squared test ukazuje na statisticku zavisnost izmedju Previous.Claims i Customer.Feedback, jacina te veze je veoma slaba i raspodela po kategorijama je gotovo identicna (mada postoji za 5-7+ zahteva mala razlika u procentima), tako da se veza moze smatrati zanemarljivom.
+
+## Occupation prema Education.Level varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Education.Level, train$Occupation)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Education.Level, fill = Occupation)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Occupation po Education.Level", x = "Education.Level", fill = "Occupation",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Occupation, train$Education.Level))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Occupation i Education.Level.")
+} else {
+  print("Postoji statistički značajna zavisnost između Occupation i Education.Level.")
+}
+```
+
+## Occupation prema Location varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Location, train$Occupation)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Location, fill = Occupation)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Occupation po Location", x = "Location", fill = "Occupation",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Occupation, train$Location))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Occupation i Location.")
+} else {
+  print("Postoji statistički značajna zavisnost između Occupation i Location.")
+}
+```
+
+## Policy.Type prema Property.Type varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Policy.Type, train$Property.Type)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Policy.Type, fill = Property.Type)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Property.Type po Policy.Type", x = "Policy.Type", fill = "Property.Type",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Policy.Type, train$Property.Type))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Policy.Type i Property.Type.")
+} else {
+  print("Postoji statistički značajna zavisnost između Policy.Type i Property.Type.")
+}
+```
+
+## Policy.Type prema Location varijabli
+
+Proveravamo procentualnu zastupljenost po kategorijama
+```{r}
+tbl <- table(train$Policy.Type, train$Location)
+
+prop_row <- prop.table(tbl, margin = 1) * 100
+round(prop_row, 1)
+```
+
+Graficka reprezentacija varijabli
+```{r}
+ggplot(train, aes(x = Policy.Type, fill = Location)) +
+  geom_bar(position = "fill") +
+  theme_minimal() +
+  labs(title = "Procentualna zastupljenost Location po Policy.Type", x = "Policy.Type", fill = "Location",y = "Procenat")
+```
+
+Chi_squared test radi statisticke provere znacajnosti izmedju kategorija:
+```{r}
+p_value <- chisq.test(table(train$Policy.Type, train$Location))$p.value
+
+if (p_value > 0.05) {
+  print("Ne postoji statistički značajna zavisnost između Policy.Type i Location.")
+} else {
+  print("Postoji statistički značajna zavisnost između Policy.Type i Location.")
+}
+```
+
+## Zakljucak:
+- Iako Chi_squared test ukazuje na statisticku zavisnost izmedju pojedinih varijabli, daljom analizom je utvrdjeno da je ova razlika minimalna i prakticno neprimenljiva.

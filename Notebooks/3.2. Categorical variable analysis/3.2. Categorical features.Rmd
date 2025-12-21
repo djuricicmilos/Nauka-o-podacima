@@ -1,0 +1,313 @@
+---
+title: "03.2 Categorical features"
+output: html_notebook
+---
+## Ucitavanje potrebnih biblioteka
+
+```{r}
+install.packages('skimr')
+
+library(tidyverse)
+library(skimr)
+```
+
+## Pregled podataka
+
+Pregled svih podataka u train skupu, kako bismo uvideli koje varijable su kategorijske
+```{r}
+str(train)
+```
+
+### 1. Gender
+
+Osnovni opis varijable Gender za train skup:
+```{r}
+skim(train$Gender)
+```
+
+Osnovni opis varijable Gender za test skup:
+```{r}
+skim(test$Gender)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Gender, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Procentualna zastupljenost polova", x = "Gender", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Gender, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Procentualna zastupljenost polova", x = "Gender", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 2. Marital.Status
+
+Osnovni opis varijable Marital.Status za train skup:
+```{r}
+skim(train$Marital.Status)
+```
+
+Osnovni opis varijable Marital.Status za test skup:
+```{r}
+skim(test$Marital.Status)
+```
+
+Graficka reprezentacija podataka
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Marital.Status, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Marital.Status", x = "Marital.Status", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Marital.Status, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Marital.Status", x = "Marital.Status", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 3. Education.Level
+
+Osnovni opis varijable Education.Level za train skup:
+```{r}
+skim(train$Education.Level)
+```
+
+Osnovni opis varijable Education.Level za test skup:
+```{r}
+skim(test$Education.Level)
+```
+
+Graficka reprezentacija podataka
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Education.Level, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Education.Level", x = "Education.Level", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Education.Level, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Education.Level", x = "Education.Level", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 4. Occupation
+
+Osnovni opis varijable Occupation za train skup:
+```{r}
+skim(train$Occupation)
+```
+
+Osnovni opis varijable Occupation za test skup:
+```{r}
+skim(test$Occupation)
+```
+
+Graficka reprezentacija podataka
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Occupation, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Occupation", x = "Occupation", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Occupation, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Occupation", x = "Occupation", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 5. Location
+
+Osnovni opis varijable Location za train skup: 
+```{r}
+skim(train$Location)
+```
+
+Osnovni opis varijable Location za test skup: 
+```{r}
+skim(test$Location)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Location, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Location", x = "Location", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Location, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Location", x = "Location", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 6. Policy.Type
+
+Osnovni opis varijable Policy.Type za train skup:
+```{r}
+skim(train$Policy.Type)
+```
+
+Osnovni opis varijable Policy.Type za test skup:
+```{r}
+skim(test$Policy.Type)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Policy.Type, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Policy.Type", x = "Policy.Type", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Policy.Type, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Policy.Type", x = "Policy.Type", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 7. Customer.Feedback
+
+Osnovni opis varijable Customer.Feedback za train skup:
+```{r}
+skim(train$Customer.Feedback)
+```
+
+Osnovni opis varijable Customer.Feedback za test skup:
+```{r}
+skim(test$Customer.Feedback)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Customer.Feedback, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Customer.Feedback", x = "Customer.Feedback", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Customer.Feedback, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Customer.Feedback", x = "Customer.Feedback", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 8. Smoking.Status
+
+Osnovni opis varijable Smoking.Status za train skup:
+```{r}
+skim(train$Smoking.Status)
+```
+
+Osnovni opis varijable Smoking.Status za test skup:
+```{r}
+skim(test$Smoking.Status)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Smoking.Status, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Smoking.Status", x = "Smoking.Status", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Smoking.Status, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Smoking.Status", x = "Smoking.Status", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 9. Exercise.Frequency
+
+Osnovni opis varijable Exercise.Frequency za train skup:
+```{r}
+skim(train$Exercise.Frequency)
+```
+
+Osnovni opis varijable Exercise.Frequency za test skup:
+```{r}
+skim(test$Exercise.Frequency)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Exercise.Frequency, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Exercise.Frequency", x = "Exercise.Frequency", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Exercise.Frequency, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Exercise.Frequency", x = "Exercise.Frequency", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+### 10. Property.Type
+
+Osnovni opis varijable Property.Type za train skup:
+```{r}
+skim(train$Property.Type)
+```
+
+Osnovni opis varijable Property.Type za test skup:
+```{r}
+skim(test$Property.Type)
+```
+
+Graficka reprezentacija podataka:
+```{r, fig.width=14, fig.height=6}
+plot.train <- ggplot(train, aes(x = Property.Type, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Train: Bar plot za Property.Type", x = "Property.Type", y = "Procenat") +
+  theme_minimal()
+
+plot.test <- ggplot(test, aes(x = Property.Type, y = ..prop.., group = 1)) +
+  geom_bar(fill = "thistle", color = "black") +
+  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
+  labs(title = "Test: Bar plot za Property.Type", x = "Property.Type", y = "Procenat") +
+  theme_minimal()
+
+plot.train | plot.test
+```
+
+## Zakljucak
+- Nijedan feature nije konstantan.
+- Svi nivoi u kategorijama su gotovo podjednako zastupljeni.

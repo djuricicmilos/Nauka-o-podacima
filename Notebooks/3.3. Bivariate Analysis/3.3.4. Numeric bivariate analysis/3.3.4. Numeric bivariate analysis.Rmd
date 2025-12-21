@@ -1,0 +1,31 @@
+---
+title: "Bivariate Analysis"
+output: html_notebook
+---
+
+## Ucitavanje potrebnih biblioteka
+
+```{r}
+library(tidyverse)
+library(car)
+library(FSA)
+library(reshape2)
+```
+
+Mapa korelacija numerickih varijabli za train skup:
+
+```{r}
+num.data <- train[sapply(train, is.numeric)]
+corr <- cor(num.data, use = "complete.obs")
+
+corr.melt <- melt(corr)
+
+ggplot(corr.melt, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = round(value, 2)), size = 3) +
+  scale_fill_distiller(palette = "PRGn", type = "div", limits = c(-1, 1)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_fixed() +
+  labs(title = "Train: Heatmap korelacija numerickih atributa (sa brojevima)", x = "", y = "", fill = "Corr")
+```
