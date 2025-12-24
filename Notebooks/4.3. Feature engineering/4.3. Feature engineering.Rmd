@@ -13,14 +13,6 @@ library(reshape2)
 library(tidymodels)
 ```
 
-Spojicemo train i test skup:
-```{r}
-test$Premium.Amount <- NA
-data <- rbind(train, test)
-
-summary(data)
-```
-
 ## Age.Group
 
 Od atributa Age kreiramo novi atribut Age.Group
@@ -116,7 +108,7 @@ Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
 kruskal_effsize(Premium.Amount ~ Age.Group, data = data)$effsize
 ```
 
-Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Age.Group varijable, analizom Dunn post-hoc testa, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva. Premije osiguranja su uglavnom slične između grupa starosti ≤25, 26–35 i 36–50. Medjutim, grupa 26–35 ima značajno više premije u odnosu na stariju populaciju.
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Age.Group varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva. Premije osiguranja su uglavnom slične između grupa starosti ≤25, 26–35 i 36–50. Medjutim, grupa 26–35 ima značajno više premije u odnosu na stariju populaciju.
 
 ## Income.Dependents
 
@@ -179,7 +171,7 @@ Statisticka analiza zavisnosti varijabli
 cor.test(data$Premium.Amount, data$Income.Dependents, method = "spearman")
 ```
 
-Spearmanova korelacija izmedju Premium.Amount i Income.Dependents je statisticki znacajna (ρ = −0.054, p < 0.001), ali izuzetno slaba. S obzirom na veoma veliki uzorak, statisticka znacajnost ne implicira prakticnu vaznost, te se zakljucuje da Income.Dependents nema relevantan uticaj na Premium.Amount.
+Spearmanova korelacija izmedju Premium.Amount i Income.Dependents je statisticki znacajna (ρ = −0.054, p < 0.05), ali izuzetno slaba. S obzirom na veoma veliki uzorak, statisticka znacajnost ne implicira prakticnu vaznost, te se zakljucuje da Income.Dependents nema relevantan uticaj na Premium.Amount.
 
 ## Income.Credit
 
@@ -229,7 +221,7 @@ Statisticka analiza zavisnosti varijabli
 cor.test(data$Premium.Amount, data$Income.Credit, method = "spearman")
 ```
 
-Spearmanova korelacija izmedju Premium.Amount i Income.Credit je statisticki znacajna (ρ = −0.071, p < 0.001), ali vrlo slaba. S obzirom na izuzetno veliki uzorak, statisticka znacajnost ne implicira prakticnu relevantnost, te se zakljucuje da Income.Credit ima ogranicen samostalni uticaj na iznos premije.
+Spearmanova korelacija izmedju Premium.Amount i Income.Credit je statisticki znacajna (ρ = −0.071, p < 0.05), ali vrlo slaba. S obzirom na izuzetno veliki uzorak, statisticka znacajnost ne implicira prakticnu relevantnost, te se zakljucuje da Income.Credit ima ogranicen samostalni uticaj na iznos premije.
 
 ## Log transformacija Annual.Income i Income.Group
 
@@ -351,7 +343,7 @@ if (p_value > 0.05) {
 kruskal_effsize(Premium.Amount ~ Income.Group, data = data)$effsize
 ```
 
-Post-hoc Dunn test (Bonferroni korekcija) pokazao je statistički značajne razlike u iznosu premije između svih Income.Group kategorija (p < 0.001). Medijani premije opadaju sa rastom prihoda, pri čemu grupa sa visokim prihodima ima najnižu medijalnu premiju. Međutim, velike interkvartilne širine i značajno preklapanje distribucija ukazuju da je praktični efekat Income.Group ograničen.
+Iako je Kruskal–Wallis test ukazao na to da postoji statistički značajna razlika u raspodeli varijable Premium.Amount u odnosu na nivoe varijable Income.Group, analizom vrednosti efekta, kao i poređenjem medijana i IQR-a, utvrđujemo da je ova razlika minimalna i praktično zanemarljiva.
 
 ## Health.Group
 
@@ -458,7 +450,7 @@ if (p_value > 0.05) {
 kruskal_effsize(Premium.Amount ~ Health.Group, data = data)$effsize
 ```
 
-Dunn post-hoc test (Bonferroni korekcija) pokazao je statisticki znacajne razlike u iznosu premije izmedju zdravstvenih grupa (p < 0.001). Iako premije rastu sa pogorsanjem zdravstvene kategorije, razlike u medijanima su male u odnosu na interkvartilne raspone, sto ukazuje na ogranicenu prakticnu vaznost zdravstvene grupe kao samostalnog faktora.
+Iako je Kruskal–Wallis test ukazao na to da postoji statistički značajna razlika u raspodeli varijable Premium.Amount u odnosu na nivoe varijable Health.Group, analizom vrednosti efekta, kao i poređenjem medijana i IQR-a, utvrđujemo da je ova razlika minimalna i praktično zanemarljiva.
 
 ## Previous.Claims spojiti za 7+
 
@@ -604,7 +596,7 @@ Statisticka analiza zavisnosti varijabli
 cor.test(data$Premium.Amount, data$Policy.Year, method = "spearman")
 ```
 
-Spearmanova korelacija izmedju godine ugovaranja polise i iznosa premije je statisticki znacajna (ρ = −0.01, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da promena godine ugovaranja nema prakticno relevantan uticaj na visinu premije.
+Spearmanova korelacija izmedju godine ugovaranja polise i iznosa premije je statisticki znacajna (ρ = −0.01, p < 0.05), ali zanemarljive jacine. Rezultat ukazuje da promena godine ugovaranja nema prakticno relevantan uticaj na visinu premije.
 
 
 ## Health.Claims
@@ -646,7 +638,7 @@ Statisticka analiza zavisnosti varijabli
 cor.test(data$Premium.Amount, data$Health.Claims, method = "spearman")
 ```
 
-Spearmanova korelacija izmedju Health.Claims i Premium.Amount je statisticki znacajna (ρ = 0.01517, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja prethodnih zahteva nema prakticno relevantan uticaj na visinu premije.
+Spearmanova korelacija izmedju Health.Claims i Premium.Amount je statisticki znacajna (ρ = 0.01517, p < 0.05), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja prethodnih zahteva nema prakticno relevantan uticaj na visinu premije.
 
 ## Health.Age
 
@@ -696,7 +688,7 @@ Statisticka analiza zavisnosti varijabli
 cor.test(data$Premium.Amount, data$Health.Age, method = "spearman")
 ```
 
-Spearmanova korelacija izmedju Health.Age i Premium.Amount je statisticki znacajna (ρ = 0.01038015, p < 0.001), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja godina nema prakticno relevantan uticaj na visinu premije.
+Spearmanova korelacija izmedju Health.Age i Premium.Amount je statisticki znacajna (ρ = 0.01038015, p < 0.05), ali zanemarljive jacine. Rezultat ukazuje da kombinacija ocene zdravlja i broja godina nema prakticno relevantan uticaj na visinu premije.
 
 
 ## Log transformacija Premium.Amount
@@ -728,7 +720,7 @@ ggplot(data, aes(x = Premium.Amount)) +
 
 ```{r}
 num.data <- data[sapply(data, is.numeric)]
-corr <- cor(num.data, use = "complete.obs")
+corr <- cor(num.data, use = "complete.obs", method = "spearman")
 
 corr.melt <- melt(corr)
 
@@ -746,28 +738,19 @@ Heat mape potvrdjuju da, iako je vecina osnovnih osobina slabo medjusobno poveza
 # Enkodiranje
 
 ```{r}
-list.feature.cat.label <- c("Number.of.Dependents", "Education.Level", "Insurance.Duration", "Exercise.Frequency", "Age.Group", "Income.Group", "Health.Group")
+list.feature.cat.ordinal <- c("Number.of.Dependents", "Education.Level", "Insurance.Duration", "Exercise.Frequency", "Age.Group", "Income.Group", "Health.Group")
 
 list.feature.cat.onehot <- c("Gender", "Marital.Status", "Occupation", "Location", "Policy.Type", "Customer.Feedback", "Property.Type", "Policy.Season", "Smoking.Status", "Previous.Claims")
 
 rec <- recipe(Premium.Amount ~ ., data = data) %>%
-  step_integer(all_of(list.feature.cat.label), zero_based = FALSE) %>%
+  step_ordinalscore(all_of(list.feature.cat.ordinal)) %>%
   step_dummy(all_of(list.feature.cat.onehot))
 
 rec.prep <- prep(rec, training = data)
-data.label <- bake(rec.prep, new_data = data)
+data.encoded <- bake(rec.prep, new_data = data)
 
-str(data.label)
+str(data.encoded)
 ```
-
-# Podela na train i test skup
-
-```{r}
-train.label <- data.label[!is.na(data.label$Premium.Amount), ]
-
-test.label  <- data.label[is.na(data.label$Premium.Amount), ]
-```
-
 
 # Skaliranje
 
@@ -786,20 +769,25 @@ scale.cols <- c(
 )
 
 preproc <- preProcess(
-  train.label[, scale.cols],
+  data.encoded[, scale.cols],
   method = c("center", "scale")
 )
 
-train.scaled.label <- train.label
-train.scaled.label[, scale.cols] <- predict(preproc, train.scaled.label[, scale.cols])
+data.scaled <- data.encoded
+data.scaled[, scale.cols] <- predict(preproc, data.scaled[, scale.cols])
+```
 
-test.scaled.label <- test.label
-test.scaled.label[, scale.cols] <- predict(preproc, test.scaled.label[, scale.cols])
+# Podela na train i test skup
+
+```{r}
+train.preproc <- data.scaled[!is.na(data.scaled$Premium.Amount), ]
+
+test.preproc <- data.scaled[is.na(data.scaled$Premium.Amount), ]
 ```
 
 # Cuvanje train i test skupa
 
 ```{r}
-write.csv(train.scaled.label, "train.scaled.label.csv", row.names = FALSE)
-write.csv(test.scaled.label, "test.scaled.label.csv", row.names = FALSE)
+write.csv(train.preproc, "train.preproc.csv", row.names = FALSE)
+write.csv(test.preproc, "test.preproc.csv", row.names = FALSE)
 ```

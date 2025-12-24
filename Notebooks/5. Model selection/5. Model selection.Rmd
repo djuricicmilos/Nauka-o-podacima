@@ -4,6 +4,7 @@ output: html_notebook
 ---
 
 Ucitavanje potrebnih biblioteka:
+
 ```{r}
 install.packages('tidymodels')
 install.packages('xgboost')
@@ -18,9 +19,10 @@ library(lightgbm)
 ```
 
 Ucitavanje pretprocesiranih podataka:
+
 ```{r}
-train <- read.csv("../data/train.scaled.label.csv", stringsAsFactors = FALSE)
-test <- read.csv("../data/test.scaled.label.csv", stringsAsFactors = FALSE)
+train <- read.csv("../data/train.preproc.csv", stringsAsFactors = FALSE)
+test <- read.csv("../data/test.preproc.csv", stringsAsFactors = FALSE)
 ```
 
 ## Cross-validacija
@@ -28,6 +30,7 @@ test <- read.csv("../data/test.scaled.label.csv", stringsAsFactors = FALSE)
 Iskoristicemo k-Fold cross-validaciju da bismo procenili realnu gresku modela i njegovu stabilnost na nevidjenim podacima. Kako nemamo obelezen test skup, koristicemo trening skup radi testiranja razlicitih modela.
 
 Konfiguracija za cross-validation:
+
 ```{r}
 set.seed(123)
 
@@ -85,6 +88,7 @@ print(ridge.model$results)
 ```
 
 Graficki prikaz RMSE greske prema regularizacionom parametru lambda:
+
 ```{r}
 ggplot(ridge.model$results, aes(x = lambda, y = RMSE)) +
   geom_line() + 
@@ -117,6 +121,7 @@ print(lasso.model$results)
 ```
 
 Graficki prikaz RMSE greske prema regularizacionom parametru lambda:
+
 ```{r}
 ggplot(lasso.model$results, aes(x = lambda, y = RMSE)) +
   geom_line() + 
@@ -135,7 +140,7 @@ Linearni modeli, sa ili bez regularizacije, nisu adekvatni za predikciju ciljne 
 ## Izdvajanje ciljne promenljive iz train skupa
 
 ```{r}
-train.x <- train %>% select(-c("Premium.Amount"))
+train.x <- train %>% select(-c("Premium.Amount", "id"))
 train.y <- train$Premium.Amount
 ```
 
@@ -164,6 +169,7 @@ print(cv.results$evaluation_log)
 XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060292, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
 
 Sada cemo da prikazemo red sa najmanjim test RMSE:
+
 ```{r}
 best.row <- cv.results$evaluation_log[which.min(cv.results$evaluation_log$test_rmse_mean), ]
 
@@ -173,21 +179,51 @@ print(best.iter)
 best.rmse <- best.row$test_rmse_mean
 print(best.rmse)
 ```
+Kreiranje finalnog modela:
 
-Prikazimo 20 najbitnijih feature-a:
 ```{r}
-final.model <- xgboost(
+final.model.XGBoost <- xgboost(
   x = train.x,
   y = train.y,
   objective = "reg:squarederror",
   max_depth = 5,
-  learning_rate = 0.1,
+  learning_rate = 0.05,
   nrounds = best.iter
 )
+```
 
-importance.matrix <- xgb.importance(feature_names = colnames(train.x), model = final.model)
+Prikaz 20 najbitnijih feature-a:
 
-xgb.plot.importance(importance.matrix[1:20, ])
+```{r}
+importance.matrix.XGBoost <- xgb.importance(feature_names = colnames(train.x), model = final.model.XGBoost)
+
+xgb.plot.importance(importance.matrix.XGBoost[1:20, ])
+```
+
+Predikcije nad test skupom:
+
+```{r}
+test.x.XGBoost <- test %>% select(-c("Premium.Amount", "id"))
+test.matrix.XGBoost <- as.matrix(test.x.XGBoost)
+
+pred.test.XGBoost <- predict(
+  final.model.XGBoost,
+  test.matrix.XGBoost,
+  type = "raw"
+)
+
+pred.test.exp.XGBoost <- exp(pred.test.XGBoost)
+```
+
+Cuvanje predikcija u csv formatu:
+
+```{r}
+pred.df.XGBoost <- data.frame(
+  id = test$id,
+  Premium.Amount = pred.test.exp.XGBoost
+)
+
+write.csv(pred.df.XGBoost,"XGBoost.csv", row.names = FALSE)
 ```
 
 ## LightGBM
@@ -216,27 +252,62 @@ cv.result <- lgb.cv(
   early_stopping_rounds = 10,
   verbose = 1
 )
+```
 
+LightGBM model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.05849, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora LightGBM-a za predikciju Premium.Amount.
+
+Sada cemo da prikazemo red sa najmanjim test RMSE:
+
+```{r}
 best.iter <- cv.result$best_iter
 best.rmse <- cv.result$record_evals$valid$rmse$eval[best.iter]
 print(paste("Best iteration:", best.iter, "with RMSE:",best.rmse))
 ```
 
-LightGBM model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.05849, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora LightGBM-a za predikciju Premium.Amount.
+Kreiranje finalnog modela:
 
-U odnosu na XGBoost, LightGBM daje bolje RMSE rezultate. 
-
-Prikazimo 20 najbitnijih feature-a:
 ```{r}
-final.model <- lgb.train(
+final.model.LightGBM <- lgb.train(
   params = params,
   data = train.lgbm,
   nrounds = best.iter
 )
-
-importance <- lgb.importance(final.model, percentage = TRUE)
-lgb.plot.importance(importance, top_n = 20)
 ```
+
+Prikaz 20 najbitnijih feature-a:
+
+```{r}
+importance.LightGBM <- lgb.importance(final.model.LightGBM, percentage = TRUE)
+lgb.plot.importance(importance.LightGBM, top_n = 20)
+```
+
+Predikcije nad test skupom:
+
+```{r}
+test.x.LightGBM <- test %>% select(-c("Premium.Amount", "id"))
+test.matrix.LightGBM <- as.matrix(test.x.LightGBM)
+
+pred.test.LightGBM <- predict(
+  final.model.LightGBM,
+  test.matrix.LightGBM,
+  type = "raw"
+)
+
+pred.test.exp.LightGBM <- exp(pred.test.LightGBM)
+```
+
+Cuvanje predikacija u csv formatu:
+
+```{r}
+pred.df.LightGBM <- data.frame(
+  id = test$id,
+  Premium.Amount = pred.test.exp.LightGBM
+)
+
+write.csv(pred.df.LightGBM,"LightGBM.csv", row.names = FALSE)
+```
+
+U odnosu na XGBoost, LightGBM daje bolje RMSE rezultate.
 
 ## Zakljucak
 - Linearni regresioni modeli, ukljucujuci Ridge i Lasso regularizaciju, nisu uspeli da ostvare zadovoljavajuce performanse, jer nisu u stanju da uhvate nelinearne i kompleksne odnose izmedju prediktora i ciljne promenljive.

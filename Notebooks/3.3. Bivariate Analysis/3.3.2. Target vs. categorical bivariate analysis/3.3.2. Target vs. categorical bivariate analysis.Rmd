@@ -792,7 +792,7 @@ Racunamo efekat Kruskal-Wallis testa kako bismo proverili:
 kruskal_effsize(Premium.Amount ~ Number.of.Dependents, data = train)$effsize
 ```
 
-Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Occupation varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
+Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika u raspodeli Premium.Amount varijable u odnosu na nivoe Number.of.Dependents varijable, analizom vrednosti efekta, kao i uporedjivanjem medijana i IQR-a, utvrdjujemo da je ova razlika minimalna i prakticno neprimenljiva.
 
 ### Distribucija varijable Premium Amount u odnosu na Previous.Claims
 
@@ -972,7 +972,7 @@ Iako je Kruskal-Wallis test ukazao na to da postoji statisticki znacajna razlika
 
 ## Zakljucak
 
-- Prema Shapiro-Wilk testu, Premium.Amount u vecini grupa po kategorijama ne prati normalnu raspodelu. Iz tog razloga, koristimo Kruskal-Wallis test i Mann-Whitney U test.
+- Prema Shapiro-Wilk testu, Premium.Amount u vecini grupa po kategorijama ne prati normalnu raspodelu. Iz tog razloga, koristimo Kruskal-Wallis test ili Mann-Whitney U test.
 - Atributi koji nemaju znacajnu vezu sa ciljnom varijablom: Gender, Marital.Status, Education.Level, Location, Policy.Type, Smoking.Status, Exercise.Frequency, Property.Type, Customer.Feedback.
 - Iako Kruskal-Wallis test ukazuje na znacajnu statisticku razliku distribucije Premium.Amount varijable u odnosu na kategorije Occupation, Insurance.Duration i Number.of.Dependents varijabli, daljom analizom je utvrdjeno da je ova razlika minimalna i prakticno neprimenljiva.
 - Na raspodelu Premium.Amount promenljive utice broj prethodno kreiranih zahteva, Previous.Claims. Premija se povecava sa povecanjem broja kreiranih zahteva.

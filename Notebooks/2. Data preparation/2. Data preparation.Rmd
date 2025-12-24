@@ -105,9 +105,3 @@ levels(test$Customer.Feedback)[levels(test$Customer.Feedback) == ""] <- NA
 
 lapply(test[sapply(test, is.factor)], levels)
 ```
-
-Izbacujemo kolonu id iz train i test skupa:
-```{r}
-train <- train[, !(names(train) == "id")]
-test <- test[, !(names(test) == "id")]
-```

@@ -1755,102 +1755,121 @@ display: none;
 <p>Ucitavanje potrebnih biblioteka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVhVzV6ZEdGc2JDNXdZV05yWVdkbGN5Z25SbE5CSnlsY2JseHViR2xpY21GeWVTaDBhV1I1ZG1WeWMyVXBYRzVzYVdKeVlYSjVLRVpUUVNsY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5pbnN0YWxsLnBhY2thZ2VzKCdGU0EnKVxuXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoRlNBKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcygnRlNBJylcblxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KEZTQSlcbmBgYCJ9 -->
-<pre class="r"><code>install.packages(&#39;FSA&#39;)
-
-library(tidyverse)
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVhVzV6ZEdGc2JDNXdZV05yWVdkbGN5Z25SbE5CSnlsY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5pbnN0YWxsLnBhY2thZ2VzKCdGU0EnKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdGFsbC5wYWNrYWdlcygnRlNBJylcbmBgYCJ9 -->
+<pre class="r"><code>install.packages(&#39;FSA&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gaW5zdGFsbC5wYWNrYWdlcyA6IFVwZGF0aW5nIGxvYWRlZCBwYWNrYWdlc1xuIn0= -->
+<pre><code>Error in install.packages : Updating loaded packages</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViR2xpY21GeWVTaDBhV1I1ZG1WeWMyVXBYRzVzYVdKeVlYSjVLRVpUUVNsY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkoRlNBKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KEZTQSlcbmBgYCJ9 -->
+<pre class="r"><code>library(tidyverse)
 library(FSA)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>Spojicemo train i test skup:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkR1Z6ZENSUWNtVnRhWFZ0TGtGdGIzVnVkQ0E4TFNCT1FWeHVaR0YwWVNBOExTQnlZbWx1WkNoMGNtRnBiaXdnZEdWemRDbGNibHh1YzNWdGJXRnllU2hrWVhSaEtWeHVZR0JnSW4wPSAtLT5cblxuYGBgclxudGVzdCRQcmVtaXVtLkFtb3VudCA8LSBOQVxuZGF0YSA8LSByYmluZCh0cmFpbiwgdGVzdClcblxuc3VtbWFyeShkYXRhKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGVzdCRQcmVtaXVtLkFtb3VudCA8LSBOQVxuZGF0YSA8LSByYmluZCh0cmFpbiwgdGVzdClcblxuc3VtbWFyeShkYXRhKVxuYGBgIn0= -->
+<pre class="r"><code>test$Premium.Amount &lt;- NA
+data &lt;- rbind(train, test)
+
+summary(data)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgIGlkICAgICAgICAgICAgICAgQWdlICAgICAgICAgICBHZW5kZXIgICAgICAgIEFubnVhbC5JbmNvbWUgICAgIE1hcml0YWwuU3RhdHVzICBcbiBNaW4uICAgOiAgICAgIDAgICBNaW4uICAgOjE4LjAwICAgRmVtYWxlOiA5OTYzNDAgICBNaW4uICAgOiAgICAgMSAgIERpdm9yY2VkOjY1MzU1MSAgXG4gMXN0IFF1LjogNTAwMDAwICAgMXN0IFF1LjozMC4wMCAgIE1hbGUgIDoxMDAzNjYwICAgMXN0IFF1LjogIDgwMjEgICBNYXJyaWVkIDo2NTY0ODggIFxuIE1lZGlhbiA6MTAwMDAwMCAgIE1lZGlhbiA6NDEuMDAgICAgICAgICAgICAgICAgICAgIE1lZGlhbiA6IDIzOTU3ICAgU2luZ2xlICA6NjU5MDk2ICBcbiBNZWFuICAgOjEwMDAwMDAgICBNZWFuICAgOjQxLjE0ICAgICAgICAgICAgICAgICAgICBNZWFuICAgOiAzMjc2OSAgIE5BJ3MgICAgOiAzMDg2NSAgXG4gM3JkIFF1LjoxNDk5OTk5ICAgM3JkIFF1Ljo1My4wMCAgICAgICAgICAgICAgICAgICAgM3JkIFF1LjogNDQ2NDEgICAgICAgICAgICAgICAgICAgIFxuIE1heC4gICA6MTk5OTk5OSAgIE1heC4gICA6NjQuMDAgICAgICAgICAgICAgICAgICAgIE1heC4gICA6MTQ5OTk3ICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICBOQSdzICAgOjMxMTk0ICAgICAgICAgICAgICAgICAgICBOQSdzICAgOjc0ODA5ICAgICAgICAgICAgICAgICAgICAgXG4gTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgRWR1Y2F0aW9uLkxldmVsICAgICAgICAgICBPY2N1cGF0aW9uICAgICAgSGVhbHRoLlNjb3JlICAgICAgICBMb2NhdGlvbiAgICAgXG4gMCAgIDozNjI5MjYgICAgICAgICAgSGlnaCBTY2hvb2w6NDgyMTk4ICAgRW1wbG95ZWQgICAgIDo0NzEzMjQgICBNaW4uICAgOiAxLjY0NyAgIFJ1cmFsICAgOjY2ODA2NyAgXG4gMSAgIDozNTg5NjYgICAgICAgICAgQmFjaGVsb3IncyA6NTA1NDU3ICAgU2VsZi1FbXBsb3llZDo0NzA2MzYgICAxc3QgUXUuOjE1LjkxOSAgIFN1YnVyYmFuOjY2ODczMiAgXG4gMiAgIDozNTk0NzggICAgICAgICAgTWFzdGVyJ3MgICA6NTA2MzcwICAgVW5lbXBsb3llZCAgIDo0NjA4NDAgICBNZWRpYW4gOjI0LjU4MCAgIFVyYmFuICAgOjY2MzIwMSAgXG4gMyAgIDozNjkyMjAgICAgICAgICAgUGhEICAgICAgICA6NTA1OTc1ICAgTkEncyAgICAgICAgIDo1OTcyMDAgICBNZWFuICAgOjI1LjYxNCAgICAgICAgICAgICAgICAgICAgXG4gNCAgIDozNjY2MDggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAzcmQgUXUuOjM0LjUyNCAgICAgICAgICAgICAgICAgICAgXG4gTkEnczoxODI4MDIgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBNYXguICAgOjU4Ljk3NiAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBOQSdzICAgOjEyMzUyNSAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgIFBvbGljeS5UeXBlICAgICBQcmV2aW91cy5DbGFpbXMgICBWZWhpY2xlLkFnZSAgICAgIENyZWRpdC5TY29yZSAgICBJbnN1cmFuY2UuRHVyYXRpb25cbiBCYXNpYyAgICAgICAgOjY2NDcwMyAgIDAgICAgICA6NTA4MjM5ICAgTWluLiAgIDogMC4wMDAgICBNaW4uICAgOjMwMC4wICAgIDkgICAgICA6MjI5OTY2ICAgIFxuIENvbXByZWhlbnNpdmU6NjY1ODIyICAgMSAgICAgIDo1MDE2OTIgICAxc3QgUXUuOiA1LjAwMCAgIDFzdCBRdS46NDY4LjAgICAgMSAgICAgIDoyMjQ1MzIgICAgXG4gUHJlbWl1bSAgICAgIDo2Njk0NzUgICAyICAgICAgOjI3OTc2MSAgIE1lZGlhbiA6MTAuMDAwICAgTWVkaWFuIDo1OTUuMCAgICA4ICAgICAgOjIyMjc5MCAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgIDMgICAgICA6IDgxNzY0ICAgTWVhbiAgIDogOS41NzEgICBNZWFuICAgOjU5Mi45ICAgIDcgICAgICA6MjIyNTEzICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgNCAgICAgIDogMTc2ODkgICAzcmQgUXUuOjE1LjAwMCAgIDNyZCBRdS46NzIxLjAgICAgNSAgICAgIDoyMjEwMTYgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAoT3RoZXIpOiAgNDAyNCAgIE1heC4gICA6MTkuMDAwICAgTWF4LiAgIDo4NDkuMCAgICAoT3RoZXIpOjg3OTE4MCAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgIE5BJ3MgICA6NjA2ODMxICAgTkEncyAgIDo5ICAgICAgICBOQSdzICAgOjIyOTMzMyAgIE5BJ3MgICA6ICAgICAzICAgIFxuIFBvbGljeS5TdGFydC5EYXRlICBDdXN0b21lci5GZWVkYmFjayBTbW9raW5nLlN0YXR1cyBFeGVyY2lzZS5GcmVxdWVuY3kgICBQcm9wZXJ0eS5UeXBlICAgXG4gTGVuZ3RoOjIwMDAwMDAgICAgIFBvb3IgICA6NjI1OTUyICAgIE5vIDogOTk2MjY4ICAgIFJhcmVseSA6NDk5OTM0ICAgICBBcGFydG1lbnQ6NjY2MDIyICBcbiBDbGFzcyA6Y2hhcmFjdGVyICAgQXZlcmFnZTo2MjkxMjIgICAgWWVzOjEwMDM3MzIgICAgTW9udGhseTo0OTgyMzAgICAgIENvbmRvICAgIDo2NjY0NzggIFxuIE1vZGUgIDpjaGFyYWN0ZXIgICBHb29kICAgOjYxNDgyNiAgICAgICAgICAgICAgICAgICBXZWVrbHkgOjUxMDY5MyAgICAgSG91c2UgICAgOjY2NzUwMCAgXG4gICAgICAgICAgICAgICAgICAgIE5BJ3MgICA6MTMwMTAwICAgICAgICAgICAgICAgICAgIERhaWx5ICA6NDkxMTQzICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiBQcmVtaXVtLkFtb3VudCBcbiBNaW4uICAgOiAgMjAgICBcbiAxc3QgUXUuOiA1MTQgICBcbiBNZWRpYW4gOiA4NzIgICBcbiBNZWFuICAgOjExMDMgICBcbiAzcmQgUXUuOjE1MDkgICBcbiBNYXguICAgOjQ5OTkgICBcbiBOQSdzICAgOjhlKzA1ICBcbiJ9 -->
+<pre><code>       id               Age           Gender        Annual.Income     Marital.Status  
+ Min.   :      0   Min.   :18.00   Female: 996340   Min.   :     1   Divorced:653551  
+ 1st Qu.: 500000   1st Qu.:30.00   Male  :1003660   1st Qu.:  8021   Married :656488  
+ Median :1000000   Median :41.00                    Median : 23957   Single  :659096  
+ Mean   :1000000   Mean   :41.14                    Mean   : 32769   NA&#39;s    : 30865  
+ 3rd Qu.:1499999   3rd Qu.:53.00                    3rd Qu.: 44641                    
+ Max.   :1999999   Max.   :64.00                    Max.   :149997                    
+                   NA&#39;s   :31194                    NA&#39;s   :74809                     
+ Number.of.Dependents    Education.Level           Occupation      Health.Score        Location     
+ 0   :362926          High School:482198   Employed     :471324   Min.   : 1.647   Rural   :668067  
+ 1   :358966          Bachelor&#39;s :505457   Self-Employed:470636   1st Qu.:15.919   Suburban:668732  
+ 2   :359478          Master&#39;s   :506370   Unemployed   :460840   Median :24.580   Urban   :663201  
+ 3   :369220          PhD        :505975   NA&#39;s         :597200   Mean   :25.614                    
+ 4   :366608                                                      3rd Qu.:34.524                    
+ NA&#39;s:182802                                                      Max.   :58.976                    
+                                                                  NA&#39;s   :123525                    
+        Policy.Type     Previous.Claims   Vehicle.Age      Credit.Score    Insurance.Duration
+ Basic        :664703   0      :508239   Min.   : 0.000   Min.   :300.0    9      :229966    
+ Comprehensive:665822   1      :501692   1st Qu.: 5.000   1st Qu.:468.0    1      :224532    
+ Premium      :669475   2      :279761   Median :10.000   Median :595.0    8      :222790    
+                        3      : 81764   Mean   : 9.571   Mean   :592.9    7      :222513    
+                        4      : 17689   3rd Qu.:15.000   3rd Qu.:721.0    5      :221016    
+                        (Other):  4024   Max.   :19.000   Max.   :849.0    (Other):879180    
+                        NA&#39;s   :606831   NA&#39;s   :9        NA&#39;s   :229333   NA&#39;s   :     3    
+ Policy.Start.Date  Customer.Feedback Smoking.Status Exercise.Frequency   Property.Type   
+ Length:2000000     Poor   :625952    No : 996268    Rarely :499934     Apartment:666022  
+ Class :character   Average:629122    Yes:1003732    Monthly:498230     Condo    :666478  
+ Mode  :character   Good   :614826                   Weekly :510693     House    :667500  
+                    NA&#39;s   :130100                   Daily  :491143                       
+                                                                                          
+                                                                                          
+                                                                                          
+ Premium.Amount 
+ Min.   :  20   
+ 1st Qu.: 514   
+ Median : 872   
+ Mean   :1103   
+ 3rd Qu.:1509   
+ Max.   :4999   
+ NA&#39;s   :8e+05  </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
 <div id="kategorijski-atributi" class="section level2">
 <h2>Kategorijski atributi</h2>
-<p>Broj nedostajucih vrednosti u train skupu podataka:</p>
+<p>Broj nedostajucih vrednosti u skupu podataka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMkYwTG5SeVlXbHVJRHd0SUhOaGNIQnNlU2gwY21GcGJpd2dhWE11Wm1GamRHOXlLVnh1WTI5c1UzVnRjeWhwY3k1dVlTaDBjbUZwYmxzc0lHTmhkQzUwY21GcGJsMHBLVnh1WUdCZ0luMD0gLS0+XG5cbmBgYHJcbmNhdC50cmFpbiA8LSBzYXBwbHkodHJhaW4sIGlzLmZhY3RvcilcbmNvbFN1bXMoaXMubmEodHJhaW5bLCBjYXQudHJhaW5dKSlcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0LnRyYWluIDwtIHNhcHBseSh0cmFpbiwgaXMuZmFjdG9yKVxuY29sU3Vtcyhpcy5uYSh0cmFpblssIGNhdC50cmFpbl0pKVxuYGBgIn0= -->
-<pre class="r"><code>cat.train &lt;- sapply(train, is.factor)
-colSums(is.na(train[, cat.train]))</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMkYwTG1SaGRHRWdQQzBnYzJGd2NHeDVLR1JoZEdFc0lHbHpMbVpoWTNSdmNpbGNibU52YkZOMWJYTW9hWE11Ym1Fb1pHRjBZVnNzSUdOaGRDNWtZWFJoWFNrcFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY2F0LmRhdGEgPC0gc2FwcGx5KGRhdGEsIGlzLmZhY3RvcilcbmNvbFN1bXMoaXMubmEoZGF0YVssIGNhdC5kYXRhXSkpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0LmRhdGEgPC0gc2FwcGx5KGRhdGEsIGlzLmZhY3RvcilcbmNvbFN1bXMoaXMubmEoZGF0YVssIGNhdC5kYXRhXSkpXG5gYGAifQ== -->
+<pre class="r"><code>cat.data &lt;- sapply(data, is.factor)
+colSums(is.na(data[, cat.data]))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAxODUyOSAgICAgICAgICAgICAgIDEwOTY3MiAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgIDM1ODA3NSAgICAgICAgICAgICAgICAgICAgMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAzNjQwMjkgICAgICAgICAgICAgICAgICAgIDEgICAgICAgICAgICAgICAgNzc4MjQgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                   0                18529               109672                    0               358075                    0 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                   0               364029                    1                77824                    0                    0 
-       Property.Type 
-                   0 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAzMDg2NSAgICAgICAgICAgICAgIDE4MjgwMiAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgIDU5NzIwMCBcbiAgICAgICAgICAgIExvY2F0aW9uICAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrIFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICA2MDY4MzEgICAgICAgICAgICAgICAgICAgIDMgICAgICAgICAgICAgICAxMzAxMDAgXG4gICAgICBTbW9raW5nLlN0YXR1cyAgIEV4ZXJjaXNlLkZyZXF1ZW5jeSAgICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwICAgICAgICAgICAgICAgICAgICAwICAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
+<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation 
+                   0                30865               182802                    0               597200 
+            Location          Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback 
+                   0                    0               606831                    3               130100 
+      Smoking.Status   Exercise.Frequency        Property.Type 
+                   0                    0                    0 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Broj nedostajucih vrednosti u test skupu podataka:</p>
+<p>Prikaz procentualnog odnosa nedostajucih podataka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMkYwTG5SbGMzUWdQQzBnYzJGd2NHeDVLSFJsYzNRc0lHbHpMbVpoWTNSdmNpbGNibU52YkZOMWJYTW9hWE11Ym1Fb2RHVnpkRnNzSUdOaGRDNTBaWE4wWFNrcFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY2F0LnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLmZhY3RvcilcbmNvbFN1bXMoaXMubmEodGVzdFssIGNhdC50ZXN0XSkpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY2F0LnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLmZhY3RvcilcbmNvbFN1bXMoaXMubmEodGVzdFssIGNhdC50ZXN0XSkpXG5gYGAifQ== -->
-<pre class="r"><code>cat.test &lt;- sapply(test, is.factor)
-colSums(is.na(test[, cat.test]))</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzVTNWdGN5aHBjeTV1WVNoa1lYUmhXeXdnWTJGMExtUmhkR0ZkS1NrZ0x5QnVjbTkzS0dSaGRHRXBJQ29nTVRBd1hHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGAifQ== -->
+<pre class="r"><code>colSums(is.na(data[, cat.data])) / nrow(data) * 100</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAxMjMzNiAgICAgICAgICAgICAgICA3MzEzMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgIDIzOTEyNSAgICAgICAgICAgICAgICAgICAgMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAyNDI4MDIgICAgICAgICAgICAgICAgICAgIDIgICAgICAgICAgICAgICAgNTIyNzYgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                   0                12336                73130                    0               239125                    0 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                   0               242802                    2                52276                    0                    0 
-       Property.Type 
-                   0 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gXG4gICAgICAgICAgICAgMC4wMDAwMCAgICAgICAgICAgICAgMS41NDMyNSAgICAgICAgICAgICAgOS4xNDAxMCAgICAgICAgICAgICAgMC4wMDAwMCAgICAgICAgICAgICAyOS44NjAwMCBcbiAgICAgICAgICAgIExvY2F0aW9uICAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrIFxuICAgICAgICAgICAgIDAuMDAwMDAgICAgICAgICAgICAgIDAuMDAwMDAgICAgICAgICAgICAgMzAuMzQxNTUgICAgICAgICAgICAgIDAuMDAwMTUgICAgICAgICAgICAgIDYuNTA1MDAgXG4gICAgICBTbW9raW5nLlN0YXR1cyAgIEV4ZXJjaXNlLkZyZXF1ZW5jeSAgICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAwLjAwMDAwICAgICAgICAgICAgICAwLjAwMDAwICAgICAgICAgICAgICAwLjAwMDAwIFxuIn0= -->
+<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation 
+             0.00000              1.54325              9.14010              0.00000             29.86000 
+            Location          Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback 
+             0.00000              0.00000             30.34155              0.00015              6.50500 
+      Smoking.Status   Exercise.Frequency        Property.Type 
+             0.00000              0.00000              0.00000 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Prikaz procentualnog odnosa nedostajucih podataka u train skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJ5WVdsdVd5d2dZMkYwTG5SeVlXbHVYU2twSUM4Z2JuSnZkeWgwY21GcGJpa2dLaUF4TURCY2JuSnZkVzVrS0c1aFgzQmxjbU5sYm5Rc0lESXBYRzVnWUdBaWZRPT0gLS0+XG5cbmBgYHJcbm5hX3BlcmNlbnQgPC0gY29sU3Vtcyhpcy5uYSh0cmFpblssIGNhdC50cmFpbl0pKSAvIG5yb3codHJhaW4pICogMTAwXG5yb3VuZChuYV9wZXJjZW50LCAyKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgY2F0LnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbnJvdW5kKG5hX3BlcmNlbnQsIDIpXG5gYGAifQ== -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(train[, cat.train])) / nrow(train) * 100
-round(na_percent, 2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgMC4wMCAgICAgICAgICAgICAgICAgMS41NCAgICAgICAgICAgICAgICAgOS4xNCAgICAgICAgICAgICAgICAgMC4wMCAgICAgICAgICAgICAgICAyOS44NCAgICAgICAgICAgICAgICAgMC4wMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgMzAuMzQgICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgIDYuNDkgICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgIDAuMDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAwLjAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                0.00                 1.54                 9.14                 0.00                29.84                 0.00 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                0.00                30.34                 0.00                 6.49                 0.00                 0.00 
-       Property.Type 
-                0.00 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Prikaz procentualnog odnosa nedostajucih podataka u test skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJsYzNSYkxDQmpZWFF1ZEdWemRGMHBLU0F2SUc1eWIzY29kR1Z6ZENrZ0tpQXhNREJjYm5KdmRXNWtLRzVoWDNCbGNtTmxiblFzSURJcFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBjYXQudGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDBcbnJvdW5kKG5hX3BlcmNlbnQsIDIpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBjYXQudGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDBcbnJvdW5kKG5hX3BlcmNlbnQsIDIpXG5gYGAifQ== -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(test[, cat.test])) / nrow(test) * 100
-round(na_percent, 2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgMC4wMCAgICAgICAgICAgICAgICAgMS41NCAgICAgICAgICAgICAgICAgOS4xNCAgICAgICAgICAgICAgICAgMC4wMCAgICAgICAgICAgICAgICAyOS44OSAgICAgICAgICAgICAgICAgMC4wMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgMzAuMzUgICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgIDYuNTMgICAgICAgICAgICAgICAgIDAuMDAgICAgICAgICAgICAgICAgIDAuMDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAwLjAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                0.00                 1.54                 9.14                 0.00                29.89                 0.00 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                0.00                30.35                 0.00                 6.53                 0.00                 0.00 
-       Property.Type 
-                0.00 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Iako su train i test dva odvojena skupa podataka, imaju skoro
-identicne procente nedostajucih vrednosti po varijablama. Samim tim,
-tehnike imputacije ce biti iste za oba skupa.</p>
 <p>Tehnike imputacije: - Nedostajuce vrednosti u varijablama
 Marital.Status, Insurance.Duration i Customer.Feedback ce biti popunjene
 sa najvise prisutnom kategorijom u varijabli. - Nedostajuce vrednosti u
 varijablama Occupation i Previous.Claims ce biti popunjene sa novom
-kategorijom Unknown. Procenat nedostajucih vrednosti u ovim varijablama
+kategorijom UNKNOWN. Procenat nedostajucih vrednosti u ovim varijablama
 je veliki i imputacija mode tehnikom bi drasticno uticala na distibuciju
 podataka. Dodavanjem nove kategorije cemo obezbediti da se distribucija
 podataka ne promeni.</p>
@@ -1859,16 +1878,14 @@ podataka ne promeni.</p>
 <h2>Imputacija MODE tehnikom</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzY3lBOExTQmpLRndpVFdGeWFYUmhiQzVUZEdGMGRYTmNJaXdnWENKSmJuTjFjbUZ1WTJVdVJIVnlZWFJwYjI1Y0lpd2dYQ0pEZFhOMGIyMWxjaTVHWldWa1ltRmphMXdpTENCY0lrNTFiV0psY2k1dlppNUVaWEJsYm1SbGJuUnpYQ0lwWEc1Y2JtWnZjaUFvWTI5c0lHbHVJR052YkhNcElIdGNiaUFnYlc5a1pTNTBjbUZwYmlBOExTQnVZVzFsY3loM2FHbGphQzV0WVhnb2RHRmliR1VvZEhKaGFXNWJXMk52YkYxZEtTa3BYRzRnSUcxdlpHVXVkR1Z6ZENBOExTQnVZVzFsY3loM2FHbGphQzV0WVhnb2RHRmliR1VvZEdWemRGdGJZMjlzWFYwcEtTbGNiaUFnWEc0Z0lIUnlZV2x1VzF0amIyeGRYVnRwY3k1dVlTaDBjbUZwYmx0YlkyOXNYVjBwWFNBOExTQnRiMlJsTG5SeVlXbHVYRzRnSUhSbGMzUmJXMk52YkYxZFcybHpMbTVoS0hSbGMzUmJXMk52YkYxZEtWMGdQQzBnYlc5a1pTNTBaWE4wWEc1OVhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY29scyA8LSBjKFwiTWFyaXRhbC5TdGF0dXNcIiwgXCJJbnN1cmFuY2UuRHVyYXRpb25cIiwgXCJDdXN0b21lci5GZWVkYmFja1wiLCBcIk51bWJlci5vZi5EZXBlbmRlbnRzXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbW9kZS50cmFpbiA8LSBuYW1lcyh3aGljaC5tYXgodGFibGUodHJhaW5bW2NvbF1dKSkpXG4gIG1vZGUudGVzdCA8LSBuYW1lcyh3aGljaC5tYXgodGFibGUodGVzdFtbY29sXV0pKSlcbiAgXG4gIHRyYWluW1tjb2xdXVtpcy5uYSh0cmFpbltbY29sXV0pXSA8LSBtb2RlLnRyYWluXG4gIHRlc3RbW2NvbF1dW2lzLm5hKHRlc3RbW2NvbF1dKV0gPC0gbW9kZS50ZXN0XG59XG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29scyA8LSBjKFwiTWFyaXRhbC5TdGF0dXNcIiwgXCJJbnN1cmFuY2UuRHVyYXRpb25cIiwgXCJDdXN0b21lci5GZWVkYmFja1wiLCBcIk51bWJlci5vZi5EZXBlbmRlbnRzXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbW9kZS50cmFpbiA8LSBuYW1lcyh3aGljaC5tYXgodGFibGUodHJhaW5bW2NvbF1dKSkpXG4gIG1vZGUudGVzdCA8LSBuYW1lcyh3aGljaC5tYXgodGFibGUodGVzdFtbY29sXV0pKSlcbiAgXG4gIHRyYWluW1tjb2xdXVtpcy5uYSh0cmFpbltbY29sXV0pXSA8LSBtb2RlLnRyYWluXG4gIHRlc3RbW2NvbF1dW2lzLm5hKHRlc3RbW2NvbF1dKV0gPC0gbW9kZS50ZXN0XG59XG5gYGAifQ== -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzY3lBOExTQmpLRndpVFdGeWFYUmhiQzVUZEdGMGRYTmNJaXdnWENKSmJuTjFjbUZ1WTJVdVJIVnlZWFJwYjI1Y0lpd2dYQ0pEZFhOMGIyMWxjaTVHWldWa1ltRmphMXdpTENCY0lrNTFiV0psY2k1dlppNUVaWEJsYm1SbGJuUnpYQ0lwWEc1Y2JtWnZjaUFvWTI5c0lHbHVJR052YkhNcElIdGNiaUFnYlc5a1pTNWtZWFJoSUR3dElHNWhiV1Z6S0hkb2FXTm9MbTFoZUNoMFlXSnNaU2hrWVhSaFcxdGpiMnhkWFNrcEtWeHVJQ0JjYmlBZ1pHRjBZVnRiWTI5c1hWMWJhWE11Ym1Fb1pHRjBZVnRiWTI5c1hWMHBYU0E4TFNCdGIyUmxMbVJoZEdGY2JuMWNibUJnWUNKOSAtLT5cblxuYGBgclxuY29scyA8LSBjKFwiTWFyaXRhbC5TdGF0dXNcIiwgXCJJbnN1cmFuY2UuRHVyYXRpb25cIiwgXCJDdXN0b21lci5GZWVkYmFja1wiLCBcIk51bWJlci5vZi5EZXBlbmRlbnRzXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbW9kZS5kYXRhIDwtIG5hbWVzKHdoaWNoLm1heCh0YWJsZShkYXRhW1tjb2xdXSkpKVxuICBcbiAgZGF0YVtbY29sXV1baXMubmEoZGF0YVtbY29sXV0pXSA8LSBtb2RlLmRhdGFcbn1cbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29scyA8LSBjKFwiTWFyaXRhbC5TdGF0dXNcIiwgXCJJbnN1cmFuY2UuRHVyYXRpb25cIiwgXCJDdXN0b21lci5GZWVkYmFja1wiLCBcIk51bWJlci5vZi5EZXBlbmRlbnRzXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbW9kZS5kYXRhIDwtIG5hbWVzKHdoaWNoLm1heCh0YWJsZShkYXRhW1tjb2xdXSkpKVxuICBcbiAgZGF0YVtbY29sXV1baXMubmEoZGF0YVtbY29sXV0pXSA8LSBtb2RlLmRhdGFcbn1cbmBgYCJ9 -->
 <pre class="r"><code>cols &lt;- c(&quot;Marital.Status&quot;, &quot;Insurance.Duration&quot;, &quot;Customer.Feedback&quot;, &quot;Number.of.Dependents&quot;)
 
 for (col in cols) {
-  mode.train &lt;- names(which.max(table(train[[col]])))
-  mode.test &lt;- names(which.max(table(test[[col]])))
+  mode.data &lt;- names(which.max(table(data[[col]])))
   
-  train[[col]][is.na(train[[col]])] &lt;- mode.train
-  test[[col]][is.na(test[[col]])] &lt;- mode.test
+  data[[col]][is.na(data[[col]])] &lt;- mode.data
 }</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -1879,19 +1896,16 @@ for (col in cols) {
 <h2>Imputacija UNKNOWN kategorijom</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkSEpoYVc0a1VISmxkbWx2ZFhNdVEyeGhhVzF6SUR3dElHWmhZM1J2Y2loMGNtRnBiaVJRY21WMmFXOTFjeTVEYkdGcGJYTXNJRzl5WkdWeVpXUWdQU0JHUVV4VFJTbGNiblJsYzNRa1VISmxkbWx2ZFhNdVEyeGhhVzF6SUR3dElHWmhZM1J2Y2loMFpYTjBKRkJ5WlhacGIzVnpMa05zWVdsdGN5d2diM0prWlhKbFpDQTlJRVpCVEZORktWeHVYRzVqYjJ4eklEd3RJR01vWENKUFkyTjFjR0YwYVc5dVhDSXNJRndpVUhKbGRtbHZkWE11UTJ4aGFXMXpYQ0lwWEc1Y2JtWnZjaUFvWTI5c0lHbHVJR052YkhNcElIdGNiaUFnYkdWMlpXeHpLSFJ5WVdsdVcxdGpiMnhkWFNrZ1BDMGdZeWhzWlhabGJITW9kSEpoYVc1YlcyTnZiRjFkS1N3Z1hDSlZUa3RPVDFkT1hDSXBYRzRnSUd4bGRtVnNjeWgwWlhOMFcxdGpiMnhkWFNrZ0lEd3RJR01vYkdWMlpXeHpLSFJsYzNSYlcyTnZiRjFkS1N3Z1hDSlZUa3RPVDFkT1hDSXBYRzRnSUZ4dUlDQjBjbUZwYmx0YlkyOXNYVjFiYVhNdWJtRW9kSEpoYVc1YlcyTnZiRjFkS1YwZ1BDMGdYQ0pWVGt0T1QxZE9YQ0pjYmlBZ2RHVnpkRnRiWTI5c1hWMWJhWE11Ym1Fb2RHVnpkRnRiWTI5c1hWMHBYU0E4TFNCY0lsVk9TMDVQVjA1Y0lseHVmVnh1WUdCZ0luMD0gLS0+XG5cbmBgYHJcbnRyYWluJFByZXZpb3VzLkNsYWltcyA8LSBmYWN0b3IodHJhaW4kUHJldmlvdXMuQ2xhaW1zLCBvcmRlcmVkID0gRkFMU0UpXG50ZXN0JFByZXZpb3VzLkNsYWltcyA8LSBmYWN0b3IodGVzdCRQcmV2aW91cy5DbGFpbXMsIG9yZGVyZWQgPSBGQUxTRSlcblxuY29scyA8LSBjKFwiT2NjdXBhdGlvblwiLCBcIlByZXZpb3VzLkNsYWltc1wiKVxuXG5mb3IgKGNvbCBpbiBjb2xzKSB7XG4gIGxldmVscyh0cmFpbltbY29sXV0pIDwtIGMobGV2ZWxzKHRyYWluW1tjb2xdXSksIFwiVU5LTk9XTlwiKVxuICBsZXZlbHModGVzdFtbY29sXV0pICA8LSBjKGxldmVscyh0ZXN0W1tjb2xdXSksIFwiVU5LTk9XTlwiKVxuICBcbiAgdHJhaW5bW2NvbF1dW2lzLm5hKHRyYWluW1tjb2xdXSldIDwtIFwiVU5LTk9XTlwiXG4gIHRlc3RbW2NvbF1dW2lzLm5hKHRlc3RbW2NvbF1dKV0gPC0gXCJVTktOT1dOXCJcbn1cbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW4kUHJldmlvdXMuQ2xhaW1zIDwtIGZhY3Rvcih0cmFpbiRQcmV2aW91cy5DbGFpbXMsIG9yZGVyZWQgPSBGQUxTRSlcbnRlc3QkUHJldmlvdXMuQ2xhaW1zIDwtIGZhY3Rvcih0ZXN0JFByZXZpb3VzLkNsYWltcywgb3JkZXJlZCA9IEZBTFNFKVxuXG5jb2xzIDwtIGMoXCJPY2N1cGF0aW9uXCIsIFwiUHJldmlvdXMuQ2xhaW1zXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbGV2ZWxzKHRyYWluW1tjb2xdXSkgPC0gYyhsZXZlbHModHJhaW5bW2NvbF1dKSwgXCJVTktOT1dOXCIpXG4gIGxldmVscyh0ZXN0W1tjb2xdXSkgIDwtIGMobGV2ZWxzKHRlc3RbW2NvbF1dKSwgXCJVTktOT1dOXCIpXG4gIFxuICB0cmFpbltbY29sXV1baXMubmEodHJhaW5bW2NvbF1dKV0gPC0gXCJVTktOT1dOXCJcbiAgdGVzdFtbY29sXV1baXMubmEodGVzdFtbY29sXV0pXSA8LSBcIlVOS05PV05cIlxufVxuYGBgIn0= -->
-<pre class="r"><code>train$Previous.Claims &lt;- factor(train$Previous.Claims, ordered = FALSE)
-test$Previous.Claims &lt;- factor(test$Previous.Claims, ordered = FALSE)
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVaR0YwWVNSUWNtVjJhVzkxY3k1RGJHRnBiWE1nUEMwZ1ptRmpkRzl5S0dSaGRHRWtVSEpsZG1sdmRYTXVRMnhoYVcxekxDQnZjbVJsY21Wa0lEMGdSa0ZNVTBVcFhHNWNibU52YkhNZ1BDMGdZeWhjSWs5alkzVndZWFJwYjI1Y0lpd2dYQ0pRY21WMmFXOTFjeTVEYkdGcGJYTmNJaWxjYmx4dVptOXlJQ2hqYjJ3Z2FXNGdZMjlzY3lrZ2UxeHVJQ0JzWlhabGJITW9aR0YwWVZ0YlkyOXNYVjBwSUR3dElHTW9iR1YyWld4ektHUmhkR0ZiVzJOdmJGMWRLU3dnWENKVlRrdE9UMWRPWENJcFhHNGdJRnh1SUNCa1lYUmhXMXRqYjJ4ZFhWdHBjeTV1WVNoa1lYUmhXMXRqYjJ4ZFhTbGRJRHd0SUZ3aVZVNUxUazlYVGx3aVhHNTlYRzVnWUdBaWZRPT0gLS0+XG5cbmBgYHJcbmRhdGEkUHJldmlvdXMuQ2xhaW1zIDwtIGZhY3RvcihkYXRhJFByZXZpb3VzLkNsYWltcywgb3JkZXJlZCA9IEZBTFNFKVxuXG5jb2xzIDwtIGMoXCJPY2N1cGF0aW9uXCIsIFwiUHJldmlvdXMuQ2xhaW1zXCIpXG5cbmZvciAoY29sIGluIGNvbHMpIHtcbiAgbGV2ZWxzKGRhdGFbW2NvbF1dKSA8LSBjKGxldmVscyhkYXRhW1tjb2xdXSksIFwiVU5LTk9XTlwiKVxuICBcbiAgZGF0YVtbY29sXV1baXMubmEoZGF0YVtbY29sXV0pXSA8LSBcIlVOS05PV05cIlxufVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSRQcmV2aW91cy5DbGFpbXMgPC0gZmFjdG9yKGRhdGEkUHJldmlvdXMuQ2xhaW1zLCBvcmRlcmVkID0gRkFMU0UpXG5cbmNvbHMgPC0gYyhcIk9jY3VwYXRpb25cIiwgXCJQcmV2aW91cy5DbGFpbXNcIilcblxuZm9yIChjb2wgaW4gY29scykge1xuICBsZXZlbHMoZGF0YVtbY29sXV0pIDwtIGMobGV2ZWxzKGRhdGFbW2NvbF1dKSwgXCJVTktOT1dOXCIpXG4gIFxuICBkYXRhW1tjb2xdXVtpcy5uYShkYXRhW1tjb2xdXSldIDwtIFwiVU5LTk9XTlwiXG59XG5gYGAifQ== -->
+<pre class="r"><code>data$Previous.Claims &lt;- factor(data$Previous.Claims, ordered = FALSE)
 
 cols &lt;- c(&quot;Occupation&quot;, &quot;Previous.Claims&quot;)
 
 for (col in cols) {
-  levels(train[[col]]) &lt;- c(levels(train[[col]]), &quot;UNKNOWN&quot;)
-  levels(test[[col]])  &lt;- c(levels(test[[col]]), &quot;UNKNOWN&quot;)
+  levels(data[[col]]) &lt;- c(levels(data[[col]]), &quot;UNKNOWN&quot;)
   
-  train[[col]][is.na(train[[col]])] &lt;- &quot;UNKNOWN&quot;
-  test[[col]][is.na(test[[col]])] &lt;- &quot;UNKNOWN&quot;
+  data[[col]][is.na(data[[col]])] &lt;- &quot;UNKNOWN&quot;
 }</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -1900,126 +1914,71 @@ for (col in cols) {
 </div>
 <div id="provera-nedostajucih-vrednosti" class="section level2">
 <h2>Provera nedostajucih vrednosti</h2>
-<p>Prikaz procentualnog odnosa nedostajucih podataka u train skupu:</p>
+<p>Prikaz procentualnog odnosa nedostajucih podataka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJ5WVdsdVd5d2dZMkYwTG5SeVlXbHVYU2twSUM4Z2JuSnZkeWgwY21GcGJpa2dLaUF4TURCY2JtNWhYM0JsY21ObGJuUmNibUJnWUNKOSAtLT5cblxuYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgY2F0LnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgY2F0LnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(train[, cat.train])) / nrow(train) * 100
-na_percent</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzVTNWdGN5aHBjeTV1WVNoa1lYUmhXeXdnWTJGMExtUmhkR0ZkS1NrZ0x5QnVjbTkzS0dSaGRHRXBJQ29nTVRBd1hHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGAifQ== -->
+<pre class="r"><code>colSums(is.na(data[, cat.data])) / nrow(data) * 100</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                   0                    0                    0                    0                    0                    0 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                   0                    0                    0                    0                    0                    0 
-       Property.Type 
-                   0 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Prikaz procentualnog odnosa nedostajucih podataka u test skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJsYzNSYkxDQmpZWFF1ZEdWemRGMHBLU0F2SUc1eWIzY29kR1Z6ZENrZ0tpQXhNREJjYm01aFgzQmxjbU5sYm5SY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5uYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodGVzdFssIGNhdC50ZXN0XSkpIC8gbnJvdyh0ZXN0KSAqIDEwMFxubmFfcGVyY2VudFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBjYXQudGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(test[, cat.test])) / nrow(test) * 100
-na_percent</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gICAgICAgICAgICAgTG9jYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCBcbiAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrICAgICAgIFNtb2tpbmcuU3RhdHVzICAgRXhlcmNpc2UuRnJlcXVlbmN5IFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgXG4gICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
-<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation             Location 
-                   0                    0                    0                    0                    0                    0 
-         Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback       Smoking.Status   Exercise.Frequency 
-                   0                    0                    0                    0                    0                    0 
-       Property.Type 
-                   0 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICBHZW5kZXIgICAgICAgTWFyaXRhbC5TdGF0dXMgTnVtYmVyLm9mLkRlcGVuZGVudHMgICAgICBFZHVjYXRpb24uTGV2ZWwgICAgICAgICAgIE9jY3VwYXRpb24gXG4gICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgICAgICAgMCBcbiAgICAgICAgICAgIExvY2F0aW9uICAgICAgICAgIFBvbGljeS5UeXBlICAgICAgUHJldmlvdXMuQ2xhaW1zICAgSW5zdXJhbmNlLkR1cmF0aW9uICAgIEN1c3RvbWVyLkZlZWRiYWNrIFxuICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgICAgICAgICAgICAgICAgICAgIDAgXG4gICAgICBTbW9raW5nLlN0YXR1cyAgIEV4ZXJjaXNlLkZyZXF1ZW5jeSAgICAgICAgUHJvcGVydHkuVHlwZSBcbiAgICAgICAgICAgICAgICAgICAwICAgICAgICAgICAgICAgICAgICAwICAgICAgICAgICAgICAgICAgICAwIFxuIn0= -->
+<pre><code>              Gender       Marital.Status Number.of.Dependents      Education.Level           Occupation 
+                   0                    0                    0                    0                    0 
+            Location          Policy.Type      Previous.Claims   Insurance.Duration    Customer.Feedback 
+                   0                    0                    0                    0                    0 
+      Smoking.Status   Exercise.Frequency        Property.Type 
+                   0                    0                    0 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
 <div id="numericki-atributi" class="section level2">
 <h2>Numericki atributi</h2>
-<p>Broj nedostajucih vrednosti u train skupu podataka:</p>
+<p>Broj nedostajucih vrednosti u skupu podataka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViblZ0TG5SeVlXbHVJRHd0SUhOaGNIQnNlU2gwY21GcGJpd2dhWE11Ym5WdFpYSnBZeWxjYm1OdmJGTjFiWE1vYVhNdWJtRW9kSEpoYVc1YkxDQnVkVzB1ZEhKaGFXNWRLU2xjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcbm51bS50cmFpbiA8LSBzYXBwbHkodHJhaW4sIGlzLm51bWVyaWMpXG5jb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtLnRyYWluIDwtIHNhcHBseSh0cmFpbiwgaXMubnVtZXJpYylcbmNvbFN1bXMoaXMubmEodHJhaW5bLCBudW0udHJhaW5dKSlcbmBgYCJ9 -->
-<pre class="r"><code>num.train &lt;- sapply(train, is.numeric)
-colSums(is.na(train[, num.train]))</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViblZ0TG1SaGRHRWdQQzBnYzJGd2NHeDVLR1JoZEdFc0lHbHpMbTUxYldWeWFXTXBYRzVqYjJ4VGRXMXpLR2x6TG01aEtHUmhkR0ZiTENCdWRXMHVaR0YwWVYwcEtWeHVZR0JnSW4wPSAtLT5cblxuYGBgclxubnVtLmRhdGEgPC0gc2FwcGx5KGRhdGEsIGlzLm51bWVyaWMpXG5jb2xTdW1zKGlzLm5hKGRhdGFbLCBudW0uZGF0YV0pKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtLmRhdGEgPC0gc2FwcGx5KGRhdGEsIGlzLm51bWVyaWMpXG5jb2xTdW1zKGlzLm5hKGRhdGFbLCBudW0uZGF0YV0pKVxuYGBgIn0= -->
+<pre class="r"><code>num.data &lt;- sapply(data, is.numeric)
+colSums(is.na(data[, num.data]))</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgICAxODcwNSAgICAgICAgICA0NDk0OSAgICAgICAgICA3NDA3NiAgICAgICAgICAgICAgNiAgICAgICAgIDEzNzg4MiAgICAgICAgICAgICAgMCBcbiJ9 -->
-<pre><code>           Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
-         18705          44949          74076              6         137882              0 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgaWQgICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgICAgICAgMCAgICAgICAgICAzMTE5NCAgICAgICAgICA3NDgwOSAgICAgICAgIDEyMzUyNSAgICAgICAgICAgICAgOSAgICAgICAgIDIyOTMzMyAgICAgICAgIDgwMDAwMCBcbiJ9 -->
+<pre><code>            id            Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
+             0          31194          74809         123525              9         229333         800000 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Broj nedostajucih vrednosti u test skupu podataka:</p>
+<p>Prikaz procentualnog odnosa nedostajucih podataka:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViblZ0TG5SbGMzUWdQQzBnYzJGd2NHeDVLSFJsYzNRc0lHbHpMbTUxYldWeWFXTXBYRzVqYjJ4VGRXMXpLR2x6TG01aEtIUmxjM1JiTENCdWRXMHVkR1Z6ZEYwcEtWeHVZR0JnSW4wPSAtLT5cblxuYGBgclxubnVtLnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLm51bWVyaWMpXG5jb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubnVtLnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLm51bWVyaWMpXG5jb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKVxuYGBgIn0= -->
-<pre class="r"><code>num.test &lt;- sapply(test, is.numeric)
-colSums(is.na(test[, num.test]))</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzVTNWdGN5aHBjeTV1WVNoa1lYUmhXeXdnYm5WdExtUmhkR0ZkS1NrZ0x5QnVjbTkzS0dSaGRHRXBJQ29nTVRBd1hHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgbnVtLmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgbnVtLmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGAifQ== -->
+<pre class="r"><code>colSums(is.na(data[, num.data])) / nrow(data) * 100</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgIEFnZSBBbm51YWwuSW5jb21lICBIZWFsdGguU2NvcmUgICBWZWhpY2xlLkFnZSAgQ3JlZGl0LlNjb3JlIFxuICAgICAgICAxMjQ4OSAgICAgICAgIDI5ODYwICAgICAgICAgNDk0NDkgICAgICAgICAgICAgMyAgICAgICAgIDkxNDUxIFxuIn0= -->
-<pre><code>          Age Annual.Income  Health.Score   Vehicle.Age  Credit.Score 
-        12489         29860         49449             3         91451 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgaWQgICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgMC4wMDAwMCAgICAgICAgMS41NTk3MCAgICAgICAgMy43NDA0NSAgICAgICAgNi4xNzYyNSAgICAgICAgMC4wMDA0NSAgICAgICAxMS40NjY2NSAgICAgICA0MC4wMDAwMCBcbiJ9 -->
+<pre><code>            id            Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
+       0.00000        1.55970        3.74045        6.17625        0.00045       11.46665       40.00000 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Prikaz procentualnog odnosa nedostajucih podataka u train skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJ5WVdsdVd5d2diblZ0TG5SeVlXbHVYU2twSUM4Z2JuSnZkeWgwY21GcGJpa2dLaUF4TURCY2JtNWhYM0JsY21ObGJuUmNibUJnWUNKOSAtLT5cblxuYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(train[, num.train])) / nrow(train) * 100
-na_percent</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgMS41NTg3NSAgICAgICAgMy43NDU3NSAgICAgICAgNi4xNzMwMCAgICAgICAgMC4wMDA1MCAgICAgICAxMS40OTAxNyAgICAgICAgMC4wMDAwMCBcbiJ9 -->
-<pre><code>           Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
-       1.55875        3.74575        6.17300        0.00050       11.49017        0.00000 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Prikaz procentualnog odnosa nedostajucih podataka u test skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJsYzNSYkxDQnVkVzB1ZEdWemRGMHBLU0F2SUc1eWIzY29kR1Z6ZENrZ0tpQXhNREJjYm01aFgzQmxjbU5sYm5SY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5uYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodGVzdFssIG51bS50ZXN0XSkpIC8gbnJvdyh0ZXN0KSAqIDEwMFxubmFfcGVyY2VudFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(test[, num.test])) / nrow(test) * 100
-na_percent</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgIEFnZSBBbm51YWwuSW5jb21lICBIZWFsdGguU2NvcmUgICBWZWhpY2xlLkFnZSAgQ3JlZGl0LlNjb3JlIFxuICAgICAxLjU2MTEyNSAgICAgIDMuNzMyNTAwICAgICAgNi4xODExMjUgICAgICAwLjAwMDM3NSAgICAgMTEuNDMxMzc1IFxuIn0= -->
-<pre><code>          Age Annual.Income  Health.Score   Vehicle.Age  Credit.Score 
-     1.561125      3.732500      6.181125      0.000375     11.431375 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>Na osnovu procentualnog prikaza broja nedostajucih vrednosti,
-zakljucujemo da ne postoji varijabla koja sadrzi vise od 20%
-nedostajucih vrednosti. Samim tim, mozemo da izvrsimo imputaciju
-nedostajucih vrednosti srednjom vrednoscu ili medijanom. Kako sve
-numericke varijable nemaju normalnu raspodelu, koristicemo median
+<p>Premium.Amount ima 40% nedostajucih vrednosti, medjutim ovo je
+ocekivano, jer se u skupu nalaze i opservacije iz test skupa koje nemaju
+definisane vrednosti za ciljnu promenljivu. Ostale varijable ne sadrze
+vise od 20% nedostajucih vrednosti. Samim tim, mozemo da izvrsimo
+imputaciju nedostajucih vrednosti srednjom vrednoscu ili medijanom. Kako
+sve numericke varijable nemaju normalnu raspodelu, koristicemo median
 imputaciju:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViV1ZrYVdGdUxtRm5aUzUwY21GcGJpQThMU0J0WldScFlXNG9kSEpoYVc0a1FXZGxMQ0J1WVM1eWJTQTlJRlJTVlVVcFhHNXRaV1JwWVc0dVkzSmxaR2wwTG5OamIzSmxMblJ5WVdsdUlEd3RJRzFsWkdsaGJpaDBjbUZwYmlSRGNtVmthWFF1VTJOdmNtVXNJRzVoTG5KdElEMGdWRkpWUlNsY2JtMWxaR2xoYmk1MlpXaHBZMnhsTG1GblpTNTBjbUZwYmlBOExTQnRaV1JwWVc0b2RISmhhVzRrVm1Wb2FXTnNaUzVCWjJVc0lHNWhMbkp0SUQwZ1ZGSlZSU2xjYm0xbFpHbGhiaTVvWldGc2RHZ3VjMk52Y21VdWRISmhhVzRnUEMwZ2JXVmthV0Z1S0hSeVlXbHVKRWhsWVd4MGFDNVRZMjl5WlN3Z2JtRXVjbTBnUFNCVVVsVkZLVnh1WEc1dFpXUnBZVzR1WVdkbExuUmxjM1FnUEMwZ2JXVmthV0Z1S0hSbGMzUWtRV2RsTENCdVlTNXliU0E5SUZSU1ZVVXBYRzV0WldScFlXNHVZM0psWkdsMExuTmpiM0psTG5SbGMzUWdQQzBnYldWa2FXRnVLSFJsYzNRa1EzSmxaR2wwTGxOamIzSmxMQ0J1WVM1eWJTQTlJRlJTVlVVcFhHNXRaV1JwWVc0dWRtVm9hV05zWlM1aFoyVXVkR1Z6ZENBOExTQnRaV1JwWVc0b2RHVnpkQ1JXWldocFkyeGxMa0ZuWlN3Z2JtRXVjbTBnUFNCVVVsVkZLVnh1YldWa2FXRnVMbWhsWVd4MGFDNXpZMjl5WlM1MFpYTjBJRHd0SUcxbFpHbGhiaWgwWlhOMEpFaGxZV3gwYUM1VFkyOXlaU3dnYm1FdWNtMGdQU0JVVWxWRktWeHVZR0JnSW4wPSAtLT5cblxuYGBgclxubWVkaWFuLmFnZS50cmFpbiA8LSBtZWRpYW4odHJhaW4kQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uY3JlZGl0LnNjb3JlLnRyYWluIDwtIG1lZGlhbih0cmFpbiRDcmVkaXQuU2NvcmUsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi52ZWhpY2xlLmFnZS50cmFpbiA8LSBtZWRpYW4odHJhaW4kVmVoaWNsZS5BZ2UsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi5oZWFsdGguc2NvcmUudHJhaW4gPC0gbWVkaWFuKHRyYWluJEhlYWx0aC5TY29yZSwgbmEucm0gPSBUUlVFKVxuXG5tZWRpYW4uYWdlLnRlc3QgPC0gbWVkaWFuKHRlc3QkQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uY3JlZGl0LnNjb3JlLnRlc3QgPC0gbWVkaWFuKHRlc3QkQ3JlZGl0LlNjb3JlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4udmVoaWNsZS5hZ2UudGVzdCA8LSBtZWRpYW4odGVzdCRWZWhpY2xlLkFnZSwgbmEucm0gPSBUUlVFKVxubWVkaWFuLmhlYWx0aC5zY29yZS50ZXN0IDwtIG1lZGlhbih0ZXN0JEhlYWx0aC5TY29yZSwgbmEucm0gPSBUUlVFKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuLmFnZS50cmFpbiA8LSBtZWRpYW4odHJhaW4kQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uY3JlZGl0LnNjb3JlLnRyYWluIDwtIG1lZGlhbih0cmFpbiRDcmVkaXQuU2NvcmUsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi52ZWhpY2xlLmFnZS50cmFpbiA8LSBtZWRpYW4odHJhaW4kVmVoaWNsZS5BZ2UsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi5oZWFsdGguc2NvcmUudHJhaW4gPC0gbWVkaWFuKHRyYWluJEhlYWx0aC5TY29yZSwgbmEucm0gPSBUUlVFKVxuXG5tZWRpYW4uYWdlLnRlc3QgPC0gbWVkaWFuKHRlc3QkQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uY3JlZGl0LnNjb3JlLnRlc3QgPC0gbWVkaWFuKHRlc3QkQ3JlZGl0LlNjb3JlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4udmVoaWNsZS5hZ2UudGVzdCA8LSBtZWRpYW4odGVzdCRWZWhpY2xlLkFnZSwgbmEucm0gPSBUUlVFKVxubWVkaWFuLmhlYWx0aC5zY29yZS50ZXN0IDwtIG1lZGlhbih0ZXN0JEhlYWx0aC5TY29yZSwgbmEucm0gPSBUUlVFKVxuYGBgIn0= -->
-<pre class="r"><code>median.age.train &lt;- median(train$Age, na.rm = TRUE)
-median.credit.score.train &lt;- median(train$Credit.Score, na.rm = TRUE)
-median.vehicle.age.train &lt;- median(train$Vehicle.Age, na.rm = TRUE)
-median.health.score.train &lt;- median(train$Health.Score, na.rm = TRUE)
-
-median.age.test &lt;- median(test$Age, na.rm = TRUE)
-median.credit.score.test &lt;- median(test$Credit.Score, na.rm = TRUE)
-median.vehicle.age.test &lt;- median(test$Vehicle.Age, na.rm = TRUE)
-median.health.score.test &lt;- median(test$Health.Score, na.rm = TRUE)</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHViV1ZrYVdGdUxtRm5aU0E4TFNCdFpXUnBZVzRvWkdGMFlTUkJaMlVzSUc1aExuSnRJRDBnVkZKVlJTbGNibTFsWkdsaGJpNWpjbVZrYVhRdWMyTnZjbVVnUEMwZ2JXVmthV0Z1S0dSaGRHRWtRM0psWkdsMExsTmpiM0psTENCdVlTNXliU0E5SUZSU1ZVVXBYRzV0WldScFlXNHVkbVZvYVdOc1pTNWhaMlVnUEMwZ2JXVmthV0Z1S0dSaGRHRWtWbVZvYVdOc1pTNUJaMlVzSUc1aExuSnRJRDBnVkZKVlJTbGNibTFsWkdsaGJpNW9aV0ZzZEdndWMyTnZjbVVnUEMwZ2JXVmthV0Z1S0dSaGRHRWtTR1ZoYkhSb0xsTmpiM0psTENCdVlTNXliU0E5SUZSU1ZVVXBYRzVnWUdBaWZRPT0gLS0+XG5cbmBgYHJcbm1lZGlhbi5hZ2UgPC0gbWVkaWFuKGRhdGEkQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uY3JlZGl0LnNjb3JlIDwtIG1lZGlhbihkYXRhJENyZWRpdC5TY29yZSwgbmEucm0gPSBUUlVFKVxubWVkaWFuLnZlaGljbGUuYWdlIDwtIG1lZGlhbihkYXRhJFZlaGljbGUuQWdlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4uaGVhbHRoLnNjb3JlIDwtIG1lZGlhbihkYXRhJEhlYWx0aC5TY29yZSwgbmEucm0gPSBUUlVFKVxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuLmFnZSA8LSBtZWRpYW4oZGF0YSRBZ2UsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi5jcmVkaXQuc2NvcmUgPC0gbWVkaWFuKGRhdGEkQ3JlZGl0LlNjb3JlLCBuYS5ybSA9IFRSVUUpXG5tZWRpYW4udmVoaWNsZS5hZ2UgPC0gbWVkaWFuKGRhdGEkVmVoaWNsZS5BZ2UsIG5hLnJtID0gVFJVRSlcbm1lZGlhbi5oZWFsdGguc2NvcmUgPC0gbWVkaWFuKGRhdGEkSGVhbHRoLlNjb3JlLCBuYS5ybSA9IFRSVUUpXG5gYGAifQ== -->
+<pre class="r"><code>median.age &lt;- median(data$Age, na.rm = TRUE)
+median.credit.score &lt;- median(data$Credit.Score, na.rm = TRUE)
+median.vehicle.age &lt;- median(data$Vehicle.Age, na.rm = TRUE)
+median.health.score &lt;- median(data$Health.Score, na.rm = TRUE)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
@@ -2029,18 +1988,12 @@ median.health.score.test &lt;- median(test$Health.Score, na.rm = TRUE)</code></p
 <h2>Imputacija Age varijable</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkSEpoYVc0a1FXZGxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEhKaGFXNGtRV2RsS1N4Y2JpQWdiV1ZrYVdGdUxtRm5aUzUwY21GcGJpeGNiaUFnZEhKaGFXNGtRV2RsWEc0cFhHNWNiblJsYzNRa1FXZGxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEdWemRDUkJaMlVwTEZ4dUlDQnRaV1JwWVc0dVlXZGxMblJsYzNRc1hHNGdJSFJsYzNRa1FXZGxYRzRwWEc1Z1lHQWlmUT09IC0tPlxuXG5gYGByXG50cmFpbiRBZ2UgPC0gaWZlbHNlKFxuICBpcy5uYSh0cmFpbiRBZ2UpLFxuICBtZWRpYW4uYWdlLnRyYWluLFxuICB0cmFpbiRBZ2VcbilcblxudGVzdCRBZ2UgPC0gaWZlbHNlKFxuICBpcy5uYSh0ZXN0JEFnZSksXG4gIG1lZGlhbi5hZ2UudGVzdCxcbiAgdGVzdCRBZ2VcbilcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW4kQWdlIDwtIGlmZWxzZShcbiAgaXMubmEodHJhaW4kQWdlKSxcbiAgbWVkaWFuLmFnZS50cmFpbixcbiAgdHJhaW4kQWdlXG4pXG5cbnRlc3QkQWdlIDwtIGlmZWxzZShcbiAgaXMubmEodGVzdCRBZ2UpLFxuICBtZWRpYW4uYWdlLnRlc3QsXG4gIHRlc3QkQWdlXG4pXG5gYGAifQ== -->
-<pre class="r"><code>train$Age &lt;- ifelse(
-  is.na(train$Age),
-  median.age.train,
-  train$Age
-)
-
-test$Age &lt;- ifelse(
-  is.na(test$Age),
-  median.age.test,
-  test$Age
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVaR0YwWVNSQloyVWdQQzBnYVdabGJITmxLRnh1SUNCcGN5NXVZU2hrWVhSaEpFRm5aU2tzWEc0Z0lHMWxaR2xoYmk1aFoyVXNYRzRnSUdSaGRHRWtRV2RsWEc0cFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuZGF0YSRBZ2UgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJEFnZSksXG4gIG1lZGlhbi5hZ2UsXG4gIGRhdGEkQWdlXG4pXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSRBZ2UgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJEFnZSksXG4gIG1lZGlhbi5hZ2UsXG4gIGRhdGEkQWdlXG4pXG5gYGAifQ== -->
+<pre class="r"><code>data$Age &lt;- ifelse(
+  is.na(data$Age),
+  median.age,
+  data$Age
 )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -2054,30 +2007,18 @@ nadoknadu novca. U prethodnoj sekciji je dokazana zavisnost ove dve
 varijable:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVabTl5SUNod1l5QnBiaUIxYm1seGRXVW9kSEpoYVc0a1VISmxkbWx2ZFhNdVEyeGhhVzF6S1NrZ2UxeHVYRzRnSUdsa2VDQThMU0IwY21GcGJpUlFjbVYyYVc5MWN5NURiR0ZwYlhNZ1BUMGdjR01nSmlCcGN5NXVZU2gwY21GcGJpUkJibTUxWVd3dVNXNWpiMjFsS1Z4dVhHNGdJR2R5YjNWd0xtMWxaR2xoYmlBOExTQnRaV1JwWVc0b1hHNGdJQ0FnZEhKaGFXNGtRVzV1ZFdGc0xrbHVZMjl0WlZ0MGNtRnBiaVJRY21WMmFXOTFjeTVEYkdGcGJYTWdQVDBnY0dOZExGeHVJQ0FnSUc1aExuSnRJRDBnVkZKVlJWeHVJQ0FwWEc1Y2JpQWdkSEpoYVc0a1FXNXVkV0ZzTGtsdVkyOXRaVnRwWkhoZElEd3RJR2R5YjNWd0xtMWxaR2xoYmx4dWZWeHVYRzVtYjNJZ0tIQmpJR2x1SUhWdWFYRjFaU2gwWlhOMEpGQnlaWFpwYjNWekxrTnNZV2x0Y3lrcElIdGNibHh1SUNCcFpIZ2dQQzBnZEdWemRDUlFjbVYyYVc5MWN5NURiR0ZwYlhNZ1BUMGdjR01nSmlCcGN5NXVZU2gwWlhOMEpFRnViblZoYkM1SmJtTnZiV1VwWEc1Y2JpQWdaM0p2ZFhBdWJXVmthV0Z1SUR3dElHMWxaR2xoYmloY2JpQWdJQ0IwWlhOMEpFRnViblZoYkM1SmJtTnZiV1ZiZEdWemRDUlFjbVYyYVc5MWN5NURiR0ZwYlhNZ1BUMGdjR05kTEZ4dUlDQWdJRzVoTG5KdElEMGdWRkpWUlZ4dUlDQXBYRzVjYmlBZ2RHVnpkQ1JCYm01MVlXd3VTVzVqYjIxbFcybGtlRjBnUEMwZ1ozSnZkWEF1YldWa2FXRnVYRzU5WEc1Z1lHQWlmUT09IC0tPlxuXG5gYGByXG5mb3IgKHBjIGluIHVuaXF1ZSh0cmFpbiRQcmV2aW91cy5DbGFpbXMpKSB7XG5cbiAgaWR4IDwtIHRyYWluJFByZXZpb3VzLkNsYWltcyA9PSBwYyAmIGlzLm5hKHRyYWluJEFubnVhbC5JbmNvbWUpXG5cbiAgZ3JvdXAubWVkaWFuIDwtIG1lZGlhbihcbiAgICB0cmFpbiRBbm51YWwuSW5jb21lW3RyYWluJFByZXZpb3VzLkNsYWltcyA9PSBwY10sXG4gICAgbmEucm0gPSBUUlVFXG4gIClcblxuICB0cmFpbiRBbm51YWwuSW5jb21lW2lkeF0gPC0gZ3JvdXAubWVkaWFuXG59XG5cbmZvciAocGMgaW4gdW5pcXVlKHRlc3QkUHJldmlvdXMuQ2xhaW1zKSkge1xuXG4gIGlkeCA8LSB0ZXN0JFByZXZpb3VzLkNsYWltcyA9PSBwYyAmIGlzLm5hKHRlc3QkQW5udWFsLkluY29tZSlcblxuICBncm91cC5tZWRpYW4gPC0gbWVkaWFuKFxuICAgIHRlc3QkQW5udWFsLkluY29tZVt0ZXN0JFByZXZpb3VzLkNsYWltcyA9PSBwY10sXG4gICAgbmEucm0gPSBUUlVFXG4gIClcblxuICB0ZXN0JEFubnVhbC5JbmNvbWVbaWR4XSA8LSBncm91cC5tZWRpYW5cbn1cbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9yIChwYyBpbiB1bmlxdWUodHJhaW4kUHJldmlvdXMuQ2xhaW1zKSkge1xuXG4gIGlkeCA8LSB0cmFpbiRQcmV2aW91cy5DbGFpbXMgPT0gcGMgJiBpcy5uYSh0cmFpbiRBbm51YWwuSW5jb21lKVxuXG4gIGdyb3VwLm1lZGlhbiA8LSBtZWRpYW4oXG4gICAgdHJhaW4kQW5udWFsLkluY29tZVt0cmFpbiRQcmV2aW91cy5DbGFpbXMgPT0gcGNdLFxuICAgIG5hLnJtID0gVFJVRVxuICApXG5cbiAgdHJhaW4kQW5udWFsLkluY29tZVtpZHhdIDwtIGdyb3VwLm1lZGlhblxufVxuXG5mb3IgKHBjIGluIHVuaXF1ZSh0ZXN0JFByZXZpb3VzLkNsYWltcykpIHtcblxuICBpZHggPC0gdGVzdCRQcmV2aW91cy5DbGFpbXMgPT0gcGMgJiBpcy5uYSh0ZXN0JEFubnVhbC5JbmNvbWUpXG5cbiAgZ3JvdXAubWVkaWFuIDwtIG1lZGlhbihcbiAgICB0ZXN0JEFubnVhbC5JbmNvbWVbdGVzdCRQcmV2aW91cy5DbGFpbXMgPT0gcGNdLFxuICAgIG5hLnJtID0gVFJVRVxuICApXG5cbiAgdGVzdCRBbm51YWwuSW5jb21lW2lkeF0gPC0gZ3JvdXAubWVkaWFuXG59XG5gYGAifQ== -->
-<pre class="r"><code>for (pc in unique(train$Previous.Claims)) {
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVabTl5SUNod1l5QnBiaUIxYm1seGRXVW9aR0YwWVNSUWNtVjJhVzkxY3k1RGJHRnBiWE1wS1NCN1hHNWNiaUFnYVdSNElEd3RJR1JoZEdFa1VISmxkbWx2ZFhNdVEyeGhhVzF6SUQwOUlIQmpJQ1lnYVhNdWJtRW9aR0YwWVNSQmJtNTFZV3d1U1c1amIyMWxLVnh1WEc0Z0lHZHliM1Z3TG0xbFpHbGhiaUE4TFNCdFpXUnBZVzRvWEc0Z0lDQWdaR0YwWVNSQmJtNTFZV3d1U1c1amIyMWxXMlJoZEdFa1VISmxkbWx2ZFhNdVEyeGhhVzF6SUQwOUlIQmpYU3hjYmlBZ0lDQnVZUzV5YlNBOUlGUlNWVVZjYmlBZ0tWeHVYRzRnSUdSaGRHRWtRVzV1ZFdGc0xrbHVZMjl0WlZ0cFpIaGRJRHd0SUdkeWIzVndMbTFsWkdsaGJseHVmVnh1WUdCZ0luMD0gLS0+XG5cbmBgYHJcbmZvciAocGMgaW4gdW5pcXVlKGRhdGEkUHJldmlvdXMuQ2xhaW1zKSkge1xuXG4gIGlkeCA8LSBkYXRhJFByZXZpb3VzLkNsYWltcyA9PSBwYyAmIGlzLm5hKGRhdGEkQW5udWFsLkluY29tZSlcblxuICBncm91cC5tZWRpYW4gPC0gbWVkaWFuKFxuICAgIGRhdGEkQW5udWFsLkluY29tZVtkYXRhJFByZXZpb3VzLkNsYWltcyA9PSBwY10sXG4gICAgbmEucm0gPSBUUlVFXG4gIClcblxuICBkYXRhJEFubnVhbC5JbmNvbWVbaWR4XSA8LSBncm91cC5tZWRpYW5cbn1cbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZm9yIChwYyBpbiB1bmlxdWUoZGF0YSRQcmV2aW91cy5DbGFpbXMpKSB7XG5cbiAgaWR4IDwtIGRhdGEkUHJldmlvdXMuQ2xhaW1zID09IHBjICYgaXMubmEoZGF0YSRBbm51YWwuSW5jb21lKVxuXG4gIGdyb3VwLm1lZGlhbiA8LSBtZWRpYW4oXG4gICAgZGF0YSRBbm51YWwuSW5jb21lW2RhdGEkUHJldmlvdXMuQ2xhaW1zID09IHBjXSxcbiAgICBuYS5ybSA9IFRSVUVcbiAgKVxuXG4gIGRhdGEkQW5udWFsLkluY29tZVtpZHhdIDwtIGdyb3VwLm1lZGlhblxufVxuYGBgIn0= -->
+<pre class="r"><code>for (pc in unique(data$Previous.Claims)) {
 
-  idx &lt;- train$Previous.Claims == pc &amp; is.na(train$Annual.Income)
+  idx &lt;- data$Previous.Claims == pc &amp; is.na(data$Annual.Income)
 
   group.median &lt;- median(
-    train$Annual.Income[train$Previous.Claims == pc],
+    data$Annual.Income[data$Previous.Claims == pc],
     na.rm = TRUE
   )
 
-  train$Annual.Income[idx] &lt;- group.median
-}
-
-for (pc in unique(test$Previous.Claims)) {
-
-  idx &lt;- test$Previous.Claims == pc &amp; is.na(test$Annual.Income)
-
-  group.median &lt;- median(
-    test$Annual.Income[test$Previous.Claims == pc],
-    na.rm = TRUE
-  )
-
-  test$Annual.Income[idx] &lt;- group.median
+  data$Annual.Income[idx] &lt;- group.median
 }</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -2088,18 +2029,12 @@ for (pc in unique(test$Previous.Claims)) {
 <h2>Imputacija Credit.Score varijable</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkSEpoYVc0a1EzSmxaR2wwTGxOamIzSmxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEhKaGFXNGtRM0psWkdsMExsTmpiM0psS1N4Y2JpQWdiV1ZrYVdGdUxtTnlaV1JwZEM1elkyOXlaUzUwY21GcGJpeGNiaUFnZEhKaGFXNGtRM0psWkdsMExsTmpiM0psWEc0cFhHNWNiblJsYzNRa1EzSmxaR2wwTGxOamIzSmxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEdWemRDUkRjbVZrYVhRdVUyTnZjbVVwTEZ4dUlDQnRaV1JwWVc0dVkzSmxaR2wwTG5OamIzSmxMblJsYzNRc1hHNGdJSFJsYzNRa1EzSmxaR2wwTGxOamIzSmxYRzRwWEc1Z1lHQWlmUT09IC0tPlxuXG5gYGByXG50cmFpbiRDcmVkaXQuU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYSh0cmFpbiRDcmVkaXQuU2NvcmUpLFxuICBtZWRpYW4uY3JlZGl0LnNjb3JlLnRyYWluLFxuICB0cmFpbiRDcmVkaXQuU2NvcmVcbilcblxudGVzdCRDcmVkaXQuU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYSh0ZXN0JENyZWRpdC5TY29yZSksXG4gIG1lZGlhbi5jcmVkaXQuc2NvcmUudGVzdCxcbiAgdGVzdCRDcmVkaXQuU2NvcmVcbilcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW4kQ3JlZGl0LlNjb3JlIDwtIGlmZWxzZShcbiAgaXMubmEodHJhaW4kQ3JlZGl0LlNjb3JlKSxcbiAgbWVkaWFuLmNyZWRpdC5zY29yZS50cmFpbixcbiAgdHJhaW4kQ3JlZGl0LlNjb3JlXG4pXG5cbnRlc3QkQ3JlZGl0LlNjb3JlIDwtIGlmZWxzZShcbiAgaXMubmEodGVzdCRDcmVkaXQuU2NvcmUpLFxuICBtZWRpYW4uY3JlZGl0LnNjb3JlLnRlc3QsXG4gIHRlc3QkQ3JlZGl0LlNjb3JlXG4pXG5gYGAifQ== -->
-<pre class="r"><code>train$Credit.Score &lt;- ifelse(
-  is.na(train$Credit.Score),
-  median.credit.score.train,
-  train$Credit.Score
-)
-
-test$Credit.Score &lt;- ifelse(
-  is.na(test$Credit.Score),
-  median.credit.score.test,
-  test$Credit.Score
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVaR0YwWVNSRGNtVmthWFF1VTJOdmNtVWdQQzBnYVdabGJITmxLRnh1SUNCcGN5NXVZU2hrWVhSaEpFTnlaV1JwZEM1VFkyOXlaU2tzWEc0Z0lHMWxaR2xoYmk1amNtVmthWFF1YzJOdmNtVXNYRzRnSUdSaGRHRWtRM0psWkdsMExsTmpiM0psWEc0cFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuZGF0YSRDcmVkaXQuU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJENyZWRpdC5TY29yZSksXG4gIG1lZGlhbi5jcmVkaXQuc2NvcmUsXG4gIGRhdGEkQ3JlZGl0LlNjb3JlXG4pXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSRDcmVkaXQuU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJENyZWRpdC5TY29yZSksXG4gIG1lZGlhbi5jcmVkaXQuc2NvcmUsXG4gIGRhdGEkQ3JlZGl0LlNjb3JlXG4pXG5gYGAifQ== -->
+<pre class="r"><code>data$Credit.Score &lt;- ifelse(
+  is.na(data$Credit.Score),
+  median.credit.score,
+  data$Credit.Score
 )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -2110,18 +2045,12 @@ test$Credit.Score &lt;- ifelse(
 <h2>Imputacija Vehicle.Age varijable</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkSEpoYVc0a1ZtVm9hV05zWlM1QloyVWdQQzBnYVdabGJITmxLRnh1SUNCcGN5NXVZU2gwY21GcGJpUldaV2hwWTJ4bExrRm5aU2tzWEc0Z0lHMWxaR2xoYmk1MlpXaHBZMnhsTG1GblpTNTBjbUZwYml4Y2JpQWdkSEpoYVc0a1ZtVm9hV05zWlM1QloyVmNiaWxjYmx4dWRHVnpkQ1JXWldocFkyeGxMa0ZuWlNBOExTQnBabVZzYzJVb1hHNGdJR2x6TG01aEtIUmxjM1FrVm1Wb2FXTnNaUzVCWjJVcExGeHVJQ0J0WldScFlXNHVkbVZvYVdOc1pTNWhaMlV1ZEdWemRDeGNiaUFnZEdWemRDUldaV2hwWTJ4bExrRm5aVnh1S1Z4dVlHQmdJbjA9IC0tPlxuXG5gYGByXG50cmFpbiRWZWhpY2xlLkFnZSA8LSBpZmVsc2UoXG4gIGlzLm5hKHRyYWluJFZlaGljbGUuQWdlKSxcbiAgbWVkaWFuLnZlaGljbGUuYWdlLnRyYWluLFxuICB0cmFpbiRWZWhpY2xlLkFnZVxuKVxuXG50ZXN0JFZlaGljbGUuQWdlIDwtIGlmZWxzZShcbiAgaXMubmEodGVzdCRWZWhpY2xlLkFnZSksXG4gIG1lZGlhbi52ZWhpY2xlLmFnZS50ZXN0LFxuICB0ZXN0JFZlaGljbGUuQWdlXG4pXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW4kVmVoaWNsZS5BZ2UgPC0gaWZlbHNlKFxuICBpcy5uYSh0cmFpbiRWZWhpY2xlLkFnZSksXG4gIG1lZGlhbi52ZWhpY2xlLmFnZS50cmFpbixcbiAgdHJhaW4kVmVoaWNsZS5BZ2VcbilcblxudGVzdCRWZWhpY2xlLkFnZSA8LSBpZmVsc2UoXG4gIGlzLm5hKHRlc3QkVmVoaWNsZS5BZ2UpLFxuICBtZWRpYW4udmVoaWNsZS5hZ2UudGVzdCxcbiAgdGVzdCRWZWhpY2xlLkFnZVxuKVxuYGBgIn0= -->
-<pre class="r"><code>train$Vehicle.Age &lt;- ifelse(
-  is.na(train$Vehicle.Age),
-  median.vehicle.age.train,
-  train$Vehicle.Age
-)
-
-test$Vehicle.Age &lt;- ifelse(
-  is.na(test$Vehicle.Age),
-  median.vehicle.age.test,
-  test$Vehicle.Age
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVaR0YwWVNSV1pXaHBZMnhsTGtGblpTQThMU0JwWm1Wc2MyVW9YRzRnSUdsekxtNWhLR1JoZEdFa1ZtVm9hV05zWlM1QloyVXBMRnh1SUNCdFpXUnBZVzR1ZG1Wb2FXTnNaUzVoWjJVc1hHNGdJR1JoZEdFa1ZtVm9hV05zWlM1QloyVmNiaWxjYm1CZ1lDSjkgLS0+XG5cbmBgYHJcbmRhdGEkVmVoaWNsZS5BZ2UgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJFZlaGljbGUuQWdlKSxcbiAgbWVkaWFuLnZlaGljbGUuYWdlLFxuICBkYXRhJFZlaGljbGUuQWdlXG4pXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSRWZWhpY2xlLkFnZSA8LSBpZmVsc2UoXG4gIGlzLm5hKGRhdGEkVmVoaWNsZS5BZ2UpLFxuICBtZWRpYW4udmVoaWNsZS5hZ2UsXG4gIGRhdGEkVmVoaWNsZS5BZ2VcbilcbmBgYCJ9 -->
+<pre class="r"><code>data$Vehicle.Age &lt;- ifelse(
+  is.na(data$Vehicle.Age),
+  median.vehicle.age,
+  data$Vehicle.Age
 )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
@@ -2132,55 +2061,33 @@ test$Vehicle.Age &lt;- ifelse(
 <h2>Imputacija Health.Score varijable</h2>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVkSEpoYVc0a1NHVmhiSFJvTGxOamIzSmxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEhKaGFXNGtTR1ZoYkhSb0xsTmpiM0psS1N4Y2JpQWdiV1ZrYVdGdUxtaGxZV3gwYUM1elkyOXlaUzUwY21GcGJpeGNiaUFnZEhKaGFXNGtTR1ZoYkhSb0xsTmpiM0psWEc0cFhHNWNiblJsYzNRa1NHVmhiSFJvTGxOamIzSmxJRHd0SUdsbVpXeHpaU2hjYmlBZ2FYTXVibUVvZEdWemRDUklaV0ZzZEdndVUyTnZjbVVwTEZ4dUlDQnRaV1JwWVc0dWFHVmhiSFJvTG5OamIzSmxMblJsYzNRc1hHNGdJSFJsYzNRa1NHVmhiSFJvTGxOamIzSmxYRzRwWEc1Z1lHQWlmUT09IC0tPlxuXG5gYGByXG50cmFpbiRIZWFsdGguU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYSh0cmFpbiRIZWFsdGguU2NvcmUpLFxuICBtZWRpYW4uaGVhbHRoLnNjb3JlLnRyYWluLFxuICB0cmFpbiRIZWFsdGguU2NvcmVcbilcblxudGVzdCRIZWFsdGguU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYSh0ZXN0JEhlYWx0aC5TY29yZSksXG4gIG1lZGlhbi5oZWFsdGguc2NvcmUudGVzdCxcbiAgdGVzdCRIZWFsdGguU2NvcmVcbilcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW4kSGVhbHRoLlNjb3JlIDwtIGlmZWxzZShcbiAgaXMubmEodHJhaW4kSGVhbHRoLlNjb3JlKSxcbiAgbWVkaWFuLmhlYWx0aC5zY29yZS50cmFpbixcbiAgdHJhaW4kSGVhbHRoLlNjb3JlXG4pXG5cbnRlc3QkSGVhbHRoLlNjb3JlIDwtIGlmZWxzZShcbiAgaXMubmEodGVzdCRIZWFsdGguU2NvcmUpLFxuICBtZWRpYW4uaGVhbHRoLnNjb3JlLnRlc3QsXG4gIHRlc3QkSGVhbHRoLlNjb3JlXG4pXG5gYGAifQ== -->
-<pre class="r"><code>train$Health.Score &lt;- ifelse(
-  is.na(train$Health.Score),
-  median.health.score.train,
-  train$Health.Score
-)
-
-test$Health.Score &lt;- ifelse(
-  is.na(test$Health.Score),
-  median.health.score.test,
-  test$Health.Score
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVaR0YwWVNSSVpXRnNkR2d1VTJOdmNtVWdQQzBnYVdabGJITmxLRnh1SUNCcGN5NXVZU2hrWVhSaEpFaGxZV3gwYUM1VFkyOXlaU2tzWEc0Z0lHMWxaR2xoYmk1b1pXRnNkR2d1YzJOdmNtVXNYRzRnSUdSaGRHRWtTR1ZoYkhSb0xsTmpiM0psWEc0cFhHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuZGF0YSRIZWFsdGguU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJEhlYWx0aC5TY29yZSksXG4gIG1lZGlhbi5oZWFsdGguc2NvcmUsXG4gIGRhdGEkSGVhbHRoLlNjb3JlXG4pXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZGF0YSRIZWFsdGguU2NvcmUgPC0gaWZlbHNlKFxuICBpcy5uYShkYXRhJEhlYWx0aC5TY29yZSksXG4gIG1lZGlhbi5oZWFsdGguc2NvcmUsXG4gIGRhdGEkSGVhbHRoLlNjb3JlXG4pXG5gYGAifQ== -->
+<pre class="r"><code>data$Health.Score &lt;- ifelse(
+  is.na(data$Health.Score),
+  median.health.score,
+  data$Health.Score
 )</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>Provericemo da li je izvrsena imputacija u train skupu:</p>
+<p>Provericemo da li je izvrsena imputacija:</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJ5WVdsdVd5d2diblZ0TG5SeVlXbHVYU2twSUM4Z2JuSnZkeWgwY21GcGJpa2dLaUF4TURCY2JtNWhYM0JsY21ObGJuUmNibUJnWUNKOSAtLT5cblxuYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYFxuXG48IS0tIHJuYi1zb3VyY2UtZW5kIC0tPlxuIn0= -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(train[, num.train])) / nrow(train) * 100
-na_percent</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVZMjlzVTNWdGN5aHBjeTV1WVNoa1lYUmhXeXdnYm5WdExtUmhkR0ZkS1NrZ0x5QnVjbTkzS0dSaGRHRXBJQ29nTVRBd1hHNWdZR0FpZlE9PSAtLT5cblxuYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgbnVtLmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGBcblxuPCEtLSBybmItc291cmNlLWVuZCAtLT5cbiJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29sU3Vtcyhpcy5uYShkYXRhWywgbnVtLmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwXG5gYGAifQ== -->
+<pre class="r"><code>colSums(is.na(data[, num.data])) / nrow(data) * 100</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCBcbiJ9 -->
-<pre><code>           Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
-             0              0              0              0              0              0 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p>U test skupu:</p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG48IS0tIHJuYi1zb3VyY2UtYmVnaW4gZXlKa1lYUmhJam9pWUdCZ2NseHVibUZmY0dWeVkyVnVkQ0E4TFNCamIyeFRkVzF6S0dsekxtNWhLSFJsYzNSYkxDQnVkVzB1ZEdWemRGMHBLU0F2SUc1eWIzY29kR1Z6ZENrZ0tpQXhNREJjYm01aFgzQmxjbU5sYm5SY2JtQmdZQ0o5IC0tPlxuXG5gYGByXG5uYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodGVzdFssIG51bS50ZXN0XSkpIC8gbnJvdyh0ZXN0KSAqIDEwMFxubmFfcGVyY2VudFxuYGBgXG5cbjwhLS0gcm5iLXNvdXJjZS1lbmQgLS0+XG4ifQ== -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDBcbm5hX3BlcmNlbnRcbmBgYCJ9 -->
-<pre class="r"><code>na_percent &lt;- colSums(is.na(test[, num.test])) / nrow(test) * 100
-na_percent</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgIEFnZSBBbm51YWwuSW5jb21lICBIZWFsdGguU2NvcmUgICBWZWhpY2xlLkFnZSAgQ3JlZGl0LlNjb3JlIFxuICAgICAgICAgICAgMCAgICAgICAgICAgICAwICAgICAgICAgICAgIDAgICAgICAgICAgICAgMCAgICAgICAgICAgICAwIFxuIn0= -->
-<pre><code>          Age Annual.Income  Health.Score   Vehicle.Age  Credit.Score 
-            0             0             0             0             0 </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgaWQgICAgICAgICAgICBBZ2UgIEFubnVhbC5JbmNvbWUgICBIZWFsdGguU2NvcmUgICAgVmVoaWNsZS5BZ2UgICBDcmVkaXQuU2NvcmUgUHJlbWl1bS5BbW91bnQgXG4gICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICAgMCAgICAgICAgICAgICA0MCBcbiJ9 -->
+<pre><code>            id            Age  Annual.Income   Health.Score    Vehicle.Age   Credit.Score Premium.Amount 
+             0              0              0              0              0              0             40 </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIk1pc3NpbmcgdmFsdWVzIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KVWNpdGF2YW5qZSBwb3RyZWJuaWggYmlibGlvdGVrYToNCg0KYGBge3J9DQppbnN0YWxsLnBhY2thZ2VzKCdGU0EnKQ0KDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoRlNBKQ0KYGBgDQoNCiMjIEthdGVnb3JpanNraSBhdHJpYnV0aQ0KDQpCcm9qIG5lZG9zdGFqdWNpaCB2cmVkbm9zdGkgdSB0cmFpbiBza3VwdSBwb2RhdGFrYToNCmBgYHtyfQ0KY2F0LnRyYWluIDwtIHNhcHBseSh0cmFpbiwgaXMuZmFjdG9yKQ0KY29sU3Vtcyhpcy5uYSh0cmFpblssIGNhdC50cmFpbl0pKQ0KYGBgDQoNCkJyb2ogbmVkb3N0YWp1Y2loIHZyZWRub3N0aSB1IHRlc3Qgc2t1cHUgcG9kYXRha2E6DQoNCmBgYHtyfQ0KY2F0LnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLmZhY3RvcikNCmNvbFN1bXMoaXMubmEodGVzdFssIGNhdC50ZXN0XSkpDQpgYGANCg0KUHJpa2F6IHByb2NlbnR1YWxub2cgb2Rub3NhIG5lZG9zdGFqdWNpaCBwb2RhdGFrYSB1IHRyYWluIHNrdXB1OiANCg0KYGBge3J9DQpuYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodHJhaW5bLCBjYXQudHJhaW5dKSkgLyBucm93KHRyYWluKSAqIDEwMA0Kcm91bmQobmFfcGVyY2VudCwgMikNCmBgYA0KDQpQcmlrYXogcHJvY2VudHVhbG5vZyBvZG5vc2EgbmVkb3N0YWp1Y2loIHBvZGF0YWthIHUgdGVzdCBza3VwdTogDQoNCmBgYHtyfQ0KbmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBjYXQudGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDANCnJvdW5kKG5hX3BlcmNlbnQsIDIpDQpgYGANCg0KSWFrbyBzdSB0cmFpbiBpIHRlc3QgZHZhIG9kdm9qZW5hIHNrdXBhIHBvZGF0YWthLCBpbWFqdSBza29ybyBpZGVudGljbmUgcHJvY2VudGUgbmVkb3N0YWp1Y2loIHZyZWRub3N0aSBwbyB2YXJpamFibGFtYS4gU2FtaW0gdGltLCB0ZWhuaWtlIGltcHV0YWNpamUgY2UgYml0aSBpc3RlIHphIG9iYSBza3VwYS4NCg0KVGVobmlrZSBpbXB1dGFjaWplOg0KLSBOZWRvc3RhanVjZSB2cmVkbm9zdGkgdSB2YXJpamFibGFtYSBNYXJpdGFsLlN0YXR1cywgSW5zdXJhbmNlLkR1cmF0aW9uIGkgQ3VzdG9tZXIuRmVlZGJhY2sgY2UgYml0aSBwb3B1bmplbmUgc2EgbmFqdmlzZSBwcmlzdXRub20ga2F0ZWdvcmlqb20gdSB2YXJpamFibGkuDQotIE5lZG9zdGFqdWNlIHZyZWRub3N0aSB1IHZhcmlqYWJsYW1hIE9jY3VwYXRpb24gaSBQcmV2aW91cy5DbGFpbXMgY2UgYml0aSBwb3B1bmplbmUgc2Egbm92b20ga2F0ZWdvcmlqb20gVW5rbm93bi4gUHJvY2VuYXQgbmVkb3N0YWp1Y2loIHZyZWRub3N0aSB1IG92aW0gdmFyaWphYmxhbWEgamUgdmVsaWtpIGkgaW1wdXRhY2lqYSBtb2RlIHRlaG5pa29tIGJpIGRyYXN0aWNubyB1dGljYWxhIG5hIGRpc3RpYnVjaWp1IHBvZGF0YWthLiBEb2RhdmFuamVtIG5vdmUga2F0ZWdvcmlqZSBjZW1vIG9iZXpiZWRpdGkgZGEgc2UgZGlzdHJpYnVjaWphIHBvZGF0YWthIG5lIHByb21lbmkuDQoNCiMjIEltcHV0YWNpamEgTU9ERSB0ZWhuaWtvbQ0KDQpgYGB7cn0NCmNvbHMgPC0gYygiTWFyaXRhbC5TdGF0dXMiLCAiSW5zdXJhbmNlLkR1cmF0aW9uIiwgIkN1c3RvbWVyLkZlZWRiYWNrIiwgIk51bWJlci5vZi5EZXBlbmRlbnRzIikNCg0KZm9yIChjb2wgaW4gY29scykgew0KICBtb2RlLnRyYWluIDwtIG5hbWVzKHdoaWNoLm1heCh0YWJsZSh0cmFpbltbY29sXV0pKSkNCiAgbW9kZS50ZXN0IDwtIG5hbWVzKHdoaWNoLm1heCh0YWJsZSh0ZXN0W1tjb2xdXSkpKQ0KICANCiAgdHJhaW5bW2NvbF1dW2lzLm5hKHRyYWluW1tjb2xdXSldIDwtIG1vZGUudHJhaW4NCiAgdGVzdFtbY29sXV1baXMubmEodGVzdFtbY29sXV0pXSA8LSBtb2RlLnRlc3QNCn0NCmBgYA0KDQojIyBJbXB1dGFjaWphIFVOS05PV04ga2F0ZWdvcmlqb20NCg0KYGBge3J9DQp0cmFpbiRQcmV2aW91cy5DbGFpbXMgPC0gZmFjdG9yKHRyYWluJFByZXZpb3VzLkNsYWltcywgb3JkZXJlZCA9IEZBTFNFKQ0KdGVzdCRQcmV2aW91cy5DbGFpbXMgPC0gZmFjdG9yKHRlc3QkUHJldmlvdXMuQ2xhaW1zLCBvcmRlcmVkID0gRkFMU0UpDQoNCmNvbHMgPC0gYygiT2NjdXBhdGlvbiIsICJQcmV2aW91cy5DbGFpbXMiKQ0KDQpmb3IgKGNvbCBpbiBjb2xzKSB7DQogIGxldmVscyh0cmFpbltbY29sXV0pIDwtIGMobGV2ZWxzKHRyYWluW1tjb2xdXSksICJVTktOT1dOIikNCiAgbGV2ZWxzKHRlc3RbW2NvbF1dKSAgPC0gYyhsZXZlbHModGVzdFtbY29sXV0pLCAiVU5LTk9XTiIpDQogIA0KICB0cmFpbltbY29sXV1baXMubmEodHJhaW5bW2NvbF1dKV0gPC0gIlVOS05PV04iDQogIHRlc3RbW2NvbF1dW2lzLm5hKHRlc3RbW2NvbF1dKV0gPC0gIlVOS05PV04iDQp9DQpgYGANCg0KIyMgUHJvdmVyYSBuZWRvc3RhanVjaWggdnJlZG5vc3RpDQoNClByaWtheiBwcm9jZW50dWFsbm9nIG9kbm9zYSBuZWRvc3RhanVjaWggcG9kYXRha2EgdSB0cmFpbiBza3VwdTogDQoNCmBgYHtyfQ0KbmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgY2F0LnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDANCm5hX3BlcmNlbnQNCmBgYA0KDQpQcmlrYXogcHJvY2VudHVhbG5vZyBvZG5vc2EgbmVkb3N0YWp1Y2loIHBvZGF0YWthIHUgdGVzdCBza3VwdTogDQoNCmBgYHtyfQ0KbmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBjYXQudGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDANCm5hX3BlcmNlbnQNCmBgYA0KDQojIyBOdW1lcmlja2kgYXRyaWJ1dGkNCg0KQnJvaiBuZWRvc3RhanVjaWggdnJlZG5vc3RpIHUgdHJhaW4gc2t1cHUgcG9kYXRha2E6DQpgYGB7cn0NCm51bS50cmFpbiA8LSBzYXBwbHkodHJhaW4sIGlzLm51bWVyaWMpDQpjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpDQpgYGANCkJyb2ogbmVkb3N0YWp1Y2loIHZyZWRub3N0aSB1IHRlc3Qgc2t1cHUgcG9kYXRha2E6DQoNCmBgYHtyfQ0KbnVtLnRlc3QgPC0gc2FwcGx5KHRlc3QsIGlzLm51bWVyaWMpDQpjb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKQ0KYGBgDQoNClByaWtheiBwcm9jZW50dWFsbm9nIG9kbm9zYSBuZWRvc3RhanVjaWggcG9kYXRha2EgdSB0cmFpbiBza3VwdTogDQoNCmBgYHtyfQ0KbmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRyYWluWywgbnVtLnRyYWluXSkpIC8gbnJvdyh0cmFpbikgKiAxMDANCm5hX3BlcmNlbnQNCmBgYA0KDQpQcmlrYXogcHJvY2VudHVhbG5vZyBvZG5vc2EgbmVkb3N0YWp1Y2loIHBvZGF0YWthIHUgdGVzdCBza3VwdTogDQoNCmBgYHtyfQ0KbmFfcGVyY2VudCA8LSBjb2xTdW1zKGlzLm5hKHRlc3RbLCBudW0udGVzdF0pKSAvIG5yb3codGVzdCkgKiAxMDANCm5hX3BlcmNlbnQNCmBgYA0KDQpOYSBvc25vdnUgcHJvY2VudHVhbG5vZyBwcmlrYXphIGJyb2phIG5lZG9zdGFqdWNpaCB2cmVkbm9zdGksIHpha2xqdWN1amVtbyBkYSBuZSBwb3N0b2ppIHZhcmlqYWJsYSBrb2phIHNhZHJ6aSB2aXNlIG9kIDIwJSBuZWRvc3RhanVjaWggdnJlZG5vc3RpLiBTYW1pbSB0aW0sIG1vemVtbyBkYSBpenZyc2ltbyBpbXB1dGFjaWp1IG5lZG9zdGFqdWNpaCB2cmVkbm9zdGkgc3JlZG5qb20gdnJlZG5vc2N1IGlsaSBtZWRpamFub20uDQpLYWtvIHN2ZSBudW1lcmlja2UgdmFyaWphYmxlIG5lbWFqdSBub3JtYWxudSByYXNwb2RlbHUsIGtvcmlzdGljZW1vIG1lZGlhbiBpbXB1dGFjaWp1Og0KDQpgYGB7cn0NCm1lZGlhbi5hZ2UudHJhaW4gPC0gbWVkaWFuKHRyYWluJEFnZSwgbmEucm0gPSBUUlVFKQ0KbWVkaWFuLmNyZWRpdC5zY29yZS50cmFpbiA8LSBtZWRpYW4odHJhaW4kQ3JlZGl0LlNjb3JlLCBuYS5ybSA9IFRSVUUpDQptZWRpYW4udmVoaWNsZS5hZ2UudHJhaW4gPC0gbWVkaWFuKHRyYWluJFZlaGljbGUuQWdlLCBuYS5ybSA9IFRSVUUpDQptZWRpYW4uaGVhbHRoLnNjb3JlLnRyYWluIDwtIG1lZGlhbih0cmFpbiRIZWFsdGguU2NvcmUsIG5hLnJtID0gVFJVRSkNCg0KbWVkaWFuLmFnZS50ZXN0IDwtIG1lZGlhbih0ZXN0JEFnZSwgbmEucm0gPSBUUlVFKQ0KbWVkaWFuLmNyZWRpdC5zY29yZS50ZXN0IDwtIG1lZGlhbih0ZXN0JENyZWRpdC5TY29yZSwgbmEucm0gPSBUUlVFKQ0KbWVkaWFuLnZlaGljbGUuYWdlLnRlc3QgPC0gbWVkaWFuKHRlc3QkVmVoaWNsZS5BZ2UsIG5hLnJtID0gVFJVRSkNCm1lZGlhbi5oZWFsdGguc2NvcmUudGVzdCA8LSBtZWRpYW4odGVzdCRIZWFsdGguU2NvcmUsIG5hLnJtID0gVFJVRSkNCmBgYA0KDQojIyBJbXB1dGFjaWphIEFnZSB2YXJpamFibGUNCg0KYGBge3J9DQp0cmFpbiRBZ2UgPC0gaWZlbHNlKA0KICBpcy5uYSh0cmFpbiRBZ2UpLA0KICBtZWRpYW4uYWdlLnRyYWluLA0KICB0cmFpbiRBZ2UNCikNCg0KdGVzdCRBZ2UgPC0gaWZlbHNlKA0KICBpcy5uYSh0ZXN0JEFnZSksDQogIG1lZGlhbi5hZ2UudGVzdCwNCiAgdGVzdCRBZ2UNCikNCmBgYA0KDQojIyBJbXB1dGFjaWphIEFubnVhbC5JbmNvbWUgdmFyaWphYmxlDQoNClJhY3VuYW5qZSBnb2Rpc25qaWggcHJpbWFuamEgcG8gYnJvanUgcHJldGhvZG5vIHBvZG5ldGloIHphaHRldmEgemEgbmFkb2tuYWR1IG5vdmNhLiBVIHByZXRob2Rub2ogc2VrY2lqaSBqZSBkb2themFuYSB6YXZpc25vc3Qgb3ZlIGR2ZSB2YXJpamFibGU6IA0KDQpgYGB7cn0NCmZvciAocGMgaW4gdW5pcXVlKHRyYWluJFByZXZpb3VzLkNsYWltcykpIHsNCg0KICBpZHggPC0gdHJhaW4kUHJldmlvdXMuQ2xhaW1zID09IHBjICYgaXMubmEodHJhaW4kQW5udWFsLkluY29tZSkNCg0KICBncm91cC5tZWRpYW4gPC0gbWVkaWFuKA0KICAgIHRyYWluJEFubnVhbC5JbmNvbWVbdHJhaW4kUHJldmlvdXMuQ2xhaW1zID09IHBjXSwNCiAgICBuYS5ybSA9IFRSVUUNCiAgKQ0KDQogIHRyYWluJEFubnVhbC5JbmNvbWVbaWR4XSA8LSBncm91cC5tZWRpYW4NCn0NCg0KZm9yIChwYyBpbiB1bmlxdWUodGVzdCRQcmV2aW91cy5DbGFpbXMpKSB7DQoNCiAgaWR4IDwtIHRlc3QkUHJldmlvdXMuQ2xhaW1zID09IHBjICYgaXMubmEodGVzdCRBbm51YWwuSW5jb21lKQ0KDQogIGdyb3VwLm1lZGlhbiA8LSBtZWRpYW4oDQogICAgdGVzdCRBbm51YWwuSW5jb21lW3Rlc3QkUHJldmlvdXMuQ2xhaW1zID09IHBjXSwNCiAgICBuYS5ybSA9IFRSVUUNCiAgKQ0KDQogIHRlc3QkQW5udWFsLkluY29tZVtpZHhdIDwtIGdyb3VwLm1lZGlhbg0KfQ0KYGBgDQoNCiMjIEltcHV0YWNpamEgQ3JlZGl0LlNjb3JlIHZhcmlqYWJsZQ0KDQpgYGB7cn0NCnRyYWluJENyZWRpdC5TY29yZSA8LSBpZmVsc2UoDQogIGlzLm5hKHRyYWluJENyZWRpdC5TY29yZSksDQogIG1lZGlhbi5jcmVkaXQuc2NvcmUudHJhaW4sDQogIHRyYWluJENyZWRpdC5TY29yZQ0KKQ0KDQp0ZXN0JENyZWRpdC5TY29yZSA8LSBpZmVsc2UoDQogIGlzLm5hKHRlc3QkQ3JlZGl0LlNjb3JlKSwNCiAgbWVkaWFuLmNyZWRpdC5zY29yZS50ZXN0LA0KICB0ZXN0JENyZWRpdC5TY29yZQ0KKQ0KYGBgDQoNCiMjIEltcHV0YWNpamEgVmVoaWNsZS5BZ2UgdmFyaWphYmxlDQoNCmBgYHtyfQ0KdHJhaW4kVmVoaWNsZS5BZ2UgPC0gaWZlbHNlKA0KICBpcy5uYSh0cmFpbiRWZWhpY2xlLkFnZSksDQogIG1lZGlhbi52ZWhpY2xlLmFnZS50cmFpbiwNCiAgdHJhaW4kVmVoaWNsZS5BZ2UNCikNCg0KdGVzdCRWZWhpY2xlLkFnZSA8LSBpZmVsc2UoDQogIGlzLm5hKHRlc3QkVmVoaWNsZS5BZ2UpLA0KICBtZWRpYW4udmVoaWNsZS5hZ2UudGVzdCwNCiAgdGVzdCRWZWhpY2xlLkFnZQ0KKQ0KYGBgDQoNCiMjIEltcHV0YWNpamEgSGVhbHRoLlNjb3JlIHZhcmlqYWJsZQ0KDQpgYGB7cn0NCnRyYWluJEhlYWx0aC5TY29yZSA8LSBpZmVsc2UoDQogIGlzLm5hKHRyYWluJEhlYWx0aC5TY29yZSksDQogIG1lZGlhbi5oZWFsdGguc2NvcmUudHJhaW4sDQogIHRyYWluJEhlYWx0aC5TY29yZQ0KKQ0KDQp0ZXN0JEhlYWx0aC5TY29yZSA8LSBpZmVsc2UoDQogIGlzLm5hKHRlc3QkSGVhbHRoLlNjb3JlKSwNCiAgbWVkaWFuLmhlYWx0aC5zY29yZS50ZXN0LA0KICB0ZXN0JEhlYWx0aC5TY29yZQ0KKQ0KYGBgDQoNClByb3ZlcmljZW1vIGRhIGxpIGplIGl6dnJzZW5hIGltcHV0YWNpamEgdSB0cmFpbiBza3VwdToNCg0KYGBge3J9DQpuYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodHJhaW5bLCBudW0udHJhaW5dKSkgLyBucm93KHRyYWluKSAqIDEwMA0KbmFfcGVyY2VudA0KYGBgDQoNClUgdGVzdCBza3VwdToNCg0KYGBge3J9DQpuYV9wZXJjZW50IDwtIGNvbFN1bXMoaXMubmEodGVzdFssIG51bS50ZXN0XSkpIC8gbnJvdyh0ZXN0KSAqIDEwMA0KbmFfcGVyY2VudA0KYGBg</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIk1pc3NpbmcgdmFsdWVzIg0Kb3V0cHV0OiBodG1sX25vdGVib29rDQotLS0NCg0KVWNpdGF2YW5qZSBwb3RyZWJuaWggYmlibGlvdGVrYToNCg0KYGBge3J9DQppbnN0YWxsLnBhY2thZ2VzKCdGU0EnKQ0KDQpsaWJyYXJ5KHRpZHl2ZXJzZSkNCmxpYnJhcnkoRlNBKQ0KYGBgDQoNClNwb2ppY2VtbyB0cmFpbiBpIHRlc3Qgc2t1cDoNCmBgYHtyfQ0KdGVzdCRQcmVtaXVtLkFtb3VudCA8LSBOQQ0KZGF0YSA8LSByYmluZCh0cmFpbiwgdGVzdCkNCg0Kc3VtbWFyeShkYXRhKQ0KYGBgDQoNCiMjIEthdGVnb3JpanNraSBhdHJpYnV0aQ0KDQpCcm9qIG5lZG9zdGFqdWNpaCB2cmVkbm9zdGkgdSBza3VwdSBwb2RhdGFrYToNCmBgYHtyfQ0KY2F0LmRhdGEgPC0gc2FwcGx5KGRhdGEsIGlzLmZhY3RvcikNCmNvbFN1bXMoaXMubmEoZGF0YVssIGNhdC5kYXRhXSkpDQpgYGANCg0KUHJpa2F6IHByb2NlbnR1YWxub2cgb2Rub3NhIG5lZG9zdGFqdWNpaCBwb2RhdGFrYTogDQoNCmBgYHtyfQ0KY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwDQpgYGANCg0KVGVobmlrZSBpbXB1dGFjaWplOg0KLSBOZWRvc3RhanVjZSB2cmVkbm9zdGkgdSB2YXJpamFibGFtYSBNYXJpdGFsLlN0YXR1cywgSW5zdXJhbmNlLkR1cmF0aW9uIGkgQ3VzdG9tZXIuRmVlZGJhY2sgY2UgYml0aSBwb3B1bmplbmUgc2EgbmFqdmlzZSBwcmlzdXRub20ga2F0ZWdvcmlqb20gdSB2YXJpamFibGkuDQotIE5lZG9zdGFqdWNlIHZyZWRub3N0aSB1IHZhcmlqYWJsYW1hIE9jY3VwYXRpb24gaSBQcmV2aW91cy5DbGFpbXMgY2UgYml0aSBwb3B1bmplbmUgc2Egbm92b20ga2F0ZWdvcmlqb20gVU5LTk9XTi4gUHJvY2VuYXQgbmVkb3N0YWp1Y2loIHZyZWRub3N0aSB1IG92aW0gdmFyaWphYmxhbWEgamUgdmVsaWtpIGkgaW1wdXRhY2lqYSBtb2RlIHRlaG5pa29tIGJpIGRyYXN0aWNubyB1dGljYWxhIG5hIGRpc3RpYnVjaWp1IHBvZGF0YWthLiBEb2RhdmFuamVtIG5vdmUga2F0ZWdvcmlqZSBjZW1vIG9iZXpiZWRpdGkgZGEgc2UgZGlzdHJpYnVjaWphIHBvZGF0YWthIG5lIHByb21lbmkuDQoNCiMjIEltcHV0YWNpamEgTU9ERSB0ZWhuaWtvbQ0KDQpgYGB7cn0NCmNvbHMgPC0gYygiTWFyaXRhbC5TdGF0dXMiLCAiSW5zdXJhbmNlLkR1cmF0aW9uIiwgIkN1c3RvbWVyLkZlZWRiYWNrIiwgIk51bWJlci5vZi5EZXBlbmRlbnRzIikNCg0KZm9yIChjb2wgaW4gY29scykgew0KICBtb2RlLmRhdGEgPC0gbmFtZXMod2hpY2gubWF4KHRhYmxlKGRhdGFbW2NvbF1dKSkpDQogIA0KICBkYXRhW1tjb2xdXVtpcy5uYShkYXRhW1tjb2xdXSldIDwtIG1vZGUuZGF0YQ0KfQ0KYGBgDQoNCiMjIEltcHV0YWNpamEgVU5LTk9XTiBrYXRlZ29yaWpvbQ0KDQpgYGB7cn0NCmRhdGEkUHJldmlvdXMuQ2xhaW1zIDwtIGZhY3RvcihkYXRhJFByZXZpb3VzLkNsYWltcywgb3JkZXJlZCA9IEZBTFNFKQ0KDQpjb2xzIDwtIGMoIk9jY3VwYXRpb24iLCAiUHJldmlvdXMuQ2xhaW1zIikNCg0KZm9yIChjb2wgaW4gY29scykgew0KICBsZXZlbHMoZGF0YVtbY29sXV0pIDwtIGMobGV2ZWxzKGRhdGFbW2NvbF1dKSwgIlVOS05PV04iKQ0KICANCiAgZGF0YVtbY29sXV1baXMubmEoZGF0YVtbY29sXV0pXSA8LSAiVU5LTk9XTiINCn0NCmBgYA0KDQojIyBQcm92ZXJhIG5lZG9zdGFqdWNpaCB2cmVkbm9zdGkNCg0KUHJpa2F6IHByb2NlbnR1YWxub2cgb2Rub3NhIG5lZG9zdGFqdWNpaCBwb2RhdGFrYTogDQoNCmBgYHtyfQ0KY29sU3Vtcyhpcy5uYShkYXRhWywgY2F0LmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwDQpgYGANCg0KIyMgTnVtZXJpY2tpIGF0cmlidXRpDQoNCkJyb2ogbmVkb3N0YWp1Y2loIHZyZWRub3N0aSB1IHNrdXB1IHBvZGF0YWthOg0KYGBge3J9DQpudW0uZGF0YSA8LSBzYXBwbHkoZGF0YSwgaXMubnVtZXJpYykNCmNvbFN1bXMoaXMubmEoZGF0YVssIG51bS5kYXRhXSkpDQpgYGANCg0KUHJpa2F6IHByb2NlbnR1YWxub2cgb2Rub3NhIG5lZG9zdGFqdWNpaCBwb2RhdGFrYTogDQoNCmBgYHtyfQ0KY29sU3Vtcyhpcy5uYShkYXRhWywgbnVtLmRhdGFdKSkgLyBucm93KGRhdGEpICogMTAwDQpgYGANCg0KUHJlbWl1bS5BbW91bnQgaW1hIDQwJSBuZWRvc3RhanVjaWggdnJlZG5vc3RpLCBtZWRqdXRpbSBvdm8gamUgb2Nla2l2YW5vLCBqZXIgc2UgdSBza3VwdSBuYWxhemUgaSBvcHNlcnZhY2lqZSBpeiB0ZXN0IHNrdXBhIGtvamUgbmVtYWp1IGRlZmluaXNhbmUgdnJlZG5vc3RpIHphIGNpbGpudSBwcm9tZW5saml2dS4gT3N0YWxlIHZhcmlqYWJsZSBuZSBzYWRyemUgdmlzZSBvZCAyMCUgbmVkb3N0YWp1Y2loIHZyZWRub3N0aS4gU2FtaW0gdGltLCBtb3plbW8gZGEgaXp2cnNpbW8gaW1wdXRhY2lqdSBuZWRvc3RhanVjaWggdnJlZG5vc3RpIHNyZWRuam9tIHZyZWRub3NjdSBpbGkgbWVkaWphbm9tLg0KS2FrbyBzdmUgbnVtZXJpY2tlIHZhcmlqYWJsZSBuZW1hanUgbm9ybWFsbnUgcmFzcG9kZWx1LCBrb3Jpc3RpY2VtbyBtZWRpYW4gaW1wdXRhY2lqdToNCg0KYGBge3J9DQptZWRpYW4uYWdlIDwtIG1lZGlhbihkYXRhJEFnZSwgbmEucm0gPSBUUlVFKQ0KbWVkaWFuLmNyZWRpdC5zY29yZSA8LSBtZWRpYW4oZGF0YSRDcmVkaXQuU2NvcmUsIG5hLnJtID0gVFJVRSkNCm1lZGlhbi52ZWhpY2xlLmFnZSA8LSBtZWRpYW4oZGF0YSRWZWhpY2xlLkFnZSwgbmEucm0gPSBUUlVFKQ0KbWVkaWFuLmhlYWx0aC5zY29yZSA8LSBtZWRpYW4oZGF0YSRIZWFsdGguU2NvcmUsIG5hLnJtID0gVFJVRSkNCmBgYA0KDQojIyBJbXB1dGFjaWphIEFnZSB2YXJpamFibGUNCg0KYGBge3J9DQpkYXRhJEFnZSA8LSBpZmVsc2UoDQogIGlzLm5hKGRhdGEkQWdlKSwNCiAgbWVkaWFuLmFnZSwNCiAgZGF0YSRBZ2UNCikNCmBgYA0KDQojIyBJbXB1dGFjaWphIEFubnVhbC5JbmNvbWUgdmFyaWphYmxlDQoNClJhY3VuYW5qZSBnb2Rpc25qaWggcHJpbWFuamEgcG8gYnJvanUgcHJldGhvZG5vIHBvZG5ldGloIHphaHRldmEgemEgbmFkb2tuYWR1IG5vdmNhLiBVIHByZXRob2Rub2ogc2VrY2lqaSBqZSBkb2themFuYSB6YXZpc25vc3Qgb3ZlIGR2ZSB2YXJpamFibGU6IA0KDQpgYGB7cn0NCmZvciAocGMgaW4gdW5pcXVlKGRhdGEkUHJldmlvdXMuQ2xhaW1zKSkgew0KDQogIGlkeCA8LSBkYXRhJFByZXZpb3VzLkNsYWltcyA9PSBwYyAmIGlzLm5hKGRhdGEkQW5udWFsLkluY29tZSkNCg0KICBncm91cC5tZWRpYW4gPC0gbWVkaWFuKA0KICAgIGRhdGEkQW5udWFsLkluY29tZVtkYXRhJFByZXZpb3VzLkNsYWltcyA9PSBwY10sDQogICAgbmEucm0gPSBUUlVFDQogICkNCg0KICBkYXRhJEFubnVhbC5JbmNvbWVbaWR4XSA8LSBncm91cC5tZWRpYW4NCn0NCmBgYA0KDQojIyBJbXB1dGFjaWphIENyZWRpdC5TY29yZSB2YXJpamFibGUNCg0KYGBge3J9DQpkYXRhJENyZWRpdC5TY29yZSA8LSBpZmVsc2UoDQogIGlzLm5hKGRhdGEkQ3JlZGl0LlNjb3JlKSwNCiAgbWVkaWFuLmNyZWRpdC5zY29yZSwNCiAgZGF0YSRDcmVkaXQuU2NvcmUNCikNCmBgYA0KDQojIyBJbXB1dGFjaWphIFZlaGljbGUuQWdlIHZhcmlqYWJsZQ0KDQpgYGB7cn0NCmRhdGEkVmVoaWNsZS5BZ2UgPC0gaWZlbHNlKA0KICBpcy5uYShkYXRhJFZlaGljbGUuQWdlKSwNCiAgbWVkaWFuLnZlaGljbGUuYWdlLA0KICBkYXRhJFZlaGljbGUuQWdlDQopDQpgYGANCg0KIyMgSW1wdXRhY2lqYSBIZWFsdGguU2NvcmUgdmFyaWphYmxlDQoNCmBgYHtyfQ0KZGF0YSRIZWFsdGguU2NvcmUgPC0gaWZlbHNlKA0KICBpcy5uYShkYXRhJEhlYWx0aC5TY29yZSksDQogIG1lZGlhbi5oZWFsdGguc2NvcmUsDQogIGRhdGEkSGVhbHRoLlNjb3JlDQopDQpgYGANCg0KUHJvdmVyaWNlbW8gZGEgbGkgamUgaXp2cnNlbmEgaW1wdXRhY2lqYToNCg0KYGBge3J9DQpjb2xTdW1zKGlzLm5hKGRhdGFbLCBudW0uZGF0YV0pKSAvIG5yb3coZGF0YSkgKiAxMDANCmBgYA==</div>
 
 
 

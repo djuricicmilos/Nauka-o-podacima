@@ -16,7 +16,7 @@ Mapa korelacija numerickih varijabli za train skup:
 
 ```{r}
 num.data <- train[sapply(train, is.numeric)]
-corr <- cor(num.data, use = "complete.obs")
+corr <- cor(num.data, use = "complete.obs", method = "spearman")
 
 corr.melt <- melt(corr)
 

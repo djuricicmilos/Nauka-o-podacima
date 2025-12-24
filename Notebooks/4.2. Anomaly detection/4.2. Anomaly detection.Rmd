@@ -16,95 +16,60 @@ library(patchwork)
 #### Age
 
 Prikaz varijable Age pomocu boxplot-a:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Age)) +
+```{r}
+ggplot(data, aes(x = Age)) +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Age", x = "Age")
-
-plot.test <- ggplot(test, aes(x = Age)) +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Test: Boxplot za Age", x = "Age")
-
-plot.train | plot.test
+  labs(title = "Boxplot za Age", x = "Age")
 ```
 
 #### Annual.Income
 
 Prikaz varijable Annual.Income pomocu boxplot-a:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Annual.Income))  +
+```{r}
+ggplot(data, aes(x = Annual.Income))  +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Annual.Income", x = "Annual.Income")
-  
-plot.test <- ggplot(test, aes(x = Annual.Income))  +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Test: Boxplot za Annual.Income", x = "Annual.Income")
-  
-plot.train | plot.test 
+  labs(title = "Boxplot za Annual.Income", x = "Annual.Income")
 ```
 #### Health.Score
 
 Prikaz varijable Health.Score pomocu boxplot-a:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Health.Score))  +
+```{r}
+ggplot(data, aes(x = Health.Score))  +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Health.Score", x = "Health.Score")
-  
-plot.test <- ggplot(test, aes(x = Health.Score))  +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Test: Boxplot za Health.Score", x = "Health.Score")
-  
-plot.train | plot.test
+  labs(title = "Boxplot za Health.Score", x = "Health.Score")
 ```
 
 #### Vehicle.Age
 
 Prikaz varijable Vehicle.Age pomocu boxplot-a:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Vehicle.Age))  +
+```{r}
+ggplot(data, aes(x = Vehicle.Age))  +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Vehicle.Age", x = "Vehicle.Age")
-  
-plot.test <- ggplot(test, aes(x = Vehicle.Age))  +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Test: Boxplot za Vehicle.Age", x = "Vehicle.Age")
-  
-plot.train | plot.test
+  labs(title = "Boxplot za Vehicle.Age", x = "Vehicle.Age")
 ```
 
 #### Credit.Score
 
 Prikaz varijable Credit.Score pomocu boxplot-a:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Credit.Score))  +
+```{r}
+ggplot(data, aes(x = Credit.Score))  +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Credit.Score", x = "Credit.Score")
-  
-plot.test <- ggplot(test, aes(x = Credit.Score))  +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Test: Boxplot za Credit.Score", x = "Credit.Score")
-  
-plot.train | plot.test
+  labs(title = "Boxplot za Credit.Score", x = "Credit.Score")
 ```
 
 #### Premium.Amount
 
-Prikaz varijable Premium.Amount pomocu boxplot-a za train skup:
+Prikaz varijable Premium.Amount pomocu boxplot-a:
 ```{r}
-ggplot(train, aes(x = Premium.Amount))  +
+ggplot(data, aes(x = Premium.Amount))  +
   geom_boxplot() +
   theme_minimal() +
-  labs(title = "Train: Boxplot za Premium.Amount", x = "Premium.Amount")
+  labs(title = "Boxplot za Premium.Amount", x = "Premium.Amount")
 ```
 
 
@@ -113,250 +78,146 @@ ggplot(train, aes(x = Premium.Amount))  +
 #### Gender
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Gender, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Gender, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Procentualna zastupljenost polova", x = "Gender", y = "Procenat") +
+  labs(title = "Procentualna zastupljenost polova", x = "Gender", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Gender, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Procentualna zastupljenost polova", x = "Gender", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Marital.Status
 
 Graficka reprezentacija podataka
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Marital.Status, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Marital.Status, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Marital.Status", x = "Marital.Status", y = "Procenat") +
+  labs(title = "Bar plot za Marital.Status", x = "Marital.Status", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Marital.Status, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Marital.Status", x = "Marital.Status", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 
 #### Education.Level
 
 Graficka reprezentacija podataka
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Education.Level, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Education.Level, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Education.Level", x = "Education.Level", y = "Procenat") +
+  labs(title = "Bar plot za Education.Level", x = "Education.Level", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Education.Level, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Education.Level", x = "Education.Level", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Occupation
 
 Graficka reprezentacija podataka
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Occupation, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Occupation, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Occupation", x = "Occupation", y = "Procenat") +
+  labs(title = "Bar plot za Occupation", x = "Occupation", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Occupation, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Occupation", x = "Occupation", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Location
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Location, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Location, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Location", x = "Location", y = "Procenat") +
+  labs(title = "Bar plot za Location", x = "Location", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Location, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Location", x = "Location", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Policy.Type
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Policy.Type, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Policy.Type, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Policy.Type", x = "Policy.Type", y = "Procenat") +
+  labs(title = "Bar plot za Policy.Type", x = "Policy.Type", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Policy.Type, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Policy.Type", x = "Policy.Type", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Customer.Feedback
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Customer.Feedback, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Customer.Feedback, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Customer.Feedback", x = "Customer.Feedback", y = "Procenat") +
+  labs(title = "Bar plot za Customer.Feedback", x = "Customer.Feedback", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Customer.Feedback, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Customer.Feedback", x = "Customer.Feedback", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Smoking.Status
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Smoking.Status, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Smoking.Status, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Smoking.Status", x = "Smoking.Status", y = "Procenat") +
+  labs(title = "Bar plot za Smoking.Status", x = "Smoking.Status", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Smoking.Status, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Smoking.Status", x = "Smoking.Status", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Exercise.Frequency
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Exercise.Frequency, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Exercise.Frequency, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Exercise.Frequency", x = "Exercise.Frequency", y = "Procenat") +
+  labs(title = "Bar plot za Exercise.Frequency", x = "Exercise.Frequency", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Exercise.Frequency, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Exercise.Frequency", x = "Exercise.Frequency", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Property.Type
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Property.Type, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Property.Type, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Property.Type", x = "Property.Type", y = "Procenat") +
+  labs(title = "Bar plot za Property.Type", x = "Property.Type", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Property.Type, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Property.Type", x = "Property.Type", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Number.of.Dependents
 
 Graficka reprezentacija podataka: 
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Number.of.Dependents, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Number.of.Dependents, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Number.of.Dependents", x = "Number.of.Dependents", y = "Procenat") +
+  labs(title = "Bar plot za Number.of.Dependents", x = "Number.of.Dependents", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Number.of.Dependents, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Number.of.Dependents", x = "Number.of.Dependents", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 #### Previous.Claims
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Previous.Claims, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Previous.Claims, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Previous.Claims", x = "Previous.Claims", y = "Procenat") +
+  labs(title = "Bar plot za Previous.Claims", x = "Previous.Claims", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Previous.Claims, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Previous.Claims", x = "Previous.Claims", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 
 #### Insurance.Duration
 
 Graficka reprezentacija podataka:
-```{r, fig.width=14, fig.height=6}
-plot.train <- ggplot(train, aes(x = Insurance.Duration, y = ..prop.., group = 1)) +
+```{r}
+ggplot(data, aes(x = Insurance.Duration, y = ..prop.., group = 1)) +
   geom_bar(fill = "thistle", color = "black") +
   geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Train: Bar plot za Insurance.Duration", x = "Insurance.Duration", y = "Procenat") +
+  labs(title = "Bar plot za Insurance.Duration", x = "Insurance.Duration", y = "Procenat") +
   theme_minimal()
-
-plot.test <- ggplot(test, aes(x = Insurance.Duration, y = ..prop.., group = 1)) +
-  geom_bar(fill = "thistle", color = "black") +
-  geom_text(aes(label = scales::percent(..prop..)), stat = "count", vjust = -0.5) +
-  labs(title = "Test: Bar plot za Insurance.Duration", x = "Insurance.Duration", y = "Procenat") +
-  theme_minimal()
-
-plot.train | plot.test
 ```
 
 ### Zakljucak
