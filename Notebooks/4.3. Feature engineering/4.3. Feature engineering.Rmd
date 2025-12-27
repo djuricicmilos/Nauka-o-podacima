@@ -752,37 +752,12 @@ data.encoded <- bake(rec.prep, new_data = data)
 str(data.encoded)
 ```
 
-# Skaliranje
-
-```{r}
-scale.cols <- c(
-  "Age",
-  "Annual.Income",
-  "Health.Score",
-  "Vehicle.Age",
-  "Credit.Score",
-  "Income.Dependents",
-  "Income.Credit",
-  "Policy.Year",
-  "Health.Claims",
-  "Health.Age"
-)
-
-preproc <- preProcess(
-  data.encoded[, scale.cols],
-  method = c("center", "scale")
-)
-
-data.scaled <- data.encoded
-data.scaled[, scale.cols] <- predict(preproc, data.scaled[, scale.cols])
-```
-
 # Podela na train i test skup
 
 ```{r}
-train.preproc <- data.scaled[!is.na(data.scaled$Premium.Amount), ]
+train.preproc <- data.encoded[!is.na(data.encoded$Premium.Amount), ]
 
-test.preproc <- data.scaled[is.na(data.scaled$Premium.Amount), ]
+test.preproc <- data.encoded[is.na(data.encoded$Premium.Amount), ]
 ```
 
 # Cuvanje train i test skupa
