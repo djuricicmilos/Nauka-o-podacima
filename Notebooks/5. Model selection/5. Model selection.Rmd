@@ -43,6 +43,11 @@ ctrl <- trainControl(
 
 # Linearni modeli
 
+```{r}
+train.lin <- train %>% select(-c("id"))
+test.lin <- test %>% select(-c("Premium.Amount", "id"))
+```
+
 ## Base linear model
 
 Na osnovu prethodno analiziranih odnosa izmedju prediktora, uoceno je da pretpostavke proste linearne regresije nisu zadovoljene. Samim tim ne ocekujemo da ovaj model ostvari zadovoljavajuce performanse u predikciji ciljne promenljive. U nastavku cemo to proveriti primenom jednostavnog modela linearne regresije:
@@ -50,13 +55,31 @@ Na osnovu prethodno analiziranih odnosa izmedju prediktora, uoceno je da pretpos
 ```{r}
 base.model <- train(
   Premium.Amount ~ .,
-  data = train,
+  data = train.lin,
   method = "lm",
   trControl = ctrl,
   metric = "RMSE"
 )
 
 print(base.model$results)
+```
+
+Predikcije nad test skupom:
+
+```{r}
+pred.test.lm <- predict(base.model, newdata = test.lin)
+pred.test.exp.lm <- exp(pred.test.lm)
+```
+
+Cuvanje predikcija u csv formatu:
+
+```{r}
+pred.df.lm <- data.frame(
+  id = test$id,
+  Premium.Amount = pred.test.exp.lm
+)
+
+write.csv(pred.df.lm,"lm.csv", row.names = FALSE)
 ```
 
 Rezultati 5-fold cross-validacije pokazuju da linearni regresioni model ostvaruje slabe performanse. Dobijena RMSE vrednost iznosi 1.095, što je prakticno jednako standardnoj devijaciji ciljne promenljive (1.102). Ovo pokazuje da model linearne regresije ne uspeva da uhvati signal iz podataka i da njegova predikcija ne poboljsava znacajno prosti prosek ciljne promenljive. Rsquared iznosi 0.012, što znači da model objašnjava oko 1% varijanse podataka. Niska standardna devijacija metrika kroz foldove ukazuje da je ovakav rezultat stabilan i nezavisan od konkretne podele podataka.
@@ -74,7 +97,7 @@ Ridge smanjuje varijansu koeficijenata kod kolinearnosti. Medjutim, kako ne post
 ```{r}
 ridge.model <- train(
   Premium.Amount ~ .,
-  data = train,
+  data = train.lin,
   method = "glmnet",
   trControl = ctrl,
   metric = "RMSE",
@@ -100,6 +123,24 @@ ggplot(ridge.model$results, aes(x = lambda, y = RMSE)) +
 
 Ridge regresija je primenjena sa razlicitim vrednostima regularizacionog parametra lambda, ali rezultati pokazuju da RMSE (priblizno 1.096) i Rsquared (priblizno 0.011) ostaju prakticno nepromenjeni u odnosu na obicnu linearnu regresiju. Standardne devijacije metrika kroz foldove su vrlo male, sto ukazuje da je model stabilan, ali i dalje nije u mogucnosti da uhvati odnose u podacima.
 
+Predikcije nad test skupom:
+
+```{r}
+pred.test.ridge <- predict(ridge.model, newdata = test.lin)
+pred.test.exp.ridge <- exp(pred.test.ridge)
+```
+
+Cuvanje predikcija u csv formatu:
+
+```{r}
+pred.df.ridge <- data.frame(
+  id = test$id,
+  Premium.Amount = pred.test.exp.ridge
+)
+
+write.csv(pred.df.ridge,"ridge.csv", row.names = FALSE)
+```
+
 # Lasso
 
 Lasso, u odnosu na Ridge, radi i selekciju varijabli, cime moze dodatno eliminisati nebitne prediktore. Hajde da proverimo da li ce doci do poboljsanja:
@@ -107,7 +148,7 @@ Lasso, u odnosu na Ridge, radi i selekciju varijabli, cime moze dodatno eliminis
 ```{r}
 lasso.model <- train(
   Premium.Amount ~ .,
-  data = train,
+  data = train.lin,
   method = "glmnet",
   trControl = ctrl,
   metric = "RMSE",
@@ -132,6 +173,24 @@ ggplot(lasso.model$results, aes(x = lambda, y = RMSE)) +
 ```
 
 Lasso regresija je primenjena sa razlicitim vrednostima regularizacionog parametra lambda, ali rezultati pokazuju da RMSE (~1.095–1.096) i Rsquared (~0.010–0.011) ostaju prakticno nepromenjeni u odnosu na obicnu linearnu regresiju. Standardne devijacije metrika kroz foldove su male, sto ukazuje da je model stabilan, ali i dalje nije u mogucnosti da objasni odnose u podacima.
+
+Predikcije nad test skupom:
+
+```{r}
+pred.test.lasso <- predict(lasso.model, newdata = test.lin)
+pred.test.exp.lasso <- exp(pred.test.lasso)
+```
+
+Cuvanje predikcija u csv formatu:
+
+```{r}
+pred.df.lasso <- data.frame(
+  id = test$id,
+  Premium.Amount = pred.test.exp.lasso
+)
+
+write.csv(pred.df.lasso,"lasso.csv", row.names = FALSE)
+```
 
 # Nelinearni modeli
 
@@ -166,7 +225,7 @@ cv.results <- xgb.cv(
 print(cv.results$evaluation_log)
 ```
 
-XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060292, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
+XGBoost model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.060247, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora XGBoost-a za predikciju Premium.Amount.
 
 Sada cemo da prikazemo red sa najmanjim test RMSE:
 
@@ -254,7 +313,7 @@ cv.result <- lgb.cv(
 )
 ```
 
-LightGBM model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.05849, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora LightGBM-a za predikciju Premium.Amount.
+LightGBM model je treniran koriscenjem cross-validation. RMSE na test foldovima opada sa 1.096 na 1.05893, sto pokazuje da model uspeva da uhvati deo nelinearnog signala koji linearni modeli nisu mogli. Male standardne devijacije kroz foldove ukazuju da model radi stabilno i generalizuje, cime se potvrdjuje opravdanost izbora LightGBM-a za predikciju Premium.Amount.
 
 Sada cemo da prikazemo red sa najmanjim test RMSE:
 
